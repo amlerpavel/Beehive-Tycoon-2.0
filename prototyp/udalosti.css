@@ -1,0 +1,41 @@
+#container {
+    position: absolute;
+}
+
+.tlacitko {
+    position: relative;
+    left: 50%;
+    bottom: 1em;
+    transform: translate(-50%);
+}
+
+.tlacitko a {
+    font-size: 12pt;
+}
+
+.tlacitko, .tlacitko a {
+    width: 100px;
+}
+
+#udalosti {
+    font-size: 14pt;
+    text-align: left;
+    width: 70%;
+    margin: auto;
+}
+
+#udalosti > ul{
+    padding-left: 1em;
+}
+
+li::marker {
+    color: black;
+}
+
+#udalosti ul ul {
+    color: rgb(100, 48, 0);
+}
+
+#udalosti ul ul ul {
+    color: black;
+}

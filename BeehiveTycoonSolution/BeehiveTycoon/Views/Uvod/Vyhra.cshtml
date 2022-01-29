@@ -1,0 +1,13 @@
+﻿@{
+    ViewData["css"] = "uvod.css";
+}
+
+<h1>Vyhráli jste!</h1>
+<div id="tlacitka">
+    <div id="tlacitkoHrat" class="tlacitko">
+        <a href="@Url.Action("Vyhra", "Uvod", new { tlacitko = "znova" })">Hrát znova</a>
+    </div>
+    <div class="tlacitko">
+        <a href="@Url.Action("Vyhra", "Uvod", new { tlacitko = "pokracovat" })">Pokračovat ve hře</a>
+    </div>
+</div>

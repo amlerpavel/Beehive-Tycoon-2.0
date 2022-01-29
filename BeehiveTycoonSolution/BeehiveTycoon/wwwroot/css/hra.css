@@ -1,0 +1,255 @@
+:root {
+    --barvaHeader: #591303;
+    --barvaHeaderDiv: white;
+    --barvaNav: #D96907;
+    --barvaNavDiv: white;
+    --barvaBorder: #260A03;
+    --barvaAhover: hsl(25, 75%, 30%);
+    --barvaMenuHover: var(--barvaAhover);
+    --barvaTableHover: var(--barvaMenuHover);
+    --barvaTlacitka3: rgb(255, 245, 110);
+    --barvaTlacitka4: rgb(255, 249, 163);
+}
+
+html, body, #container {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+}
+
+#container {
+    display: grid;
+    grid-template-columns: 350px auto 350px;
+    grid-template-rows: min-content;
+}
+
+header {
+    background-color: var(--barvaHeader);
+    grid-column: 1 / 4;
+    order: 1;
+    border-bottom: var(--barvaBorder) solid 2px;
+    overflow: visible;
+    font-size: 14pt;
+}
+
+header > div {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+header div div {
+    background-color: var(--barvaHeaderDiv);
+    border-radius: 10px;
+    padding: 0.5em;
+    margin: 0.5em;
+}
+
+main {
+   background-image: url("/img/plastev.jpeg");
+   order: 3;
+}
+
+nav {
+    background-color: var(--barvaNav);
+}
+
+nav div {
+    background-color: var(--barvaNavDiv);
+    padding: 0.5em;
+    margin: 1em 1em 1em 1em;
+    border-radius: 10px;
+}
+
+#nepratele {
+    order: 4;
+    border-left: var(--barvaBorder) solid 2px;
+    position: relative;
+}
+
+#nepratele p{
+    margin-bottom: 0.3em;
+}
+
+#ukoly {
+    order: 2;
+    border-right: var(--barvaBorder) solid 2px;
+}
+
+p {
+    margin-top: 0;
+}
+
+#ukoly p {
+    margin-bottom: 0.3em;
+}
+
+nav a {
+    color: inherit;
+    text-decoration: none;
+}
+
+nav a:hover {
+    color: var(--barvaAhover);
+}
+
+ul {
+    list-style: circle;
+    margin-top: 0;
+    margin-bottom: 0.5em;
+    padding-left: 2em;
+}
+/**/
+.submenuG {
+    display: none;
+    position: absolute;
+    margin-left: -0.5em;
+    width: 150px;
+    font-size:11pt;
+}
+
+#generace td{
+    text-align: center;
+}
+
+#Prumer:hover .submenuG{
+    display: block;
+}
+/**/
+/*
+#ukolyMenu, .submenu{
+    width: 160px;
+}
+
+#ukolyMenu p{
+    margin: 0;
+    padding: 0;
+    padding-bottom: 0.5em;
+}
+
+#ukolyMenu{
+    margin: auto;
+    text-align: center;
+}
+
+.submenu a {
+    display: flex;
+    justify-content: center;
+    color: inherit;
+    text-decoration: none;
+}
+
+.submenu a:hover {
+    font-weight: bold;
+    color: var(--barvaMenuHover);
+}
+
+.submenu a {
+    padding: 0.3em;
+}
+
+.seda{
+    background-color: darkgray;
+}
+
+.submenu {
+    margin: 0;
+    padding: 0;
+    display: none;
+    position: absolute;
+}
+
+#ukolyMenu:hover .submenu {
+    display: block;
+}
+*/
+/**/
+table {
+    width: calc(100% - 1em);
+    border-collapse: collapse;
+    margin: 0.5em auto 0.5em auto;
+}
+
+th,td {
+    padding: 0.3em;
+}
+
+th {
+    text-align: left;
+}
+
+th a {
+    color: inherit;
+    text-decoration: none;
+}
+
+th a:hover {
+    color: var(--barvaTableHover);
+}
+
+td {
+    text-align: right;
+}
+
+tr {
+    border-bottom: 1px solid black;
+}
+
+tr:last-child {
+    border: none;
+}
+
+#zdroje {
+    color: white;
+    margin-bottom: 0;
+    background-color: transparent;
+    position: absolute;
+    bottom: 0;
+}
+
+#zdroje div {
+    margin: 0;
+    background-color: transparent;
+    font-size: 10pt;
+}
+
+#zdroje div:last-child {
+    padding-top: 0;
+}
+
+.tlacitko0 a {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    padding: 0.5em;
+}
+
+.tlacitko0 {
+    padding: 0;
+    overflow: hidden;
+}
+
+.tlacitko0{
+    background-color:var(--barvaTlacitka3);
+}
+
+.tlacitko0:hover {
+    background-color:var(--barvaTlacitka4);
+}
+
+/*telefon*/
+@media all and (max-width:640px) {
+}
+
+/*tablet*/
+@media all and (min-width:641px) and (max-width:1280px){
+
+}
+
+/*desktop*/
+@media all and (min-width:1281px) {
+    
+}

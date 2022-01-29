@@ -1,0 +1,133 @@
+﻿@model BeehiveTycoon.Models.Hra
+@{
+    Layout = "_Layout";
+    ViewData["css"] = "hra.css";
+
+    int pocetVcel = 0;
+    int pocetMedu = 0;
+
+    foreach (BeehiveTycoon.Models.Ukol ukol in Model.SeznamUkolu)
+    {
+        pocetVcel += ukol.PocetVcel;
+        pocetMedu += ukol.PocetMedu;
+    }
+
+    int soucetVek = 0;
+
+    foreach (BeehiveTycoon.Models.GeneraceVcelstva generaceVcelstva in Model.GeneraceVcelstev)
+    {
+        soucetVek += generaceVcelstva.Vek;
+    }
+
+    double prumerVek = soucetVek / Convert.ToDouble(Model.GeneraceVcelstev.Count);
+    prumerVek = Math.Round(prumerVek, 2, MidpointRounding.AwayFromZero);
+}
+
+<header>
+    <div id="radek">
+        <div>Včelstvo: @Model.Ul.Vcelstvo</div>
+        <div id="Prumer">
+            Průměrný věk včelstva: @prumerVek
+            <div class="submenuG">
+                Generace včel:
+                <table id="generace">
+                    <tbody>
+                        <tr>
+                            <th>Počet včel</th>
+                            <th>Věk</th>
+                        </tr>
+                        @foreach (BeehiveTycoon.Models.GeneraceVcelstva generaceVcelstva in Model.GeneraceVcelstev)
+                        {
+                            <tr>
+
+                                <td>@generaceVcelstva.Pocet</td>
+                                <td>@generaceVcelstva.Vek</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div>Med: @Model.Ul.Med</div>
+        <div>Plástve: @Model.Plastve.Count</div>
+        <div>Měsíc: @Model.Ul.Mesic</div>
+    </div>
+</header>
+<nav id="ukoly">
+    <div>
+        <p>Úkoly:</p>
+        @if (!Model.SeznamUkolu.Any())
+        {
+            <ul>
+                <li>Nejsou zadané žádné úkoly.</li>
+            </ul>
+        }
+        else
+        {
+            <table>
+                <tbody>
+                    <tr>
+                        <th>Název úkolu</th>
+                        <td>Kusy</td>
+                        <td>Včely</td>
+                        <td>Med</td>
+                    </tr>
+                    @foreach (BeehiveTycoon.Models.Ukol ukol in Model.SeznamUkolu)
+                    {
+                        <tr>
+                            <th><a href="@Url.Action("Pridat", "Ukoly", new { idUkolu = ukol.IdUkolu })">@ukol.Nazev</a></th>
+                            @if (ukol.IdUkolu == 1)
+                            {
+                                <td>@ukol.PocetVajicek</td>
+                            }
+                            else if (ukol.IdUkolu == 2)
+                            {
+                                <td>@ukol.PocetPlastvi</td>
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                            <td>@ukol.PocetVcel</td>
+                            <td>@ukol.PocetMedu</td>
+                        </tr>
+                    }
+                    <tr>
+                        <th>Celkem</th>
+                        <td></td>
+                        <td>@pocetVcel</td>
+                        <td>@pocetMedu</td>
+                    </tr>
+                </tbody>
+            </table>
+        }
+    </div>
+    <div class="tlacitko0">
+        <a href="/Ul/DalsiKolo">Další kolo</a>
+    </div>
+</nav>
+<main>
+    @RenderBody()
+</main>
+<nav id="nepratele">
+    @if (Model.Nepritel.PocetNepratel > 0)
+    {
+        <div>
+            <p>Nepřítel v úlu!</p>
+            <ul>
+                <li>Jméno nepřítele: @Model.Nepritel.JmenoNepritele</li>
+                <li>Počet nepřátel: @Model.Nepritel.PocetNepratel</li>
+            </ul>
+        </div>
+    }
+    else if (Model.Nepritel.PocetNepratel <= 0 && Model.Nepritel.JmenoNepritele != null)
+    {
+        <div>
+            <p>Nepřítel byl poražen.</p>
+        </div>
+    }
+    <div id="zdroje">
+        <div>Icons made by <a href="https://www.flaticon.com/authors/dinosoftlabs" title="DinosoftLabs">DinosoftLabs</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
+        <div><a href="https://wallpapersafari.com/w/rXaV6Y">wallpapersafari.com</a></div>
+    </div>
+</nav>
