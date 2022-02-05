@@ -12,6 +12,7 @@ namespace BeehiveTycoon.Controllers
 {
     public class UlController : Controller
     {
+        /*
         public IActionResult Plastev()
         {
             Hra hra = NacistHru();
@@ -32,7 +33,7 @@ namespace BeehiveTycoon.Controllers
         public IActionResult DalsiKolo()
         {
             Hra hra = NacistHru();
-
+            
             if (hra.Ul.Vcelstvo <= 0)
                 return Redirect(Url.Action("Prohra", "Uvod"));
             else if(hra.Vyhra == true)
@@ -227,7 +228,7 @@ namespace BeehiveTycoon.Controllers
                 
                 Debug.WriteLine(nepritel.JmenoNepritele);
                 Debug.WriteLine(nepritel.PocetNepratel);
-                /*
+                //
                 if (nepritel.IdNepritele == 4)
                 {
                     
@@ -237,7 +238,7 @@ namespace BeehiveTycoon.Controllers
                     Debug.WriteLine("smazano");
                     nepritel = new();
                 }
-                */
+                //
                 // odebirani vcel, medu, plastvi po vniknuti nepratel do ulu
                 if (nepritel.IdNepritele == 0)
                 {
@@ -578,7 +579,7 @@ namespace BeehiveTycoon.Controllers
             
             return nepritel;
         }
-
+        */
         public void UlozitHru(Hra hra)
         {
             HttpContext.Session.SetString("Hra", JsonSerializer.Serialize(hra));
@@ -598,6 +599,53 @@ namespace BeehiveTycoon.Controllers
             }
             else
                 hra = JsonSerializer.Deserialize<Hra>(HttpContext.Session.GetString("Hra"));
+
+            return hra;
+        }
+        //
+        public IActionResult Plastev0()
+        {
+            Hra0 hra = NacistHru0();
+
+            if (hra == null)
+            {
+                hra = new();
+                hra.NovaHra();
+                UlozitHru0(hra);
+            }
+
+            return View(hra);
+        }
+
+        public IActionResult DalsiKolo()
+        {
+            Hra0 hra0 = NacistHru0();
+            hra0.Dalsikolo();
+            //Debug.WriteLine(JsonSerializer.Serialize(hra0));
+            UlozitHru0(hra0);
+
+            return RedirectToAction("Plastev0");
+        }
+
+        public void UlozitHru0(Hra0 hra)
+        {
+            HttpContext.Session.SetString("Hra", JsonSerializer.Serialize(hra));
+
+            //HttpContext.Response.Cookies.Append("Hra", JsonSerializer.Serialize(hra), new CookieOptions() { SameSite = SameSiteMode.Lax, HttpOnly = true });
+        }
+        public Hra0 NacistHru0()
+        {
+            Hra0 hra;
+
+            if (HttpContext.Session.GetString("Hra") == null)
+            {
+                if (HttpContext.Request.Cookies["Hra"] == null)
+                    hra = null;
+                else
+                    hra = JsonSerializer.Deserialize<Hra0>(HttpContext.Request.Cookies["Hra"]);
+            }
+            else
+                hra = JsonSerializer.Deserialize<Hra0>(HttpContext.Session.GetString("Hra"));
 
             return hra;
         }
