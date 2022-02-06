@@ -1,0 +1,172 @@
+:root {
+    --barvaCervenehoTlacitka: hsl(0, 100%, 64%);
+    --barvaCervenehoTlacitka2: hsl(0, 100%, 54%);
+    --barvaTlacitka: yellowgreen;
+    --barvaTlacitka2: lawngreen;
+    --barvaContainer: white;
+    --barvaAhover: hsl(25, 75%, 30%);
+}
+
+main{
+    display:flex;
+}
+
+#container2 {
+    position: relative;
+    background-color: var(--barvaContainer);
+    margin: auto;
+    height: 450px;
+    width: 400px;
+    box-shadow: 0px 0px 6px;
+    text-align: center;
+}
+
+#zpet {
+    position: absolute;
+    top: 4px;
+    right: 8px;
+    text-decoration: none;
+    color: black;
+    font-size: 14pt;
+}
+
+#tlacitka {
+    display: flex;
+    position: absolute;
+    left: 50%;
+    bottom: 1em;
+    transform: translate(-50%);
+}
+
+#cerveneTlacitko {
+    background-color: var(--barvaCervenehoTlacitka);
+    color: white;
+    margin-right: 80px;
+    text-align: center;
+}
+
+#cerveneTlacitko:hover {
+    background-color: var(--barvaCervenehoTlacitka2);
+}
+
+#cerveneTlacitko a {
+    font-size: 12pt;
+}
+
+#cerveneTlacitko, #cerveneTlacitko a {
+    width: 130px;
+}
+
+#tlacitka input[type="submit"] {
+    font-size: 12pt;
+    border: none;
+    width: 130px;
+    padding: 1em;
+    font-family: inherit;
+}
+
+#formular {
+    width: 70%;
+    margin: auto;
+    text-align: left;
+}
+
+.radek {
+    display: flex;
+    align-items: center;
+    font-size: 14pt;
+}
+
+#posledni {
+    justify-content: center;
+    margin-top: 0.5em;
+}
+
+label {
+    padding: 0.5em;
+    padding-left: 0;
+    display: inline-block;
+}
+
+input[type=number] {
+    width: 100%;
+    padding: 0.5em;
+}
+
+input[type=submit] {
+    font-size: 11pt;
+    cursor: pointer;
+    padding: 0.2em;
+}
+
+.sloupec1 {
+    float: left;
+    width: 60%;
+}
+
+.sloupec2 {
+    float: left;
+    width: 40%;
+}
+
+#container2 table {
+    margin: auto;
+    margin-top: 2.5em;
+    width: 70%;
+}
+
+#container2 td, th {
+    padding: 0.3em;
+    text-align: left;
+}
+
+#container2 td:last-child {
+    text-align: right;
+}
+
+.tlacitko a {
+    padding: 1em;
+    text-decoration: none;
+    color: inherit;
+    font-size: 16pt;
+}
+
+.tlacitko {
+    display: flex;
+    justify-content: center;
+    width: 150px;
+    background-color: var(--barvaTlacitka);
+    border-radius: 10px;
+}
+
+.tlacitko:hover {
+    background-color: var(--barvaTlacitka2);
+}
+
+#seznam{
+    width: 60%;
+    margin:auto;
+    display:grid;
+    grid-template-rows: 1fr;
+    font-size:14pt;
+}
+
+#seznam a {
+    color:inherit;
+    text-decoration:none;
+    padding: 0.3em;
+    border-bottom: 1px solid black;
+}
+
+#seznam a:last-child {
+    border-bottom: none;
+}
+
+.seda {
+    background-color: lightgrey;
+}
+
+#seznam a:hover {
+    font-weight: bold;
+    color: var(--barvaMenuHover);
+}

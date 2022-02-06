@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="img/honey.png" type="image/png">
+    <link rel="stylesheet" href="css/hra.css">
+    <link rel="stylesheet" href="css/upresneniUkolu.css">
+    <title>BeehiveTycoon</title>
+</head>
+<body>
+    <div id="container"> 
+        <header>
+            <div id="radek">
+                <div>Včelstvo: 700</div>
+                <div id="Prumer">
+                    Průměrný věk včelstva: 2,5
+                    <div class="submenuG">
+                        Generace včel:
+                        <table id="generace">
+                            <tbody>
+                                <tr>
+                                    <th>Počet včel</th>
+                                    <th>Věk</th>
+                                </tr>
+                                    <tr>
+
+                                        <td>400</td>
+                                        <td>1</td>
+                                    </tr>
+                                    <tr>
+
+                                        <td>300</td>
+                                        <td>4</td>
+                                    </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div>Med: 262</div>
+                <div>Plástve: 1</div>
+                <div>Měsíc: Duben</div>
+            </div>
+        </header>
+            <nav id="ukoly">
+                <div>
+                    <p>Úkoly:</p>
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <th>Název úkolu</th>
+                                    <td>Kusy</td>
+                                    <td>Včely</td>
+                                    <td>Med</td>
+                                </tr>
+                                <tr>
+                                    <th><a href="/Ukoly/Pridat?idUkolu=1">Nakladen&#xED; vaj&#xED;&#x10D;ek </a></th>
+                                        <td>4</td>
+                                    <td>2</td>
+                                    <td>8</td>
+                                </tr>
+                                <tr>
+                                    <th>Celkem</th>
+                                    <td></td>
+                                    <td>2</td>
+                                    <td>8</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                </div>
+                <div class="tlacitko0">
+                    <a href="/Ul/DalsiKolo">Další kolo</a>
+                </div>
+            </nav>
+        <main>
+            <div id="container2">
+                <h1>Nakladení vajíček</h1>
+                <a id="zpet" href="plastev.html">&#10006;</a>
+                <div id="formular">
+                    <form action="/Ukoly/CoSUkolem" method="post">
+                        <input type="hidden" name="idUkolu" value="1">
+                        <input type="hidden" name="nazevUkolu" value="Nakladení vajíček">
+                        <div class="radek">
+                            <div class="sloupec1">
+                                <label for="pocetVajicek">Počet vajíček: </label>
+                            </div>
+                            <div class="sloupec2">
+                                <input type="number" name="pocetVajicek" value="4" max="131" min="1">
+                            </div>
+                        </div>
+                        <div class="radek" id="posledni">
+                            <input type="submit" value="Zobrazit požadavky" name="tlacitko">
+                        </div>
+                        <div id="tlacitka">
+                            <div id="cerveneTlacitko" class="tlacitko">
+                                <a href="/Ukoly/ZrusitUkol?idUkolu=1">Smazat úkol</a>
+                            </div>
+                            <input class="tlacitko" type="submit" value="Přidat úkol" name="tlacitko">
+                        </div>
+                    </form>
+                </div>
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>Úkol vyžaduje:</th>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Včely</td>
+                            <td>2</td>
+                        </tr>
+                        <tr>
+                            <td>Med</td>
+                            <td>8</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div id="chyba">
+                    
+                </div>
+            </div>
+        </main>
+        <nav id="nepratele">
+            <div>
+                <p>Nepřítel v úlu!</p>
+                <ul>
+                    <li>Jméno nepřítele: Mravenci</li>
+                    <li>Počet nepřátel: 19</li>
+                </ul>
+            </div>
+            <div id="zdroje">
+                <div>Icons made by <a href="https://www.flaticon.com/authors/dinosoftlabs" title="DinosoftLabs">DinosoftLabs</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
+                <div><a href="https://wallpapersafari.com/w/rXaV6Y">wallpapersafari.com</a></div>
+            </div>
+        </nav>
+    </div>
+</body>
+</html>
