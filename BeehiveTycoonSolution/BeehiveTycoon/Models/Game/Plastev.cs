@@ -7,7 +7,29 @@ namespace BeehiveTycoon.Models.Game
 {
     public class Plastev
     {
-        public int _med { get; set; }
-        public int _vajicka { get; set; } //k cemu to je???
+        public int Med { get; private set; }
+
+        private readonly int _maxMedu = 1000;
+
+        public Plastev(int med)
+        {
+            Med = med;
+        }
+
+        public int PridatMed(int med)
+        {
+            if (med >= _maxMedu)
+            {
+                Med = _maxMedu;
+                med -= _maxMedu;
+            }
+            else
+            {
+                Med = med;
+                med = 0;
+            }
+
+            return med;
+        }
     }
 }

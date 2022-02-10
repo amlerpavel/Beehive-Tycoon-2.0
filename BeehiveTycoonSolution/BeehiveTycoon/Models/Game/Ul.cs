@@ -8,21 +8,22 @@ namespace BeehiveTycoon.Models.Game
 {
     public class Ul0
     {
-        public int _vcelstvo { get; set; }
-        public int _med { get; set; }
-        public string _lokace { get; set; }
-        public List<GeneraceVcel> _generaceVcelstva { get; set; }
-        public List<Plastev> _plastve { get; set; }
+        public int Vcelstvo { get; private set; }
+        public int Med { get; private set; }
+        public string Lokace { get; private set; }
+        public List<GeneraceVcel> GeneraceVcelstva { get; private set; }
+        public List<Plastev> Plastve { get; private set; }
+        public List<Ukol> SeznamUkolu { get; private set; }
 
         /*
         public Nepritel Nepritel { get; set; }
         public List<Ukol> SeznamUkolu { get; set; }
         */
-        public void NovyUl(string lokace, List<GeneraceVcel> generaceVcelstva, List<Plastev> plastve)
+        public Ul0(string lokace, List<GeneraceVcel> generaceVcelstva, List<Plastev> plastve)
         {
-            _lokace = lokace;
-            _generaceVcelstva = generaceVcelstva;
-            _plastve = plastve;
+            Lokace = lokace;
+            GeneraceVcelstva = generaceVcelstva;
+            Plastve = plastve;
 
             SecistMed();
             SecistVcely();
@@ -30,75 +31,73 @@ namespace BeehiveTycoon.Models.Game
 
         public void DalsiKolo()
         {
+            SplnitUkoly();
             ZestarnutiVcelstva();
-            UlozitMedNaPlastve(_med);
+            UlozitMedNaPlastve();
             SecistVcely();
         }
 
         private void SecistVcely()
         {
-            _vcelstvo = 0;
+            Vcelstvo = 0;
 
-            foreach (GeneraceVcel generaceVcel in _generaceVcelstva)
+            foreach (GeneraceVcel generaceVcel in GeneraceVcelstva)
             {
-                _vcelstvo += generaceVcel._pocet;
+                Vcelstvo += generaceVcel.Pocet;
             }
 
         }
         private void SecistMed()
         {
-            _med = 0;
+            Med = 0;
 
-            foreach (Plastev plastev in _plastve)
+            foreach (Plastev plastev in Plastve)
             {
-                _med += plastev._med;
+                Med += plastev.Med;
             }
 
         }
         private void ZestarnutiVcelstva()
         {
-            _generaceVcelstva.Sort((x, y) => x._vek.CompareTo(y._vek));
+            GeneraceVcelstva.Sort((x, y) => x.Vek.CompareTo(y.Vek));
             List<int> inexy = new();
 
-            foreach (GeneraceVcel generaceVcel in _generaceVcelstva)
+            foreach (GeneraceVcel generaceVcel in GeneraceVcelstva)
             {
-                _med -= generaceVcel._pocet;
+                Med -= generaceVcel.Pocet;
 
-                if(_med >= 0)
+                if(Med >= 0)
                     generaceVcel.Zestarnout(1);
                 else
                 {
-                    double vek = (_med * (-3) + generaceVcel._pocet + _med) / Convert.ToDouble(generaceVcel._pocet);
+                    double vek = (Med * (-3) + generaceVcel.Pocet + Med) / Convert.ToDouble(generaceVcel.Pocet);
                     generaceVcel.Zestarnout(Math.Round(vek, 0, MidpointRounding.AwayFromZero));
-                    _med = 0;
+                    Med = 0;
                 }
 
-                if (generaceVcel._vek >= 7)
-                    inexy.Add(_generaceVcelstva.IndexOf(generaceVcel));
+                if (generaceVcel.Vek >= 7)
+                    inexy.Add(GeneraceVcelstva.IndexOf(generaceVcel));
             }
 
             foreach(int i in inexy)
             {
-                _generaceVcelstva.RemoveAt(i);
+                GeneraceVcelstva.RemoveAt(i);
             }
 
-            _generaceVcelstva.Sort((x, y) => y._vek.CompareTo(x._vek));
+            GeneraceVcelstva.Sort((x, y) => y.Vek.CompareTo(x.Vek));
         }
-        private void UlozitMedNaPlastve(int med)
+        private void UlozitMedNaPlastve()
         {
-            foreach (Plastev plastev in _plastve)
+            foreach (Plastev plastev in Plastve)
             {
-                if (med >= 1000)
-                {
-                    plastev._med = 1000;
-                    med -= 1000;
-                }
-                else
-                {
-                    plastev._med = med;
-                    med = 0;
-                }
+                Med = plastev.PridatMed(Med);
             }
+
+            SecistMed();
+        }
+        private void SplnitUkoly()
+        {
+
         }
     }
 }

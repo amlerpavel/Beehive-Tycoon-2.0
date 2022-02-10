@@ -7,31 +7,31 @@ namespace BeehiveTycoon.Models.Game
 {
     public class Datum
     {
-        public int _rok { get; set; }
-        public int _cisloMesice { get; set; }
-        public string _mesic { get; set; }
+        public int Rok { get; private set; }
+        public int CisloMesice { get; private set; }
+        public string Mesic { get; private set; }
 
-        private string[] _mesice = { "Leden", "Únor", "Březen", "Duben", "Květen", "Červen", "Červenec", "Srpen", "Září", "Říjen", "Listopad", "Prosinec" };
+        private readonly string[] _mesice = { "Leden", "Únor", "Březen", "Duben", "Květen", "Červen", "Červenec", "Srpen", "Září", "Říjen", "Listopad", "Prosinec" };
 
         public void ZmenaData()
         {
             
-            _cisloMesice += 1;
+            CisloMesice += 1;
 
-            if (_cisloMesice == 13)
+            if (CisloMesice == 13)
             {
-                _cisloMesice = 1;
-                _rok += 1;
+                CisloMesice = 1;
+                Rok += 1;
             }
 
-            _mesic = _mesice[_cisloMesice - 1];
+            Mesic = _mesice[CisloMesice - 1];
         }
 
-        public void NoveDatum(int cisloMesice, int rok)
+        public Datum(int cisloMesice, int rok)
         {
-            _cisloMesice = cisloMesice;
-            _rok = rok;
-            _mesic = _mesice[_cisloMesice - 1];
+            CisloMesice = cisloMesice;
+            Rok = rok;
+            Mesic = _mesice[CisloMesice - 1];
         }
     }
 }

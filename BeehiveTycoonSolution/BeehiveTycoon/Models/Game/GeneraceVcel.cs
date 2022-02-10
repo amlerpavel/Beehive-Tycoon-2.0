@@ -7,12 +7,18 @@ namespace BeehiveTycoon.Models.Game
 {
     public class GeneraceVcel
     {
-        public int _pocet { get; set; }
-        public double _vek { get; set; }
+        public int Pocet { get; private set; }
+        public double Vek { get; private set; }
+
+        public GeneraceVcel(int pocet, double vek)
+        {
+            Pocet = pocet;
+            Vek = vek;
+        }
 
         public void Zestarnout(double oKolik)
         {
-            _vek += oKolik;
+            Vek += oKolik;
         }
     }
 }

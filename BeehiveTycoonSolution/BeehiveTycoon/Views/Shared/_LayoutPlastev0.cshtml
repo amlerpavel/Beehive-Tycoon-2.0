@@ -16,19 +16,19 @@
     */
     double soucetVek = 0;
 
-    foreach (GeneraceVcel generaceVcel in Model._ul0._generaceVcelstva)
+    foreach (GeneraceVcel generaceVcel in Model.Ul0.GeneraceVcelstva)
     {
-        soucetVek += generaceVcel._vek;
+        soucetVek += generaceVcel.Vek;
     }
     
-    double prumerVek = soucetVek / Convert.ToDouble(Model._ul0._generaceVcelstva.Count);
+    double prumerVek = soucetVek / Convert.ToDouble(Model.Ul0.GeneraceVcelstva.Count);
     prumerVek = Math.Round(prumerVek, 2, MidpointRounding.AwayFromZero);
     
 }
 
 <header>
     <div id="radek">
-        <div>Včelstvo: @Model._ul0._vcelstvo</div>
+        <div>Včelstvo: @Model.Ul0.Vcelstvo</div>
         <div id="Prumer">
             Průměrný věk včelstva: @prumerVek
             <div class="submenuG">
@@ -39,22 +39,22 @@
                             <th>Počet včel</th>
                             <th>Věk</th>
                         </tr>
-                        @foreach (GeneraceVcel generaceVcel in Model._ul0._generaceVcelstva)
+                        @foreach (GeneraceVcel generaceVcel in Model.Ul0.GeneraceVcelstva)
                         {
                             <tr>
 
-                                <td>@generaceVcel._pocet</td>
-                                <td>@generaceVcel._vek</td>
+                                <td>@generaceVcel.Pocet</td>
+                                <td>@generaceVcel.Vek</td>
                             </tr>
                         }
                     </tbody>
                 </table>
             </div>
         </div>
-        <div>Med: @Model._ul0._med</div>
-        <div>Plástve: @Model._ul0._plastve.Count</div>
-        <div>Měsíc: @Model._datum._mesic</div>
-        <div>Lokace: @Model._ul0._lokace</div>
+        <div>Med: @Model.Ul0.Med</div>
+        <div>Plástve: @Model.Ul0.Plastve.Count</div>
+        <div>Měsíc: @Model.Datum.Mesic</div>
+        <div>Lokace: @Model.Ul0.Lokace</div>
     </div>
 </header>
 <nav id="ukoly">

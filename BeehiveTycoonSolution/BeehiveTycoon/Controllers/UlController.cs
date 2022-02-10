@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using BeehiveTycoon.Models;
+using BeehiveTycoon.Models.Game;
 using Microsoft.AspNetCore.Http;
 using System.Text.Json;
 
@@ -609,8 +610,19 @@ namespace BeehiveTycoon.Controllers
 
             if (hra == null)
             {
-                hra = new();
-                hra.NovaHra();
+                hra = new Hra0(
+                    new Datum(12, 0),
+                    new Ul0(
+                        "netusim",
+                        new List<GeneraceVcel> {
+                            new GeneraceVcel(300, 3),
+                            new GeneraceVcel(400, 0)
+                        },
+                        new List<Plastev> {
+                            new Plastev(1000)
+                        }
+                    )
+                );
                 UlozitHru0(hra);
             }
 
@@ -636,7 +648,7 @@ namespace BeehiveTycoon.Controllers
         public Hra0 NacistHru0()
         {
             Hra0 hra;
-
+            
             if (HttpContext.Session.GetString("Hra") == null)
             {
                 if (HttpContext.Request.Cookies["Hra"] == null)
