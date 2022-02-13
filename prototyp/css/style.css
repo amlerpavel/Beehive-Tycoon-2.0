@@ -5,7 +5,7 @@
     --barvaTlacitka2: lawngreen;
 }
 
-html,body {
+html, body {
     height: 100%;
 }
 
@@ -31,6 +31,10 @@ h1 {
     font-size: 28pt;
 }
 
+.tlacitko, .tlacitko a {
+    width: 150px;
+}
+
 .tlacitko a {
     padding: 1em;
     text-decoration: none;
@@ -41,7 +45,6 @@ h1 {
 .tlacitko {
     display: flex;
     justify-content: center;
-    width: 150px;
     background-color: var(--barvaTlacitka);
     border-radius: 10px;
 }
