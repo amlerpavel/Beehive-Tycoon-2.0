@@ -15,9 +15,15 @@ namespace BeehiveTycoon.Models.Game
         public int PocetPlastvi { get; private set; }
         public int Platnost { get; private set; }
 
-        public Ukol()
+        public Ukol(int id, string nazev, int pocetVcel, int pocetVajicek, int pocetMedu, int pocetPlastvi, int platnost)
         {
-            
+            Id = id;
+            Nazev = nazev;
+            PocetVcel = pocetVcel;
+            PocetVajicek = pocetVajicek;
+            PocetMedu = pocetMedu;
+            PocetPlastvi = pocetPlastvi;
+            Platnost = platnost;
         }
     }
 }

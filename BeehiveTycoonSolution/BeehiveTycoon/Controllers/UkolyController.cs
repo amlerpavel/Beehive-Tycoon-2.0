@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BeehiveTycoon.Models;
+using BeehiveTycoon.Models.Game;
 using System.Diagnostics;
 using System.Text.Json;
 
@@ -274,9 +274,9 @@ namespace BeehiveTycoon.Controllers
         }
 
         [HttpPost]
-        public IActionResult Seznam2([FromBody]string pokus)
+        public IActionResult Pridat([FromBody]Ukol ukol)
         {
-            Debug.WriteLine(pokus + "222");
+            Debug.WriteLine(ukol.Nazev);
 
             return Json("povedlo");
         }

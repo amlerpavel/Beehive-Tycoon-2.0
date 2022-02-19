@@ -42,31 +42,39 @@ main{
     transform: translate(-50%);
 }
 
-#cerveneTlacitko {
+#zrusit {
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
     background-color: var(--barvaCervenehoTlacitka);
     color: white;
     margin-right: 80px;
     text-align: center;
+    width: 130px;
+    font-size: 12pt;
+    font-family: inherit;
+    border-radius: 10px;
 }
 
-#cerveneTlacitko:hover {
+#zrusit:hover {
     background-color: var(--barvaCervenehoTlacitka2);
 }
 
-#cerveneTlacitko a {
-    font-size: 12pt;
-}
-
-#cerveneTlacitko, #cerveneTlacitko a {
-    width: 130px;
-}
-
-#tlacitka input[type="submit"] {
+#pridat {
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
     font-size: 12pt;
     border: none;
     width: 130px;
     padding: 1em;
     font-family: inherit;
+    border-radius: 10px;
+    background-color: var(--barvaTlacitka);
+}
+
+#pridat:hover {
+    background-color: var(--barvaTlacitka2);
 }
 
 #formular {

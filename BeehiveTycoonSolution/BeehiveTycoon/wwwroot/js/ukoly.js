@@ -5,22 +5,23 @@ $(document).ready(function() {
     $(document).on("click", "#zpet", function(){
         UkazUkoly();
     });
-    $(document).on("click", "#pokus", function () {
+    $(document).on("click", "#pridat", function () {
+       
         /*
         fetch('/Ukoly/Seznam')
             .then(odpoved => odpoved.json())
             .then(data => console.log(data));
         */
-        let data = "eee";
-        fetch('/Ukoly/Seznam2', {
+
+        fetch('/Ukoly/Pridat', {
             method: 'POST',
-            body: JSON.stringify(data),
+            body: JSON.stringify(ZiskatUkol()),
             headers: {
                 "Content-Type": "application/json"
             }
         })
-            .then(odpoved => odpoved.json())
-            .then(data => console.log(data));;
+        .then(odpoved => odpoved.json())
+        .then(data => console.log(data));
     });
 });
 
@@ -31,20 +32,20 @@ function UkazFormular(element){
         telo = `
         <div class="radek">
             <div class="sloupec1">
-                <label for="vcely">Počet včel: </label>
+                <label for="PocetVcel">Počet včel: </label>
             </div>
             <div class="sloupec2">
-                <input type="number" name="pocetVcel" value="@ViewBag.Ukol.PocetVcel" max="" min="1">
+                <input type="number" name="PocetVcel" value="@ViewBag.Ukol.PocetVcel" max="" min="1">
             </div>
         </div>`;
     }else if(element.value == 2){
         telo = `
         <div class="radek">
             <div class="sloupec1">
-                <label for="pocetVajicek">Počet vajíček: </label>
+                <label for="PocetVajicek">Počet vajíček: </label>
             </div>
             <div class="sloupec2">
-                <input type="number" name="pocetVajicek" value="@ViewBag.Ukol.PocetVajicek" max="" min="1">
+                <input type="number" name="PocetVajicek" value="@ViewBag.Ukol.PocetVajicek" max="" min="1">
             </div>
         </div>
         <div class="radek" id="posledni">
@@ -54,31 +55,28 @@ function UkazFormular(element){
         telo = `
         <div class="radek">
             <div class="sloupec1">
-                <label for="pocetPlaství">Počet pláství: </label>
+                <label for="PocetPlastvi">Počet pláství: </label>
             </div>
             <div class="sloupec2">
-                <input type="number" name="pocetPlastvi" value="@ViewBag.Ukol.PocetPlastvi" max="" min="1">
+                <input type="number" name="PocetPlastvi" value="@ViewBag.Ukol.PocetPlastvi" max="" min="1">
             </div>
         </div>
         <div class="radek" id="posledni">
             <input type="submit" value="Zobrazit požadavky" name="tlacitko">
         </div>`;
     }
-    
+
     $("#container2").html(`
         <h1>` + element.innerText + `</h1>
         <button id="zpet">&#10006;</button>
         <div id="formular">
-            <input type="hidden" name="idUkolu" value="` + element.id +`">
-            <input type="hidden" name="nazevUkolu" value="` + element.innerText +`">
+            <input type="hidden" name="Id" value="` + element.value +`">
+            <input type="hidden" name="Nazev" value="` + element.innerText +`">
             `+ telo +`
-            <div id="tlacitka">
-                <div id="cerveneTlacitko" class="tlacitko">
-                    <a href="/Ukoly/ZrusitUkol?idUkolu=1">Smazat úkol</a>
-                </div>
-                <button id="pokus">Sbírání pylu</button>
-                <input class="tlacitko" type="submit" value="Přidat úkol" name="tlacitko">
-            </div>
+        </div>
+        <div id="tlacitka">
+            <button id="zrusit"">Smazat úkol</button>
+            <button id="pridat">Přidat úkol</button>
         </div>
     `);
 }
@@ -95,4 +93,35 @@ function UkazUkoly(){
             <button class="ukol" value="6">Vyrojení včelstva</button>
         </div>
     `);
+}
+
+function ZiskatUkol() {
+    let formular = $("#formular").find("input");
+    let ukol = { Id: 0, Nazev: "", PocetVcel: 0, PocetVajicek: 0, PocetMedu: 0, PocetPlastvi: 0, Platnost: 0 };
+
+    for (let input of formular) {
+        let jmeno = input.name;
+        let hodnota = input.value;
+
+        if (jmeno == "Id") {
+            ukol.Id = hodnota;
+        }
+        else if (jmeno == "Nazev") {
+            ukol.Nazev = hodnota;
+        }
+        else if (jmeno == "PocetVcel") {
+            ukol.PocetVcel = hodnota;
+        }
+        else if (jmeno == "PocetVajicek") {
+            ukol.PocetVajicek = hodnota;
+        }
+        else if (jmeno == "PocetVajicek") {
+            ukol.PocetVajicek = hodnota;
+        }
+        else if (jmeno == "PocetPlastvi") {
+            ukol.PocetPlastvi = hodnota;
+        }
+    }
+
+    return ukol;
 }
