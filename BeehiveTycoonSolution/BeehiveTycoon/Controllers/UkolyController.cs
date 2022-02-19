@@ -11,6 +11,7 @@ namespace BeehiveTycoon.Controllers
 {
     public class UkolyController : UlController
     {
+        /*
         public IActionResult Seznam()
         {
             Hra hra = NacistHru();
@@ -263,6 +264,21 @@ namespace BeehiveTycoon.Controllers
 
             int[] vysledky = { pocetVcel, pocetMedu };
             return vysledky;
+        }
+        */
+        public IActionResult Seznam()
+        {
+            string pokus = "pokus33";
+
+            return Json(pokus);
+        }
+
+        [HttpPost]
+        public IActionResult Seznam2([FromBody]string pokus)
+        {
+            Debug.WriteLine(pokus + "222");
+
+            return Json("povedlo");
         }
     }
 }
