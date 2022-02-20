@@ -49,7 +49,7 @@ header div div {
 }
 
 main {
-   background-image: url("/img/plastev.jpeg");
+   background-image: url("../img/plastev.jpeg");
    order: 3;
 }
 

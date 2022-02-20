@@ -1,0 +1,78 @@
+﻿@model BeehiveTycoon.Models.Hra0
+@using System.Diagnostics;
+@using BeehiveTycoon.Models.Game
+@{
+    Layout = "_Layout";
+    ViewData["css"] = "hra.css";
+    /*
+    int pocetVcel = 0;
+    int pocetMedu = 0;
+
+    foreach (BeehiveTycoon.Models.Ukol ukol in Model.SeznamUkolu)
+    {
+        pocetVcel += ukol.PocetVcel;
+        pocetMedu += ukol.PocetMedu;
+    }
+    */
+    double soucetVek = 0;
+
+    foreach (GeneraceVcel generaceVcel in Model.Ul0.GeneraceVcelstva)
+    {
+        soucetVek += generaceVcel.Vek;
+    }
+    
+    double prumerVek = soucetVek / Convert.ToDouble(Model.Ul0.GeneraceVcelstva.Count);
+    prumerVek = Math.Round(prumerVek, 2, MidpointRounding.AwayFromZero);
+    
+}
+
+<header>
+    <div id="radek">
+        <div>Včelstvo: @Model.Ul0.Vcelstvo</div>
+        <div id="Prumer">
+            Průměrný věk včelstva: @prumerVek
+            <div class="submenuG">
+                Generace včel:
+                <table id="generace">
+                    <tbody>
+                        <tr>
+                            <th>Počet včel</th>
+                            <th>Věk</th>
+                        </tr>
+                        @foreach (GeneraceVcel generaceVcel in Model.Ul0.GeneraceVcelstva)
+                        {
+                            <tr>
+
+                                <td>@generaceVcel.Pocet</td>
+                                <td>@generaceVcel.Vek</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div>Med: @Model.Ul0.Med</div>
+        <div>Plástve: @Model.Ul0.Plastve.Count</div>
+        <div>Měsíc: @Model.Datum.Mesic</div>
+        <div>Lokace: @Model.Ul0.Lokace</div>
+    </div>
+</header>
+<nav id="ukoly">
+    <div>
+        
+        
+    </div>
+    <div class="tlacitko0">
+        <a href="/Ul/DalsiKolo">Další kolo</a>
+    </div>
+</nav>
+<main>
+    @RenderBody()
+</main>
+<nav id="nepratele">
+    
+    <div id="zdroje">
+        <div>Icons made by <a href="https://www.flaticon.com/authors/dinosoftlabs" title="DinosoftLabs">DinosoftLabs</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
+        <div><a href="https://wallpapersafari.com/w/rXaV6Y">wallpapersafari.com</a></div>
+    </div>
+</nav>

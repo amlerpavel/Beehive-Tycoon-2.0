@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BeehiveTycoon.Models;
+using BeehiveTycoon.Models.Game;
 using System.Diagnostics;
 using System.Text.Json;
 
@@ -11,6 +11,7 @@ namespace BeehiveTycoon.Controllers
 {
     public class UkolyController : UlController
     {
+        /*
         public IActionResult Seznam()
         {
             Hra hra = NacistHru();
@@ -263,6 +264,21 @@ namespace BeehiveTycoon.Controllers
 
             int[] vysledky = { pocetVcel, pocetMedu };
             return vysledky;
+        }
+        */
+        public IActionResult Seznam()
+        {
+            string pokus = "pokus33";
+
+            return Json(pokus);
+        }
+
+        [HttpPost]
+        public IActionResult Pridat([FromBody]Ukol ukol)
+        {
+            Debug.WriteLine(ukol.Nazev);
+
+            return Json("povedlo");
         }
     }
 }

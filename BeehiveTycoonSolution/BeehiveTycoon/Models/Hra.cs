@@ -10,7 +10,7 @@ namespace BeehiveTycoon.Models
         public Ul Ul { get; set; }
         public Nepritel Nepritel { get; set; }
         public List<GeneraceVcelstva> GeneraceVcelstev { get; set; }
-        public List<Plastev> Plastve { get; set; }
+        public List<Plastev0> Plastve { get; set; }
         public List<Ukol> SeznamUkolu { get; set; }
         public bool Vyhra { get; set; }
     }
@@ -45,7 +45,7 @@ namespace BeehiveTycoon.Models
         public int Pocet { get; set; }
     }
 
-    public struct Plastev
+    public struct Plastev0
     {
         public int Med { get; set; }
         public int Vajicka { get; set; }
