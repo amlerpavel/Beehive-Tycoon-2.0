@@ -636,7 +636,7 @@ namespace BeehiveTycoon.Controllers
             //Debug.WriteLine(JsonSerializer.Serialize(hra0));
             UlozitHru0(hra0);
 
-            return RedirectToAction("Plastev0");
+            return Json(hra0);
         }
 
         public void UlozitHru0(Hra0 hra)
