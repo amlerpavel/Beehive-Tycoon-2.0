@@ -6,7 +6,7 @@
     int pocetVcel = 0;
     int pocetMedu = 0;
 
-    foreach (BeehiveTycoon.Models.Ukol ukol in Model.SeznamUkolu)
+    foreach (BeehiveTycoon.Models.Ukol0 ukol in Model.SeznamUkolu)
     {
         pocetVcel += ukol.PocetVcel;
         pocetMedu += ukol.PocetMedu;
@@ -72,7 +72,7 @@
                         <td>Včely</td>
                         <td>Med</td>
                     </tr>
-                    @foreach (BeehiveTycoon.Models.Ukol ukol in Model.SeznamUkolu)
+                    @foreach (BeehiveTycoon.Models.Ukol0 ukol in Model.SeznamUkolu)
                     {
                         <tr>
                             <th><a href="@Url.Action("Pridat", "Ukoly", new { idUkolu = ukol.IdUkolu })">@ukol.Nazev</a></th>
