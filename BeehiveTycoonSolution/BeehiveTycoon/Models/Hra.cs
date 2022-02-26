@@ -11,7 +11,7 @@ namespace BeehiveTycoon.Models
         public Nepritel Nepritel { get; set; }
         public List<GeneraceVcelstva> GeneraceVcelstev { get; set; }
         public List<Plastev0> Plastve { get; set; }
-        public List<Ukol> SeznamUkolu { get; set; }
+        public List<Ukol0> SeznamUkolu { get; set; }
         public bool Vyhra { get; set; }
     }
 
@@ -28,7 +28,7 @@ namespace BeehiveTycoon.Models
         public int Vek { get; set; }
     }
 
-    public struct Ukol
+    public struct Ukol0
     {
         public int IdUkolu { get; set; }
         public string Nazev { get; set; }
@@ -39,7 +39,7 @@ namespace BeehiveTycoon.Models
         public int Platnost { get; set; }
     }
 
-    public struct Pozadavek
+    public struct Pozadavek0
     {
         public string Jmeno { get; set; }
         public int Pocet { get; set; }

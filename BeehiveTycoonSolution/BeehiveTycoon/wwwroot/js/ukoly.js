@@ -12,7 +12,7 @@ $(document).ready(function() {
             .then(odpoved => odpoved.json())
             .then(data => console.log(data));
         */
-
+        
         fetch('/Ukoly/Pridat', {
             method: 'POST',
             body: JSON.stringify(ZiskatUkol()),
@@ -32,20 +32,20 @@ function UkazFormular(element){
         telo = `
         <div class="radek">
             <div class="sloupec1">
-                <label for="PocetVcel">Počet včel: </label>
+                <label for="Hodnota">Počet včel: </label>
             </div>
             <div class="sloupec2">
-                <input type="number" name="PocetVcel" value="@ViewBag.Ukol.PocetVcel" max="" min="1">
+                <input type="number" name="Hodnota" value="@ViewBag.Ukol.PocetVcel" max="" min="1">
             </div>
         </div>`;
     }else if(element.value == 2){
         telo = `
         <div class="radek">
             <div class="sloupec1">
-                <label for="PocetVajicek">Počet vajíček: </label>
+                <label for="Hodnota">Počet vajíček: </label>
             </div>
             <div class="sloupec2">
-                <input type="number" name="PocetVajicek" value="@ViewBag.Ukol.PocetVajicek" max="" min="1">
+                <input type="number" name="Hodnota" value="@ViewBag.Ukol.PocetVajicek" max="" min="1">
             </div>
         </div>
         <div class="radek" id="posledni">
@@ -55,10 +55,10 @@ function UkazFormular(element){
         telo = `
         <div class="radek">
             <div class="sloupec1">
-                <label for="PocetPlastvi">Počet pláství: </label>
+                <label for="Hodnota">Počet pláství: </label>
             </div>
             <div class="sloupec2">
-                <input type="number" name="PocetPlastvi" value="@ViewBag.Ukol.PocetPlastvi" max="" min="1">
+                <input type="number" name="Hodnota" value="@ViewBag.Ukol.PocetPlastvi" max="" min="1">
             </div>
         </div>
         <div class="radek" id="posledni">
@@ -71,7 +71,6 @@ function UkazFormular(element){
         <button id="zpet">&#10006;</button>
         <div id="formular">
             <input type="hidden" name="Id" value="` + element.value +`">
-            <input type="hidden" name="Nazev" value="` + element.innerText +`">
             `+ telo +`
         </div>
         <div id="tlacitka">
@@ -97,7 +96,7 @@ function UkazUkoly(){
 
 function ZiskatUkol() {
     let formular = $("#formular").find("input");
-    let ukol = { Id: 0, Nazev: "", PocetVcel: 0, PocetVajicek: 0, PocetMedu: 0, PocetPlastvi: 0, Platnost: 0 };
+    let ukol = { Id: 0, Hodnota: 0 };
 
     for (let input of formular) {
         let jmeno = input.name;
@@ -106,22 +105,10 @@ function ZiskatUkol() {
         if (jmeno == "Id") {
             ukol.Id = hodnota;
         }
-        else if (jmeno == "Nazev") {
-            ukol.Nazev = hodnota;
-        }
-        else if (jmeno == "PocetVcel") {
-            ukol.PocetVcel = hodnota;
-        }
-        else if (jmeno == "PocetVajicek") {
-            ukol.PocetVajicek = hodnota;
-        }
-        else if (jmeno == "PocetVajicek") {
-            ukol.PocetVajicek = hodnota;
-        }
-        else if (jmeno == "PocetPlastvi") {
-            ukol.PocetPlastvi = hodnota;
+        else if (jmeno == "Hodnota") {
+            ukol.Hodnota = hodnota;
         }
     }
-
+    console.log(ukol);
     return ukol;
 }
