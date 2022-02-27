@@ -300,5 +300,15 @@ namespace BeehiveTycoon.Controllers
             
             return Json(hra.Ul0.SeznamUkolu);
         }
+
+        [HttpPost]
+        public IActionResult Zrusit([FromBody] int idUkolu)
+        {
+            Hra0 hra = NacistHru0();
+            hra.Ul0.SmazatUkol(idUkolu);
+            UlozitHru0(hra);
+
+            return Json(hra.Ul0.SeznamUkolu);
+        }
     }
 }

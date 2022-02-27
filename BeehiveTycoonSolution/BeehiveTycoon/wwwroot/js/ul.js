@@ -47,6 +47,18 @@ $(document).ready(function () {
             }
         });
     });
+
+    $(document).on("click", "#zrusit", function () {
+        fetch('/Ukoly/Zrusit', {
+            method: 'POST',
+            body: JSON.stringify(ZiskatUkol().Id),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        .then(odpoved => odpoved.json())
+        .then(data => console.log(data));
+    });
 });
 
 function PrepsatZakladniInformace() {
