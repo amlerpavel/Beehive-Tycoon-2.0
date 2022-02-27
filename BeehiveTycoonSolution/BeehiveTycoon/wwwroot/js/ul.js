@@ -11,7 +11,7 @@ $(document).ready(function () {
         .then(data => {
             hra = data;
             PrepsatZakladniInformace();
-            console.log(hra);
+            PrepsatSeznamUkolu();
         });
     });
 
@@ -42,22 +42,28 @@ $(document).ready(function () {
                 console.log(data);
             else {
                 hra.ul0.seznamUkolu = data;
-                console.log(hra.ul0.seznamUkolu);
                 PrepsatSeznamUkolu();
+                UkazVyberUkolu();
             }
         });
     });
-
     $(document).on("click", "#zrusit", function () {
-        fetch('/Ukoly/Zrusit', {
-            method: 'POST',
-            body: JSON.stringify(ZiskatUkol().Id),
-            headers: {
-                "Content-Type": "application/json"
-            }
-        })
-        .then(odpoved => odpoved.json())
-        .then(data => console.log(data));
+        let dataUkolu = ZiskatDataUkolu();
+        if (hra.ul0.seznamUkolu.includes(NajitUkol(dataUkolu.Id))) {
+            fetch('/Ukoly/Zrusit', {
+                method: 'POST',
+                body: JSON.stringify(dataUkolu.Id),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
+            .then(odpoved => odpoved.json())
+            .then(data => {
+                hra.ul0.seznamUkolu = data;
+                PrepsatSeznamUkolu();
+                UkazVyberUkolu();
+            });
+        }
     });
 });
 
@@ -231,6 +237,12 @@ function ZiskatDataUkolu() {
             ukol.Hodnota = hodnota;
         }
     }
-    console.log(ukol);
+    
     return ukol;
+}
+function NajitUkol(id) {
+    for (let ukol of hra.ul0.seznamUkolu) {
+        if (ukol.id == id)
+            return ukol;
+    }
 }
