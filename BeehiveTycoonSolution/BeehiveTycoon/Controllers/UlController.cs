@@ -640,6 +640,13 @@ namespace BeehiveTycoon.Controllers
             return Json(hra0);
         }
 
+        public IActionResult JSONHra()
+        {
+            Hra0 hra0 = NacistHru0();
+
+            return Json(hra0);
+        }
+
         public void UlozitHru0(Hra0 hra)
         {
             HttpContext.Session.SetString("Hra", JsonSerializer.Serialize(hra));

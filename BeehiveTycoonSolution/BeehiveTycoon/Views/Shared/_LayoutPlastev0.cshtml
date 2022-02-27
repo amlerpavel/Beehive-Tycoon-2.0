@@ -4,26 +4,31 @@
 @{
     Layout = "_Layout";
     ViewData["css"] = "hra.css";
-    /*
+
     int pocetVcel = 0;
     int pocetMedu = 0;
 
-    foreach (BeehiveTycoon.Models.Ukol ukol in Model.SeznamUkolu)
+    foreach (Ukol ukol in Model.Ul0.SeznamUkolu)
     {
-        pocetVcel += ukol.PocetVcel;
-        pocetMedu += ukol.PocetMedu;
+        foreach (Podrobnost podrobnost in ukol.Podrobnosti)
+        {
+            if (podrobnost.Jmeno == "vcely")
+                pocetVcel += podrobnost.Hodnota;
+            else if (podrobnost.Jmeno == "med")
+                pocetMedu += podrobnost.Hodnota;
+        }
     }
-    */
+    
     double soucetVek = 0;
 
     foreach (GeneraceVcel generaceVcel in Model.Ul0.GeneraceVcelstva)
     {
         soucetVek += generaceVcel.Vek;
     }
-    
+
     double prumerVek = soucetVek / Convert.ToDouble(Model.Ul0.GeneraceVcelstva.Count);
     prumerVek = Math.Round(prumerVek, 2, MidpointRounding.AwayFromZero);
-    
+
 }
 
 <header>
@@ -58,9 +63,66 @@
     </div>
 </header>
 <nav id="ukoly">
-    <div>
-        
-        
+    <div id="seznamUkolu">
+        <p>Úkoly:</p>
+        @if (!Model.Ul0.SeznamUkolu.Any())
+        {
+            <ul>
+                <li>Nejsou zadané žádné úkoly.</li>
+            </ul>
+        }
+        else
+        {
+            <table>
+                <tbody>
+                    <tr>
+                        <th>Název úkolu</th>
+                        <td>Kusy</td>
+                        <td>Včely</td>
+                        <td>Med</td>
+                    </tr>
+                    @foreach (Ukol ukol in Model.Ul0.SeznamUkolu)
+                    {
+                        <tr>
+                            <th><a>@ukol.Nazev</a></th>
+                            @foreach (Podrobnost podrobnost in ukol.Podrobnosti)
+                            {
+                                if (podrobnost.Jmeno == "kusy")
+                                {
+                                    <td>@podrobnost.Hodnota</td>
+                                }
+                                else
+                                {
+                                    <td>0</td>
+                                }
+                                if (podrobnost.Jmeno == "vcely")
+                                {
+                                    <td>@podrobnost.Hodnota</td>
+                                }
+                                else
+                                {
+                                    <td>0</td>
+                                }
+                                if (podrobnost.Jmeno == "med")
+                                {
+                                    <td>@podrobnost.Hodnota</td>
+                                }
+                                else
+                                {
+                                    <td>0</td>
+                                }
+                            }
+                        </tr>
+                    }
+                        <tr>
+                            <th>Celkem</th>
+                            <td></td>
+                            <td>@pocetVcel</td>
+                            <td>@pocetMedu</td>
+                        </tr>
+                    </tbody>
+            </table>
+        }
     </div>
     <div id="dalsiKolo" class="tlacitko0">
         <a>Další kolo</a>
