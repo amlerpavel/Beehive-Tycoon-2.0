@@ -9,21 +9,37 @@ namespace BeehiveTycoon.Models.Game
     {
         public int Id { get; private set; }
         public string Nazev { get; private set; }
-        public int PocetVcel { get; private set; }
-        public int PocetVajicek { get; private set; }
-        public int PocetMedu { get; private set; }
-        public int PocetPlastvi { get; private set; }
-        public int Platnost { get; private set; }
+        public Podrobnost[] Podrobnosti { get; private set; }
 
-        public Ukol(int id, string nazev, int pocetVcel, int pocetVajicek, int pocetMedu, int pocetPlastvi, int platnost)
+        public Ukol(int id, string nazev, Podrobnost[] podrobnosti)
         {
             Id = id;
             Nazev = nazev;
-            PocetVcel = pocetVcel;
-            PocetVajicek = pocetVajicek;
-            PocetMedu = pocetMedu;
-            PocetPlastvi = pocetPlastvi;
-            Platnost = platnost;
+            Podrobnosti = podrobnosti;
+        }
+    }
+
+    public class Podrobnost
+    {
+        public string Jmeno { get; private set; }
+        public int Hodnota { get; private set; }
+
+        public Podrobnost(string jmeno, int hodnota)
+        {
+            Jmeno = jmeno;
+            Hodnota = hodnota;
+        }
+    }
+
+    public class DataUkolu
+    {
+        public int Id { get; private set; }
+        public int Hodnota { get; private set; }
+
+        public DataUkolu(int id, int hodnota)
+        {
+            Id = id;
+            Hodnota = hodnota;
         }
     }
 }

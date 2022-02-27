@@ -4,10 +4,10 @@
 @{
     Layout = "_LayoutPlastev";
     ViewData["css2"] = "upresneniUkolu.css";
-    List<Pozadavek> Pozadavky = new();
+    List<Pozadavek0> Pozadavky = new();
     if (TempData["Pozadavky"] != null)
     {
-        Pozadavky = JsonSerializer.Deserialize<List<Pozadavek>>(Convert.ToString(TempData["Pozadavky"]));
+        Pozadavky = JsonSerializer.Deserialize<List<Pozadavek0>>(Convert.ToString(TempData["Pozadavky"]));
     }
 
 }
@@ -75,7 +75,7 @@
                     <th>Úkol vyžaduje:</th>
                     <td></td>
                 </tr>
-                foreach (Pozadavek pozadavek in Pozadavky)
+                foreach (Pozadavek0 pozadavek in Pozadavky)
                 {
                     <tr>
                         <td>@pozadavek.Jmeno</td>

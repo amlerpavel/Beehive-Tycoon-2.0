@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BeehiveTycoon.Models;
 using BeehiveTycoon.Models.Game;
 using System.Diagnostics;
 using System.Text.Json;
@@ -270,14 +271,33 @@ namespace BeehiveTycoon.Controllers
         {
             string pokus = "pokus33";
 
+            //Ukol ukol = new Ukol(3, 10);
+            //Debug.WriteLine(ukol.Podrobnosti[0].Jmeno + " " + ukol.Podrobnosti[0].Hodnota);
+
             return Json(pokus);
         }
 
         [HttpPost]
-        public IActionResult Pridat([FromBody]Ukol ukol)
+        public IActionResult Pridat([FromBody] DataUkolu dataUkolu)
         {
-            Debug.WriteLine(ukol.Nazev);
+            if (dataUkolu == null)
+                return Json("Zadejte smysluplné hodnoty");
 
+            if(dataUkolu.Id <= 0 || dataUkolu.Id > 6)
+                return Json("Něco se pokazilo... :(");
+
+            if (dataUkolu.Hodnota <= 0 && (dataUkolu.Id == 1 || dataUkolu.Id == 2 || dataUkolu.Id == 3 || dataUkolu.Id == 4))
+                return Json("Prosím zadejde kladné číslo");
+            
+            Hra0 hra = NacistHru0();
+            string blaboly = hra.Ul0.PridatUkol(dataUkolu, hra.Datum.CisloMesice);
+
+            if (blaboly != "přisně tajný string")
+                return Json(blaboly);
+
+            Debug.WriteLine(JsonSerializer.Serialize(hra.Ul0.SeznamUkolu));
+            UlozitHru0(hra);
+            
             return Json("povedlo");
         }
     }

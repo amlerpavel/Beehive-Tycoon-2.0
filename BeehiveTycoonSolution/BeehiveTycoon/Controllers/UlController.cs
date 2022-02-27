@@ -620,7 +620,8 @@ namespace BeehiveTycoon.Controllers
                         },
                         new List<Plastev> {
                             new Plastev(1000)
-                        }
+                        },
+                        new List<Ukol>()
                     )
                 );
                 UlozitHru0(hra);
