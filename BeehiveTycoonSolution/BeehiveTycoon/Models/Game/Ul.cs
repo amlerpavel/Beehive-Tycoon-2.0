@@ -21,10 +21,16 @@ namespace BeehiveTycoon.Models.Game
             public int medu;
         }
 
+        // cisla mesicu, ve kterych je ...
         private readonly int[] _zima = { 12, 1 };
-        private readonly int[] _neniPyl = { 11, 2 };
-        private readonly int[] _rojVcelstva = { 4 ,5, 6 };
-        private readonly int _zazimovaniUlu = 11;
+        private readonly int[] _neniPyl = { 11 };
+        private readonly int[] _rojVcelstva = { 4, 5, 6 };
+        private readonly int[] _zazimovaniUlu = { 11 };
+
+        private readonly int[] _nejvicePylu = { 5 };
+        private readonly int[] _sezonaPylu = { 4, 6, 7, 8 };
+        private readonly int[] _menePylu = { 3, 9 };
+        private readonly int[] _maloPylu = { 2, 10 };
 
         /*
         public Nepritel Nepritel { get; set; }
@@ -41,12 +47,14 @@ namespace BeehiveTycoon.Models.Game
             SecistVcely();
         }
 
-        public void DalsiKolo()
+        public void DalsiKolo(int cisloMesice)
         {
-            SplnitUkoly();
+            SplnitUkoly(cisloMesice);
             ZestarnutiVcelstva();
             UlozitMedNaPlastve();
             SecistVcely();
+            // vytvorit nepritele
+            // boj s nepritelem
         }
 
         private void SecistVcely()
@@ -114,7 +122,7 @@ namespace BeehiveTycoon.Models.Game
                 return "Úkol nelze přidat, protože je zimní období";
             if (dataUkolu.Id == 1 && _neniPyl.Contains(cisloMesice))
                 return "Úkol nelze přidat, protože nejsou kvetoucí rostliny";
-            if (dataUkolu.Id == 5 && !(_zazimovaniUlu == cisloMesice))
+            if (dataUkolu.Id == 5 && !_zazimovaniUlu.Contains(cisloMesice))
                 return "Úl lze zazimovat pouze v listopadu.";
             if (dataUkolu.Id == 6 && !_rojVcelstva.Contains(cisloMesice))
                 return "Úl lze vyrojit pouze v dubnu, květnu a červnu";
@@ -226,9 +234,72 @@ namespace BeehiveTycoon.Models.Game
                 SeznamUkolu.Remove(nactenyUkol);
             }
         }
-        private void SplnitUkoly()
+        private void SplnitUkoly(int cisloMesice)
         {
+            List<int> splneneUkoly = new();
 
+            foreach(Ukol ukol in SeznamUkolu)
+            {
+                if (ukol.Id == 1)
+                {
+                    int vcely = ukol.Podrobnosti[0].Hodnota;
+
+                    if (_nejvicePylu.Contains(cisloMesice))
+                        Med += vcely * 8;
+                    else if (_sezonaPylu.Contains(cisloMesice))
+                        Med += vcely * 6;
+                    else if (_menePylu.Contains(cisloMesice))
+                        Med += vcely * 3;
+                    else if (_maloPylu.Contains(cisloMesice))
+                        Med += Convert.ToInt32(vcely * 0.5);
+
+                    splneneUkoly.Add(ukol.Id);
+                }
+                else if (ukol.Id == 2)
+                {
+                    int vajicka = ukol.Podrobnosti[0].Hodnota;
+                    int med = ukol.Podrobnosti[2].Hodnota;
+
+                    GeneraceVcelstva.Add(new GeneraceVcel(vajicka, -1));
+                    Med -= med;
+                    splneneUkoly.Add(ukol.Id);
+                }
+                else if(ukol.Id == 3)
+                {
+                    int plastve = ukol.Podrobnosti[0].Hodnota;
+                    int med = ukol.Podrobnosti[2].Hodnota;
+
+                    for (int i = 0; i < plastve; i++)
+                    {
+                        Plastve.Add(new Plastev(0));
+                    }
+
+                    Med -= med;
+                    splneneUkoly.Add(ukol.Id);
+                }
+                else if (ukol.Id == 4)
+                {
+                    // zatim v budoucnu
+                    // snizi sanci na vytvoreni nepritele
+                    // vrati hodnoty z ukolu
+                    splneneUkoly.Add(ukol.Id);
+                }
+                else if (ukol.Id == 5)
+                {
+                    // zatim v budoucnu
+                    // nulova sance na nepritele
+                    splneneUkoly.Add(ukol.Id);
+                }
+                else if (ukol.Id == 6)
+                {
+                    // zatim v budoucnu
+                    // neco se zapise
+                    splneneUkoly.Add(ukol.Id);
+                }
+            }
+
+            foreach(int i in splneneUkoly)
+                SmazatUkol(i);
         }
     }
 }

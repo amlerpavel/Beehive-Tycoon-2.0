@@ -611,7 +611,7 @@ namespace BeehiveTycoon.Controllers
             if (hra == null)
             {
                 hra = new Hra0(
-                    new Datum(12, 0),
+                    new Datum(3, 0),
                     new Ul0(
                         "netusim",
                         new List<GeneraceVcel> {

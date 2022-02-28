@@ -21,7 +21,7 @@ namespace BeehiveTycoon.Models
         public void Dalsikolo()
         {
             Datum.ZmenaData();
-            Ul0.DalsiKolo();
+            Ul0.DalsiKolo(Datum.CisloMesice);
         }
     }
 }
