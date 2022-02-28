@@ -1,24 +1,73 @@
-﻿$(document).ready(function () {
+﻿let hra;
+
+$(document).ready(function () {
+    fetch('/Ul/JSONHra')
+    .then(odpoved => odpoved.json())
+    .then(data => { hra = data; });
+
     $(document).on("click", "#dalsiKolo", function () {
         fetch('/Ul/DalsiKolo')
         .then(odpoved => odpoved.json())
-        .then(data => ZmenitUdaje(data));
+        .then(data => {
+            hra = data;
+            PrepsatZakladniInformace();
+            PrepsatSeznamUkolu();
+        });
     });
 
-    $(document).on("click", "#zrusit", function () {
-        fetch('/Ukoly/Zrusit', {
+    $(document).on("click", ".ukol", function () {
+        UkazFormular(this);
+    });
+    $(document).on("click", "#zpet", function () {
+        UkazVyberUkolu();
+    });
+    $(document).on("click", "#pridat", function () {
+
+        /*
+        fetch('/Ukoly/Seznam')
+            .then(odpoved => odpoved.json())
+            .then(data => console.log(data));
+        */
+
+        fetch('/Ukoly/Pridat', {
             method: 'POST',
-            body: JSON.stringify(ZiskatUkol().Id),
+            body: JSON.stringify(ZiskatDataUkolu()),
             headers: {
                 "Content-Type": "application/json"
             }
         })
         .then(odpoved => odpoved.json())
-        .then(data => console.log(data));
+        .then(data => {
+            if (typeof (data) == "string")
+                console.log(data);
+            else {
+                hra.ul0.seznamUkolu = data;
+                PrepsatSeznamUkolu();
+                UkazVyberUkolu();
+            }
+        });
+    });
+    $(document).on("click", "#zrusit", function () {
+        let dataUkolu = ZiskatDataUkolu();
+        if (hra.ul0.seznamUkolu.includes(NajitUkol(dataUkolu.Id))) {
+            fetch('/Ukoly/Zrusit', {
+                method: 'POST',
+                body: JSON.stringify(dataUkolu.Id),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
+            .then(odpoved => odpoved.json())
+            .then(data => {
+                hra.ul0.seznamUkolu = data;
+                PrepsatSeznamUkolu();
+                UkazVyberUkolu();
+            });
+        }
     });
 });
 
-function ZmenitUdaje(hra) {
+function PrepsatZakladniInformace() {
     let soucetVek = 0;
     let vypisGeneraci = "";
 
@@ -58,4 +107,142 @@ function ZmenitUdaje(hra) {
         <div>Měsíc: `+ hra.datum.mesic +`</div>
         <div>Lokace: `+ hra.ul0.lokace +`</div>
     `);
+}
+function PrepsatSeznamUkolu() {
+    let tabulka;
+    let pocetVcel = 0;
+    let pocetMedu = 0;
+
+    if (hra.ul0.seznamUkolu.length == 0) {
+        tabulka = "<ul><li>Nejsou zadané žádné úkoly.</li></ul>";
+
+    } else {
+        let radky = "";
+
+        for (let ukol of hra.ul0.seznamUkolu) {
+            let sloupce = "";
+
+            for (let podrobnost of ukol.podrobnosti) {
+                if (podrobnost.jmeno == "kusy") {
+                    sloupce += "<td>" + podrobnost.hodnota + "</td>";
+                }
+                else {
+                    sloupce += "<td>0</td>";
+                }
+                if (podrobnost.jmeno == "vcely") {
+                    pocetVcel += podrobnost.hodnota;
+                    sloupce += "<td>" + podrobnost.hodnota + "</td>";
+                }
+                else {
+                    sloupce += "<td>0</td>";
+                }
+                if (podrobnost.jmeno == "med") {
+                    pocetMedu += podrobnost.hodnota;
+                    sloupce += "<td>" + podrobnost.hodnota + "</td>";
+                }
+                else {
+                    sloupce += "<td>0</td>";
+                }
+            }
+
+            radky += "<tr><th><a>" + ukol.nazev + "</a></th>"+ sloupce +"</tr>";
+        }
+
+        tabulka = "<table><tbody><tr><th>Název úkolu</th><td>Kusy</td><td>Včely</td><td>Med</td></tr>" + radky + "<tr><th>Celkem</th><td></td><td>" + pocetVcel + "</td><td>" + pocetMedu + "</td></tr></tbody></table>";
+    }
+
+    $("#seznamUkolu").html("<p>Úkoly:</p>" + tabulka);
+}
+
+function UkazVyberUkolu() {
+    $("#container2").html(`
+        <h1>Přidat úkol</h1>
+        <div id="seznam">
+            <button class="ukol" value="1">Sbírání pylu</button>
+            <button class="ukol" value="2">Nakladení vajíček</button>
+            <button class="ukol" value="3">Vytvoření plástve</button>
+            <button class="ukol" value="4">Obrana úlu</button>
+            <button class="ukol" value="5">Zazimování úlu</button>
+            <button class="ukol" value="6">Vyrojení včelstva</button>
+        </div>
+    `);
+}
+function UkazFormular(element) {
+    let telo = "";
+
+    if (element.value == 1 || element.value == 4) {
+        telo = `
+        <div class="radek">
+            <div class="sloupec1">
+                <label for="Hodnota">Počet včel: </label>
+            </div>
+            <div class="sloupec2">
+                <input type="number" name="Hodnota" value="@ViewBag.Ukol.PocetVcel" max="" min="1">
+            </div>
+        </div>`;
+    } else if (element.value == 2) {
+        telo = `
+        <div class="radek">
+            <div class="sloupec1">
+                <label for="Hodnota">Počet vajíček: </label>
+            </div>
+            <div class="sloupec2">
+                <input type="number" name="Hodnota" value="@ViewBag.Ukol.PocetVajicek" max="" min="1">
+            </div>
+        </div>
+        <div class="radek" id="posledni">
+            <input type="submit" value="Zobrazit požadavky" name="tlacitko">
+        </div>`;
+    } else if (element.value == 3) {
+        telo = `
+        <div class="radek">
+            <div class="sloupec1">
+                <label for="Hodnota">Počet pláství: </label>
+            </div>
+            <div class="sloupec2">
+                <input type="number" name="Hodnota" value="@ViewBag.Ukol.PocetPlastvi" max="" min="1">
+            </div>
+        </div>
+        <div class="radek" id="posledni">
+            <input type="submit" value="Zobrazit požadavky" name="tlacitko">
+        </div>`;
+    }
+
+    $("#container2").html(`
+        <h1>` + element.innerText + `</h1>
+        <button id="zpet">&#10006;</button>
+        <div id="formular">
+            <input type="hidden" name="Id" value="` + element.value + `">
+            `+ telo + `
+        </div>
+        <div id="tlacitka">
+            <button id="zrusit"">Smazat úkol</button>
+            <button id="pridat">Přidat úkol</button>
+        </div>
+    `);
+}
+
+function ZiskatDataUkolu() {
+    let formular = $("#formular").find("input");
+    let ukol = { Id: 0, Hodnota: 0 };
+
+    for (let input of formular) {
+        let jmeno = input.name;
+        let hodnota = input.value;
+
+        if (jmeno == "Id") {
+            ukol.Id = hodnota;
+        }
+        else if (jmeno == "Hodnota") {
+            ukol.Hodnota = hodnota;
+        }
+    }
+    
+    return ukol;
+}
+function NajitUkol(id) {
+    for (let ukol of hra.ul0.seznamUkolu) {
+        if (ukol.id == id)
+            return ukol;
+    }
 }

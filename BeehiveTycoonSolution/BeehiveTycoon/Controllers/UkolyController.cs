@@ -298,7 +298,7 @@ namespace BeehiveTycoon.Controllers
             Debug.WriteLine(JsonSerializer.Serialize(hra.Ul0.SeznamUkolu));
             UlozitHru0(hra);
             
-            return Json("povedlo");
+            return Json(hra.Ul0.SeznamUkolu);
         }
 
         [HttpPost]
