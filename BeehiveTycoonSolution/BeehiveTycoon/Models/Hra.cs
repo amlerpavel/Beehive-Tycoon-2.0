@@ -8,7 +8,7 @@ namespace BeehiveTycoon.Models
     public class Hra
     {
         public Ul Ul { get; set; }
-        public Nepritel Nepritel { get; set; }
+        public Nepritel0 Nepritel { get; set; }
         public List<GeneraceVcelstva> GeneraceVcelstev { get; set; }
         public List<Plastev0> Plastve { get; set; }
         public List<Ukol0> SeznamUkolu { get; set; }
@@ -51,7 +51,7 @@ namespace BeehiveTycoon.Models
         public int Vajicka { get; set; }
     }
 
-    public struct Nepritel
+    public struct Nepritel0
     {
         public int IdNepritele { get; set; }
         public string JmenoNepritele { get; set; }
