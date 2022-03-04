@@ -1,19 +1,152 @@
 ﻿@model BeehiveTycoon.Models.Hra0
+@using System.Diagnostics;
+@using BeehiveTycoon.Models.Game
 @{
-    Layout = "_LayoutPlastev0";
+    Layout = "_Layout";
+    ViewData["css"] = "hra.css";
     ViewData["css2"] = "upresneniUkolu.css";
 
-    
+    int pocetVcel = 0;
+    int pocetMedu = 0;
+
+    foreach (Ukol ukol in Model.Ul0.SeznamUkolu)
+    {
+        foreach (Podrobnost podrobnost in ukol.Podrobnosti)
+        {
+            if (podrobnost.Jmeno == "vcely")
+                pocetVcel += podrobnost.Hodnota;
+            else if (podrobnost.Jmeno == "med")
+                pocetMedu += podrobnost.Hodnota;
+        }
+    }
+
+    double soucetVek = 0;
+
+    foreach (GeneraceVcel generaceVcel in Model.Ul0.GeneraceVcelstva)
+    {
+        soucetVek += generaceVcel.Vek;
+    }
+
+    double prumerVek = soucetVek / Convert.ToDouble(Model.Ul0.GeneraceVcelstva.Count);
+    prumerVek = Math.Round(prumerVek, 2, MidpointRounding.AwayFromZero);
+
+    List<int> sloupecKusy = new();
+    List<int> sloupecVcely = new();
+    List<int> sloupecMed = new();
+
+    foreach (Ukol ukol in Model.Ul0.SeznamUkolu)
+    {
+        Podrobnost kusy = ukol.Podrobnosti.Where(u => u.Jmeno == "kusy").FirstOrDefault();
+        Podrobnost vcely = ukol.Podrobnosti.Where(u => u.Jmeno == "vcely").FirstOrDefault();
+        Podrobnost med = ukol.Podrobnosti.Where(u => u.Jmeno == "med").FirstOrDefault();
+
+        if (kusy != null)
+            sloupecKusy.Add(kusy.Hodnota);
+        else
+            sloupecKusy.Add(0);
+
+        if (vcely != null)
+            sloupecVcely.Add(vcely.Hodnota);
+        else
+            sloupecVcely.Add(0);
+
+        if (med != null)
+            sloupecMed.Add(med.Hodnota);
+        else
+            sloupecMed.Add(0);
+    }
 }
 
-<div id="container2">
-    <h1>Přidat úkol</h1>
-    <div id="seznam">
-        <button class="ukol" value="1">Sbírání pylu</button>
-        <button class="ukol" value="2">Nakladení vajíček</button>
-        <button class="ukol" value="3">Vytvoření plástve</button>
-        <button class="ukol" value="4">Obrana úlu</button>
-        <button class="ukol" value="5">Zazimování úlu</button>
-        <button class="ukol" value="6">Vyrojení včelstva</button>
+<header>
+    <div id="radek">
+        <div>Včelstvo: @Model.Ul0.Vcelstvo</div>
+        <div id="Prumer">
+            Průměrný věk včelstva: @prumerVek
+            <div class="submenuG">
+                Generace včel:
+                <table id="generace">
+                    <tbody>
+                        <tr>
+                            <th>Počet včel</th>
+                            <th>Věk</th>
+                        </tr>
+                        @foreach (GeneraceVcel generaceVcel in Model.Ul0.GeneraceVcelstva)
+                        {
+                            <tr>
+
+                                <td>@generaceVcel.Pocet</td>
+                                <td>@generaceVcel.Vek</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div>Med: @Model.Ul0.Med</div>
+        <div>Plástve: @Model.Ul0.Plastve.Count</div>
+        <div>Měsíc: @Model.Datum.Mesic</div>
+        <div>Lokace: @Model.Ul0.Lokace</div>
     </div>
-</div>
+</header>
+<nav id="ukoly">
+    <div id="seznamUkolu">
+        <p>Úkoly:</p>
+        @if (!Model.Ul0.SeznamUkolu.Any())
+        {
+            <ul>
+                <li>Nejsou zadané žádné úkoly.</li>
+            </ul>
+        }
+        else
+        {
+            <table>
+                <tbody>
+                    <tr>
+                        <th>Název úkolu</th>
+                        <td>Kusy</td>
+                        <td>Včely</td>
+                        <td>Med</td>
+                    </tr>
+                    @foreach (Ukol ukol in Model.Ul0.SeznamUkolu)
+                    {
+                        <tr>
+                            <th><a>@ukol.Nazev</a></th>
+                            <td>@sloupecKusy[Model.Ul0.SeznamUkolu.IndexOf(ukol)]</td>
+                            <td>@sloupecVcely[Model.Ul0.SeznamUkolu.IndexOf(ukol)]</td>
+                            <td>@sloupecMed[Model.Ul0.SeznamUkolu.IndexOf(ukol)]</td>
+                        </tr>
+                    }
+                    <tr>
+                        <th>Celkem</th>
+                        <td></td>
+                        <td>@pocetVcel</td>
+                        <td>@pocetMedu</td>
+                    </tr>
+                </tbody>
+            </table>
+        }
+    </div>
+    <div id="dalsiKolo" class="tlacitko0">
+        <a>Další kolo</a>
+    </div>
+</nav>
+<main>
+    <div id="container2">
+        <h1>Přidat úkol</h1>
+        <div id="seznam">
+            <button class="ukol" value="1">Sbírání pylu</button>
+            <button class="ukol" value="2">Nakladení vajíček</button>
+            <button class="ukol" value="3">Vytvoření plástve</button>
+            <button class="ukol" value="4">Obrana úlu</button>
+            <button class="ukol" value="5">Zazimování úlu</button>
+            <button class="ukol" value="6">Vyrojení včelstva</button>
+        </div>
+    </div>
+</main>
+<nav id="nepratele">
+
+    <div id="zdroje">
+        <div>Icons made by <a href="https://www.flaticon.com/authors/dinosoftlabs" title="DinosoftLabs">DinosoftLabs</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
+        <div><a href="https://wallpapersafari.com/w/rXaV6Y">wallpapersafari.com</a></div>
+    </div>
+</nav>
