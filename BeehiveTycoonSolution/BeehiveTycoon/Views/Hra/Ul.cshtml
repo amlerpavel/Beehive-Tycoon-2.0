@@ -1,4 +1,4 @@
-﻿@model BeehiveTycoon.Models.Hra0
+﻿@model BeehiveTycoon.Models.Hra
 @using System.Diagnostics;
 @using BeehiveTycoon.Models.Game
 @{
@@ -9,7 +9,7 @@
     int pocetVcel = 0;
     int pocetMedu = 0;
 
-    foreach (Ukol ukol in Model.Ul0.SeznamUkolu)
+    foreach (Ukol ukol in Model.Ul.SeznamUkolu)
     {
         foreach (Podrobnost podrobnost in ukol.Podrobnosti)
         {
@@ -22,19 +22,19 @@
 
     double soucetVek = 0;
 
-    foreach (GeneraceVcel generaceVcel in Model.Ul0.GeneraceVcelstva)
+    foreach (GeneraceVcel generaceVcel in Model.Ul.GeneraceVcelstva)
     {
         soucetVek += generaceVcel.Vek;
     }
 
-    double prumerVek = soucetVek / Convert.ToDouble(Model.Ul0.GeneraceVcelstva.Count);
+    double prumerVek = soucetVek / Convert.ToDouble(Model.Ul.GeneraceVcelstva.Count);
     prumerVek = Math.Round(prumerVek, 2, MidpointRounding.AwayFromZero);
 
     List<int> sloupecKusy = new();
     List<int> sloupecVcely = new();
     List<int> sloupecMed = new();
 
-    foreach (Ukol ukol in Model.Ul0.SeznamUkolu)
+    foreach (Ukol ukol in Model.Ul.SeznamUkolu)
     {
         Podrobnost kusy = ukol.Podrobnosti.Where(u => u.Jmeno == "kusy").FirstOrDefault();
         Podrobnost vcely = ukol.Podrobnosti.Where(u => u.Jmeno == "vcely").FirstOrDefault();
@@ -59,7 +59,7 @@
 
 <header>
     <div id="radek">
-        <div>Včelstvo: @Model.Ul0.Vcelstvo</div>
+        <div>Včelstvo: @Model.Ul.Vcelstvo</div>
         <div id="Prumer">
             Průměrný věk včelstva: @prumerVek
             <div class="submenuG">
@@ -70,7 +70,7 @@
                             <th>Počet včel</th>
                             <th>Věk</th>
                         </tr>
-                        @foreach (GeneraceVcel generaceVcel in Model.Ul0.GeneraceVcelstva)
+                        @foreach (GeneraceVcel generaceVcel in Model.Ul.GeneraceVcelstva)
                         {
                             <tr>
 
@@ -82,16 +82,16 @@
                 </table>
             </div>
         </div>
-        <div>Med: @Model.Ul0.Med</div>
-        <div>Plástve: @Model.Ul0.Plastve.Count</div>
+        <div>Med: @Model.Ul.Med</div>
+        <div>Plástve: @Model.Ul.Plastve.Count</div>
         <div>Měsíc: @Model.Datum.Mesic</div>
-        <div>Lokace: @Model.Ul0.Lokace</div>
+        <div>Lokace: @Model.Ul.Lokace</div>
     </div>
 </header>
 <nav id="ukoly">
     <div id="seznamUkolu">
         <p>Úkoly:</p>
-        @if (!Model.Ul0.SeznamUkolu.Any())
+        @if (!Model.Ul.SeznamUkolu.Any())
         {
             <ul>
                 <li>Nejsou zadané žádné úkoly.</li>
@@ -107,13 +107,13 @@
                         <td>Včely</td>
                         <td>Med</td>
                     </tr>
-                    @foreach (Ukol ukol in Model.Ul0.SeznamUkolu)
+                    @foreach (Ukol ukol in Model.Ul.SeznamUkolu)
                     {
                         <tr>
                             <th><a>@ukol.Nazev</a></th>
-                            <td>@sloupecKusy[Model.Ul0.SeznamUkolu.IndexOf(ukol)]</td>
-                            <td>@sloupecVcely[Model.Ul0.SeznamUkolu.IndexOf(ukol)]</td>
-                            <td>@sloupecMed[Model.Ul0.SeznamUkolu.IndexOf(ukol)]</td>
+                            <td>@sloupecKusy[Model.Ul.SeznamUkolu.IndexOf(ukol)]</td>
+                            <td>@sloupecVcely[Model.Ul.SeznamUkolu.IndexOf(ukol)]</td>
+                            <td>@sloupecMed[Model.Ul.SeznamUkolu.IndexOf(ukol)]</td>
                         </tr>
                     }
                     <tr>

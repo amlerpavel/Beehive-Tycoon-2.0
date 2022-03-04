@@ -1,12 +1,12 @@
 ﻿let hra;
 
 $(document).ready(function () {
-    fetch('/Ul/JSONHra')
+    fetch('/Hra/JSON')
     .then(odpoved => odpoved.json())
     .then(data => { hra = data; });
 
     $(document).on("click", "#dalsiKolo", function () {
-        fetch('/Ul/DalsiKolo')
+        fetch('/Hra/DalsiKolo')
         .then(odpoved => odpoved.json())
         .then(data => {
             hra = data;
@@ -41,7 +41,7 @@ $(document).ready(function () {
             if (typeof (data) == "string")
                 console.log(data);
             else {
-                hra.ul0.seznamUkolu = data;
+                hra.ul.seznamUkolu = data;
                 PrepsatSeznamUkolu();
                 UkazVyberUkolu();
             }
@@ -49,7 +49,7 @@ $(document).ready(function () {
     });
     $(document).on("click", "#zrusit", function () {
         let dataUkolu = ZiskatDataUkolu();
-        if (hra.ul0.seznamUkolu.includes(NajitUkol(dataUkolu.Id))) {
+        if (hra.ul.seznamUkolu.includes(NajitUkol(dataUkolu.Id))) {
             fetch('/Ukoly/Zrusit', {
                 method: 'POST',
                 body: JSON.stringify(dataUkolu.Id),
@@ -59,7 +59,7 @@ $(document).ready(function () {
             })
             .then(odpoved => odpoved.json())
             .then(data => {
-                hra.ul0.seznamUkolu = data;
+                hra.ul.seznamUkolu = data;
                 PrepsatSeznamUkolu();
                 UkazVyberUkolu();
             });
@@ -71,7 +71,7 @@ function PrepsatZakladniInformace() {
     let soucetVek = 0;
     let vypisGeneraci = "";
 
-    for(let generaceVcel of hra.ul0.generaceVcelstva)
+    for(let generaceVcel of hra.ul.generaceVcelstva)
     {
         soucetVek += generaceVcel.vek;
 
@@ -82,11 +82,11 @@ function PrepsatZakladniInformace() {
             </tr>`
     }
 
-    let prumerVek = Math.round(soucetVek / hra.ul0.generaceVcelstva.length * 100) / 100;
-    //(soucetVek / hra.ul0.generaceVcelstva.length).toFixed(2);
+    let prumerVek = Math.round(soucetVek / hra.ul.generaceVcelstva.length * 100) / 100;
+    //(soucetVek / hra.ul.generaceVcelstva.length).toFixed(2);
 
     $("#radek").html(`
-        <div>Včelstvo: `+ hra.ul0.vcelstvo +`</div>
+        <div>Včelstvo: `+ hra.ul.vcelstvo +`</div>
         <div id="Prumer">
             Průměrný věk včelstva: `+ prumerVek +`
             <div class="submenuG">
@@ -102,10 +102,10 @@ function PrepsatZakladniInformace() {
                 </table>
             </div>
         </div>
-        <div>Med: `+ hra.ul0.med +`</div>
-        <div>Plástve: `+ hra.ul0.plastve.length +`</div>
+        <div>Med: `+ hra.ul.med +`</div>
+        <div>Plástve: `+ hra.ul.plastve.length +`</div>
         <div>Měsíc: `+ hra.datum.mesic +`</div>
-        <div>Lokace: `+ hra.ul0.lokace +`</div>
+        <div>Lokace: `+ hra.ul.lokace +`</div>
     `);
 }
 function PrepsatSeznamUkolu() {
@@ -113,7 +113,7 @@ function PrepsatSeznamUkolu() {
     let pocetVcel = 0;
     let pocetMedu = 0;
 
-    if (hra.ul0.seznamUkolu.length == 0) {
+    if (hra.ul.seznamUkolu.length == 0) {
         tabulka = "<ul><li>Nejsou zadané žádné úkoly.</li></ul>";
 
     } else {
@@ -122,7 +122,7 @@ function PrepsatSeznamUkolu() {
         let sloupecVcely = [];
         let sloupecMed = [];
 
-        for (let ukol of hra.ul0.seznamUkolu) {
+        for (let ukol of hra.ul.seznamUkolu) {
             let kusy = ukol.podrobnosti.find(u => u.jmeno == "kusy");
             let vcely = ukol.podrobnosti.find(u => u.jmeno == "vcely");
             let med = ukol.podrobnosti.find(u => u.jmeno == "med");
@@ -140,7 +140,7 @@ function PrepsatSeznamUkolu() {
             else
                 sloupecMed.push(med.hodnota);
 
-            let i = hra.ul0.seznamUkolu.indexOf(ukol);
+            let i = hra.ul.seznamUkolu.indexOf(ukol);
             radky += "<tr><th><a>" + ukol.nazev + "</a></th><td>" + sloupecKusy[i] + "</td><td>" + sloupecVcely[i] + "</td><td>" + sloupecMed[i] + "</td></tr>";
             
             for (let podrobnost of ukol.podrobnosti) {
@@ -246,7 +246,7 @@ function ZiskatDataUkolu() {
     return ukol;
 }
 function NajitUkol(id) {
-    for (let ukol of hra.ul0.seznamUkolu) {
+    for (let ukol of hra.ul.seznamUkolu) {
         if (ukol.id == id)
             return ukol;
     }

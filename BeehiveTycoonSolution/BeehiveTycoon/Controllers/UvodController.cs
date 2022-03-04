@@ -9,7 +9,7 @@ using BeehiveTycoon.Models;
 
 namespace BeehiveTycoon.Controllers
 {
-    public class UvodController : UlController
+    public class UvodController : HraController
     {
         [HttpGet]
         public IActionResult Hrat()

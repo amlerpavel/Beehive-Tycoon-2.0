@@ -7,20 +7,20 @@ using System.Diagnostics;
 
 namespace BeehiveTycoon.Models
 {
-    public class Hra0
+    public class Hra
     {
         public Datum Datum { get; private set; }
-        public Ul0 Ul0 { get; private set; }
+        public Ul Ul { get; private set; }
         
-        public Hra0(Datum datum, Ul0 ul0)
+        public Hra(Datum datum, Ul ul)
         {
             Datum = datum;
-            Ul0 = ul0;
+            Ul = ul;
         }
 
         public void Dalsikolo()
         {
-            Ul0.DalsiKolo(Datum.CisloMesice);
+            Ul.DalsiKolo(Datum.CisloMesice);
             Datum.ZmenaData();
         }
     }

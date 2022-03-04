@@ -6,7 +6,7 @@ using System.Diagnostics;
 
 namespace BeehiveTycoon.Models.Game
 {
-    public class Ul0
+    public class Ul
     {
         public int Vcelstvo { get; private set; }
         public int Med { get; private set; }
@@ -47,7 +47,7 @@ namespace BeehiveTycoon.Models.Game
         public Nepritel Nepritel { get; set; }
         public List<Ukol> SeznamUkolu { get; set; }
         */
-        public Ul0(string lokace, List<GeneraceVcel> generaceVcelstva, List<Plastev> plastve, List<Ukol> seznamUkolu, Nepritel nepritel, int klidPoBitve)
+        public Ul(string lokace, List<GeneraceVcel> generaceVcelstva, List<Plastev> plastve, List<Ukol> seznamUkolu, Nepritel nepritel, int klidPoBitve)
         {
             Lokace = lokace;
             GeneraceVcelstva = generaceVcelstva;

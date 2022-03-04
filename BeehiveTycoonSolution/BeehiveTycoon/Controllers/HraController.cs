@@ -11,51 +11,51 @@ using System.Text.Json;
 
 namespace BeehiveTycoon.Controllers
 {
-    public class UlController : Controller
+    public class HraController : Controller
     {
         [HttpGet]
-        public IActionResult Plastev0()
+        public IActionResult Ul()
         {
-            Hra0 hra = NacistHru0();
+            Hra hra = NacistHru();
 
             return View(hra);
         }
 
         [HttpGet]
-        public IActionResult JSONHra()
+        public IActionResult JSON()
         {
-            Hra0 hra0 = NacistHru0();
+            Hra hra = NacistHru();
 
-            return Json(hra0);
+            return Json(hra);
         }
 
         [HttpGet]
         public IActionResult DalsiKolo()
         {
-            Hra0 hra0 = NacistHru0();
-            hra0.Dalsikolo();
-            UlozitHru0(hra0);
+            Hra hra = NacistHru();
+            hra.Dalsikolo();
+            UlozitHru(hra);
 
-            return Json(hra0);
+            return Json(hra);
         }
         
-        public void UlozitHru0(Hra0 hra)
+        public void UlozitHru(Hra hra)
         {
             HttpContext.Session.SetString("Hra", JsonSerializer.Serialize(hra));
 
             //HttpContext.Response.Cookies.Append("Hra", JsonSerializer.Serialize(hra), new CookieOptions() { SameSite = SameSiteMode.Lax, HttpOnly = true });
         }
-        public Hra0 NacistHru0()
+        public Hra NacistHru()
         {
-            Hra0 hra;
+            Hra hra;
             
             if (HttpContext.Session.GetString("Hra") == null)
             {
                 if (HttpContext.Request.Cookies["Hra"] == null)
                 {
-                    hra = new Hra0(
+                    hra = new Hra(
                         new Datum(3, 0),
-                        new Ul0(
+                        new Ul(
                             "netusim",
                             new List<GeneraceVcel> {
                                 new GeneraceVcel(300, 3),
@@ -69,13 +69,13 @@ namespace BeehiveTycoon.Controllers
                             0
                         )
                     );
-                    UlozitHru0(hra);
+                    UlozitHru(hra);
                 }
                 else
-                    hra = JsonSerializer.Deserialize<Hra0>(HttpContext.Request.Cookies["Hra"]);
+                    hra = JsonSerializer.Deserialize<Hra>(HttpContext.Request.Cookies["Hra"]);
             }
             else
-                hra = JsonSerializer.Deserialize<Hra0>(HttpContext.Session.GetString("Hra"));
+                hra = JsonSerializer.Deserialize<Hra>(HttpContext.Session.GetString("Hra"));
 
             return hra;
         }
