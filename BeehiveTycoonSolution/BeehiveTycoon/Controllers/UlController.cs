@@ -608,27 +608,6 @@ namespace BeehiveTycoon.Controllers
         {
             Hra0 hra = NacistHru0();
 
-            if (hra == null)
-            {
-                hra = new Hra0(
-                    new Datum(3, 0),
-                    new Ul0(
-                        "netusim",
-                        new List<GeneraceVcel> {
-                            new GeneraceVcel(300, 3),
-                            new GeneraceVcel(400, 0)
-                        },
-                        new List<Plastev> {
-                            new Plastev(1000)
-                        },
-                        new List<Ukol>(),
-                        new Nepritel(0, "", 0, 0, 0, 0, false, true),
-                        0
-                    )
-                );
-                UlozitHru0(hra);
-            }
-
             return View(hra);
         }
 
@@ -662,7 +641,25 @@ namespace BeehiveTycoon.Controllers
             if (HttpContext.Session.GetString("Hra") == null)
             {
                 if (HttpContext.Request.Cookies["Hra"] == null)
-                    hra = null;
+                {
+                    hra = new Hra0(
+                        new Datum(3, 0),
+                        new Ul0(
+                            "netusim",
+                            new List<GeneraceVcel> {
+                                new GeneraceVcel(300, 3),
+                                new GeneraceVcel(400, 0)
+                            },
+                            new List<Plastev> {
+                                new Plastev(1000)
+                            },
+                            new List<Ukol>(),
+                            new Nepritel(0, "", 0, 0, 0, 0, false, true),
+                            0
+                        )
+                    );
+                    UlozitHru0(hra);
+                }
                 else
                     hra = JsonSerializer.Deserialize<Hra0>(HttpContext.Request.Cookies["Hra"]);
             }

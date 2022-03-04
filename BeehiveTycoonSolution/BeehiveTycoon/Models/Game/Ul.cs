@@ -431,13 +431,18 @@ namespace BeehiveTycoon.Models.Game
                 else if (Nepritel.Id == 3)
                 {
                     OdecistVcely(Nepritel.Pocet, true);
-                    Med -= Nepritel.Pocet / 2;
-                    UlozitMedNaPlastve();
                     SecistVcely();
+
+                    Med -= Nepritel.Pocet / 2;
+                    if (Med < 0)
+                        Med = 0;
+                    UlozitMedNaPlastve();
                 }
                 else if (Nepritel.Id == 4)
                 {
                     Med -= Nepritel.Pocet * 2;
+                    if (Med < 0)
+                        Med = 0;
                     UlozitMedNaPlastve();
                 }
                 else if (Nepritel.Id == 5)

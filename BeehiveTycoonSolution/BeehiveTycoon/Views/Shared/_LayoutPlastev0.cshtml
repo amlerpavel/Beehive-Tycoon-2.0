@@ -18,7 +18,7 @@
                 pocetMedu += podrobnost.Hodnota;
         }
     }
-    
+
     double soucetVek = 0;
 
     foreach (GeneraceVcel generaceVcel in Model.Ul0.GeneraceVcelstva)
@@ -29,6 +29,31 @@
     double prumerVek = soucetVek / Convert.ToDouble(Model.Ul0.GeneraceVcelstva.Count);
     prumerVek = Math.Round(prumerVek, 2, MidpointRounding.AwayFromZero);
 
+    List<int> sloupecKusy = new();
+    List<int> sloupecVcely = new();
+    List<int> sloupecMed = new();
+
+    foreach (Ukol ukol in Model.Ul0.SeznamUkolu)
+    {
+        Podrobnost kusy = ukol.Podrobnosti.Where(u => u.Jmeno == "kusy").FirstOrDefault();
+        Podrobnost vcely = ukol.Podrobnosti.Where(u => u.Jmeno == "vcely").FirstOrDefault();
+        Podrobnost med = ukol.Podrobnosti.Where(u => u.Jmeno == "med").FirstOrDefault();
+
+        if(kusy != null)
+            sloupecKusy.Add(kusy.Hodnota);
+        else
+            sloupecKusy.Add(0);
+
+        if (vcely != null)
+            sloupecVcely.Add(vcely.Hodnota);
+        else
+            sloupecVcely.Add(0);
+
+        if (med != null)
+            sloupecMed.Add(med.Hodnota);
+        else
+            sloupecMed.Add(0);
+    }
 }
 
 <header>
@@ -85,42 +110,18 @@
                     {
                         <tr>
                             <th><a>@ukol.Nazev</a></th>
-                            @foreach (Podrobnost podrobnost in ukol.Podrobnosti)
-                            {
-                                if (podrobnost.Jmeno == "kusy")
-                                {
-                                    <td>@podrobnost.Hodnota</td>
-                                }
-                                else
-                                {
-                                    <td>0</td>
-                                }
-                                if (podrobnost.Jmeno == "vcely")
-                                {
-                                    <td>@podrobnost.Hodnota</td>
-                                }
-                                else
-                                {
-                                    <td>0</td>
-                                }
-                                if (podrobnost.Jmeno == "med")
-                                {
-                                    <td>@podrobnost.Hodnota</td>
-                                }
-                                else
-                                {
-                                    <td>0</td>
-                                }
-                            }
+                            <td>@sloupecKusy[Model.Ul0.SeznamUkolu.IndexOf(ukol)]</td>
+                            <td>@sloupecVcely[Model.Ul0.SeznamUkolu.IndexOf(ukol)]</td>
+                            <td>@sloupecMed[Model.Ul0.SeznamUkolu.IndexOf(ukol)]</td>
                         </tr>
                     }
-                        <tr>
-                            <th>Celkem</th>
-                            <td></td>
-                            <td>@pocetVcel</td>
-                            <td>@pocetMedu</td>
-                        </tr>
-                    </tbody>
+                    <tr>
+                        <th>Celkem</th>
+                        <td></td>
+                        <td>@pocetVcel</td>
+                        <td>@pocetMedu</td>
+                    </tr>
+                </tbody>
             </table>
         }
     </div>
@@ -132,7 +133,7 @@
     @RenderBody()
 </main>
 <nav id="nepratele">
-    
+
     <div id="zdroje">
         <div>Icons made by <a href="https://www.flaticon.com/authors/dinosoftlabs" title="DinosoftLabs">DinosoftLabs</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
         <div><a href="https://wallpapersafari.com/w/rXaV6Y">wallpapersafari.com</a></div>

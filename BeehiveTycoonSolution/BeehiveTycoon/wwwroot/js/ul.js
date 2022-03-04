@@ -118,36 +118,41 @@ function PrepsatSeznamUkolu() {
 
     } else {
         let radky = "";
+        let sloupecKusy = [];
+        let sloupecVcely = [];
+        let sloupecMed = [];
 
         for (let ukol of hra.ul0.seznamUkolu) {
-            let sloupce = "";
+            let kusy = ukol.podrobnosti.find(u => u.jmeno == "kusy");
+            let vcely = ukol.podrobnosti.find(u => u.jmeno == "vcely");
+            let med = ukol.podrobnosti.find(u => u.jmeno == "med");
 
+            if (kusy == undefined)
+                sloupecKusy.push(0);
+            else
+                sloupecKusy.push(kusy.hodnota);
+            if (vcely == undefined)
+                sloupecVcely.push(0);
+            else
+                sloupecVcely.push(vcely.hodnota);
+            if (med == undefined)
+                sloupecMed.push(0);
+            else
+                sloupecMed.push(med.hodnota);
+
+            let i = hra.ul0.seznamUkolu.indexOf(ukol);
+            radky += "<tr><th><a>" + ukol.nazev + "</a></th><td>" + sloupecKusy[i] + "</td><td>" + sloupecVcely[i] + "</td><td>" + sloupecMed[i] + "</td></tr>";
+            
             for (let podrobnost of ukol.podrobnosti) {
-                if (podrobnost.jmeno == "kusy") {
-                    sloupce += "<td>" + podrobnost.hodnota + "</td>";
-                }
-                else {
-                    sloupce += "<td>0</td>";
-                }
                 if (podrobnost.jmeno == "vcely") {
                     pocetVcel += podrobnost.hodnota;
-                    sloupce += "<td>" + podrobnost.hodnota + "</td>";
                 }
-                else {
-                    sloupce += "<td>0</td>";
-                }
-                if (podrobnost.jmeno == "med") {
+                else if (podrobnost.jmeno == "med") {
                     pocetMedu += podrobnost.hodnota;
-                    sloupce += "<td>" + podrobnost.hodnota + "</td>";
-                }
-                else {
-                    sloupce += "<td>0</td>";
                 }
             }
-
-            radky += "<tr><th><a>" + ukol.nazev + "</a></th>"+ sloupce +"</tr>";
         }
-
+        
         tabulka = "<table><tbody><tr><th>Název úkolu</th><td>Kusy</td><td>Včely</td><td>Med</td></tr>" + radky + "<tr><th>Celkem</th><td></td><td>" + pocetVcel + "</td><td>" + pocetMedu + "</td></tr></tbody></table>";
     }
 
