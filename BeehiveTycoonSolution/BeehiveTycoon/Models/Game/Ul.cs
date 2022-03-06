@@ -16,6 +16,7 @@ namespace BeehiveTycoon.Models.Game
         public List<Ukol> SeznamUkolu { get; private set; }
         public Nepritel Nepritel { get; private set; }
         public int KlidPoBitve { get; private set; }
+        public bool ExistujeMrtvyNepritel { get; private set; }
 
         private struct DostupnyPocet
         {
@@ -47,7 +48,7 @@ namespace BeehiveTycoon.Models.Game
         public Nepritel Nepritel { get; set; }
         public List<Ukol> SeznamUkolu { get; set; }
         */
-        public Ul(string lokace, List<GeneraceVcel> generaceVcelstva, List<Plastev> plastve, List<Ukol> seznamUkolu, Nepritel nepritel, int klidPoBitve)
+        public Ul(string lokace, List<GeneraceVcel> generaceVcelstva, List<Plastev> plastve, List<Ukol> seznamUkolu, Nepritel nepritel, int klidPoBitve, bool existujeMrtvyNepritel)
         {
             Lokace = lokace;
             GeneraceVcelstva = generaceVcelstva;
@@ -55,6 +56,7 @@ namespace BeehiveTycoon.Models.Game
             SeznamUkolu = seznamUkolu;
             Nepritel = nepritel;
             KlidPoBitve = klidPoBitve;
+            ExistujeMrtvyNepritel = existujeMrtvyNepritel;
 
             SecistMed();
             SecistVcely();
@@ -398,8 +400,12 @@ namespace BeehiveTycoon.Models.Game
                     Nepritel.Invaze(Vcelstvo);
             }
             else
+            {
                 KlidPoBitve -= 1;
-
+                if (Nepritel.Porazen == false)
+                    Nepritel.Invaze(Vcelstvo);
+                ExistujeMrtvyNepritel = false;
+            }
         }
         private void BojSNepritelem()
         {
@@ -412,8 +418,10 @@ namespace BeehiveTycoon.Models.Game
                 {
                     if (KlidPoBitve == 0 && Nepritel.Vek > 0)
                         KlidPoBitve = 1;
+                    if (Nepritel.Pocet <= 0 && Nepritel.Id != 0)
+                        ExistujeMrtvyNepritel = true;
 
-                    Nepritel = new Nepritel(0, "", 0, 0, 0, 0, false, true); //nechat kvuli javascriptu???
+                    Nepritel = new Nepritel(0, "", 0, 0, 0, 0, false, true);
                 }
             }
 

@@ -54,7 +54,9 @@ namespace BeehiveTycoon.Models.Game
                     Pocet += _nahodneCislo.Next(4, 28);
             }
 
-            Zivoty = Pocet * ZivotJedince;
+            if(Id != 0)
+                Zivoty = Pocet * ZivotJedince;
+
             Vek += 1;
         }
         public int Boj(int strazci, int zivotyStrazcu, int zivotStrazce)
