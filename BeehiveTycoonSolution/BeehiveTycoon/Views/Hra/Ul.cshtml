@@ -1,14 +1,15 @@
-﻿@model BeehiveTycoon.Models.Hra0
+﻿@model BeehiveTycoon.Models.Hra
 @using System.Diagnostics;
 @using BeehiveTycoon.Models.Game
 @{
     Layout = "_Layout";
     ViewData["css"] = "hra.css";
+    ViewData["css2"] = "upresneniUkolu.css";
 
     int pocetVcel = 0;
     int pocetMedu = 0;
 
-    foreach (Ukol ukol in Model.Ul0.SeznamUkolu)
+    foreach (Ukol ukol in Model.Ul.SeznamUkolu)
     {
         foreach (Podrobnost podrobnost in ukol.Podrobnosti)
         {
@@ -18,22 +19,47 @@
                 pocetMedu += podrobnost.Hodnota;
         }
     }
-    
+
     double soucetVek = 0;
 
-    foreach (GeneraceVcel generaceVcel in Model.Ul0.GeneraceVcelstva)
+    foreach (GeneraceVcel generaceVcel in Model.Ul.GeneraceVcelstva)
     {
         soucetVek += generaceVcel.Vek;
     }
 
-    double prumerVek = soucetVek / Convert.ToDouble(Model.Ul0.GeneraceVcelstva.Count);
+    double prumerVek = soucetVek / Convert.ToDouble(Model.Ul.GeneraceVcelstva.Count);
     prumerVek = Math.Round(prumerVek, 2, MidpointRounding.AwayFromZero);
 
+    List<int> sloupecKusy = new();
+    List<int> sloupecVcely = new();
+    List<int> sloupecMed = new();
+
+    foreach (Ukol ukol in Model.Ul.SeznamUkolu)
+    {
+        Podrobnost kusy = ukol.Podrobnosti.Where(u => u.Jmeno == "kusy").FirstOrDefault();
+        Podrobnost vcely = ukol.Podrobnosti.Where(u => u.Jmeno == "vcely").FirstOrDefault();
+        Podrobnost med = ukol.Podrobnosti.Where(u => u.Jmeno == "med").FirstOrDefault();
+
+        if (kusy != null)
+            sloupecKusy.Add(kusy.Hodnota);
+        else
+            sloupecKusy.Add(0);
+
+        if (vcely != null)
+            sloupecVcely.Add(vcely.Hodnota);
+        else
+            sloupecVcely.Add(0);
+
+        if (med != null)
+            sloupecMed.Add(med.Hodnota);
+        else
+            sloupecMed.Add(0);
+    }
 }
 
 <header>
     <div id="radek">
-        <div>Včelstvo: @Model.Ul0.Vcelstvo</div>
+        <div>Včelstvo: @Model.Ul.Vcelstvo</div>
         <div id="Prumer">
             Průměrný věk včelstva: @prumerVek
             <div class="submenuG">
@@ -44,7 +70,7 @@
                             <th>Počet včel</th>
                             <th>Věk</th>
                         </tr>
-                        @foreach (GeneraceVcel generaceVcel in Model.Ul0.GeneraceVcelstva)
+                        @foreach (GeneraceVcel generaceVcel in Model.Ul.GeneraceVcelstva)
                         {
                             <tr>
 
@@ -56,16 +82,16 @@
                 </table>
             </div>
         </div>
-        <div>Med: @Model.Ul0.Med</div>
-        <div>Plástve: @Model.Ul0.Plastve.Count</div>
+        <div>Med: @Model.Ul.Med</div>
+        <div>Plástve: @Model.Ul.Plastve.Count</div>
         <div>Měsíc: @Model.Datum.Mesic</div>
-        <div>Lokace: @Model.Ul0.Lokace</div>
+        <div>Lokace: @Model.Ul.Lokace</div>
     </div>
 </header>
 <nav id="ukoly">
     <div id="seznamUkolu">
         <p>Úkoly:</p>
-        @if (!Model.Ul0.SeznamUkolu.Any())
+        @if (!Model.Ul.SeznamUkolu.Any())
         {
             <ul>
                 <li>Nejsou zadané žádné úkoly.</li>
@@ -81,46 +107,22 @@
                         <td>Včely</td>
                         <td>Med</td>
                     </tr>
-                    @foreach (Ukol ukol in Model.Ul0.SeznamUkolu)
+                    @foreach (Ukol ukol in Model.Ul.SeznamUkolu)
                     {
                         <tr>
                             <th><a>@ukol.Nazev</a></th>
-                            @foreach (Podrobnost podrobnost in ukol.Podrobnosti)
-                            {
-                                if (podrobnost.Jmeno == "kusy")
-                                {
-                                    <td>@podrobnost.Hodnota</td>
-                                }
-                                else
-                                {
-                                    <td>0</td>
-                                }
-                                if (podrobnost.Jmeno == "vcely")
-                                {
-                                    <td>@podrobnost.Hodnota</td>
-                                }
-                                else
-                                {
-                                    <td>0</td>
-                                }
-                                if (podrobnost.Jmeno == "med")
-                                {
-                                    <td>@podrobnost.Hodnota</td>
-                                }
-                                else
-                                {
-                                    <td>0</td>
-                                }
-                            }
+                            <td>@sloupecKusy[Model.Ul.SeznamUkolu.IndexOf(ukol)]</td>
+                            <td>@sloupecVcely[Model.Ul.SeznamUkolu.IndexOf(ukol)]</td>
+                            <td>@sloupecMed[Model.Ul.SeznamUkolu.IndexOf(ukol)]</td>
                         </tr>
                     }
-                        <tr>
-                            <th>Celkem</th>
-                            <td></td>
-                            <td>@pocetVcel</td>
-                            <td>@pocetMedu</td>
-                        </tr>
-                    </tbody>
+                    <tr>
+                        <th>Celkem</th>
+                        <td></td>
+                        <td>@pocetVcel</td>
+                        <td>@pocetMedu</td>
+                    </tr>
+                </tbody>
             </table>
         }
     </div>
@@ -129,10 +131,20 @@
     </div>
 </nav>
 <main>
-    @RenderBody()
+    <div id="container2">
+        <h1>Přidat úkol</h1>
+        <div id="seznam">
+            <button class="ukol" value="1">Sbírání pylu</button>
+            <button class="ukol" value="2">Nakladení vajíček</button>
+            <button class="ukol" value="3">Vytvoření plástve</button>
+            <button class="ukol" value="4">Obrana úlu</button>
+            <button class="ukol" value="5">Zazimování úlu</button>
+            <button class="ukol" value="6">Vyrojení včelstva</button>
+        </div>
+    </div>
 </main>
 <nav id="nepratele">
-    
+
     <div id="zdroje">
         <div>Icons made by <a href="https://www.flaticon.com/authors/dinosoftlabs" title="DinosoftLabs">DinosoftLabs</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
         <div><a href="https://wallpapersafari.com/w/rXaV6Y">wallpapersafari.com</a></div>

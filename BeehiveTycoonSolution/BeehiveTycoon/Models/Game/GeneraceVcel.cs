@@ -20,5 +20,15 @@ namespace BeehiveTycoon.Models.Game
         {
             Vek += oKolik;
         }
+
+        public int OdstranitVcely(int vcely)
+        {
+            Pocet -= vcely;
+
+            if (Pocet < 0)
+                return Pocet * (-1);
+            else
+                return 0;
+        }
     }
 }
