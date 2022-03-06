@@ -16,9 +16,7 @@ namespace BeehiveTycoon.Controllers
         [HttpGet]
         public IActionResult Ul()
         {
-            Hra hra = NacistHru();
-
-            return View(hra);
+            return View();
         }
 
         [HttpGet]
@@ -55,19 +53,35 @@ namespace BeehiveTycoon.Controllers
                 {
                     hra = new Hra(
                         new Datum(3, 0),
-                        new Ul(
-                            "netusim",
-                            new List<GeneraceVcel> {
-                                new GeneraceVcel(300, 3),
-                                new GeneraceVcel(400, 0)
-                            },
-                            new List<Plastev> {
-                                new Plastev(1000)
-                            },
-                            new List<Ukol>(),
-                            new Nepritel(0, "", 0, 0, 0, 0, false, true),
-                            0
-                        )
+                        new List<Ul> {
+                            new Ul(
+                                "netusim",
+                                new List<GeneraceVcel> {
+                                    new GeneraceVcel(300, 3),
+                                    new GeneraceVcel(400, 0)
+                                },
+                                new List<Plastev> {
+                                    new Plastev(1000)
+                                },
+                                new List<Ukol>(),
+                                new Nepritel(0, "", 0, 0, 0, 0, false, true),
+                                0
+                            ),
+                            new Ul(
+                                "moje",
+                                new List<GeneraceVcel> {
+                                    new GeneraceVcel(700, 3),
+                                    new GeneraceVcel(300, 0)
+                                },
+                                new List<Plastev> {
+                                    new Plastev(1000),
+                                    new Plastev(1000)
+                                },
+                                new List<Ukol>(),
+                                new Nepritel(0, "", 0, 0, 0, 0, false, true),
+                                0
+                            )
+                        }
                     );
                     UlozitHru(hra);
                 }
