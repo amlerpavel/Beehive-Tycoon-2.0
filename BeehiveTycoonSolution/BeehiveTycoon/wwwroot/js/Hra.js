@@ -12,6 +12,7 @@ $(document).ready(function () {
             hra = data;
             PrepsatZakladniInformace();
             PrepsatSeznamUkolu();
+            ZobrazitNepritele();
         });
     });
 
@@ -157,6 +158,29 @@ function PrepsatSeznamUkolu() {
     }
 
     $("#seznamUkolu").html("<p>Úkoly:</p>" + tabulka);
+}
+function ZobrazitNepritele() {
+    if (hra.ul.nepritel.porazen == false || hra.ul.existujeMrtvyNepritel == true) {
+        let telo = "";
+
+        if (hra.ul.nepritel.porazen == false) {
+            telo = `
+        <p>Nepřítel v úlu!</p>
+        <ul>
+            <li>Jméno nepřítele: `+ hra.ul.nepritel.jmeno + `</li>
+            <li>Počet nepřátel: `+ hra.ul.nepritel.pocet + `</li>
+        </ul>`;
+        }
+        else if (hra.ul.existujeMrtvyNepritel == true) {
+            telo = "<p>Nepřítel byl poražen.</p>";
+        }
+
+        $("#nepritel").remove();
+        $("#nepratele").prepend('<div id="nepritel">' + telo + '</div>');
+    }
+    else {
+        $("#nepritel").remove();
+    }
 }
 
 function UkazVyberUkolu() {

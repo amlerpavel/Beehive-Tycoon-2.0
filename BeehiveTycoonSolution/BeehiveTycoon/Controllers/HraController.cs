@@ -66,7 +66,8 @@ namespace BeehiveTycoon.Controllers
                             },
                             new List<Ukol>(),
                             new Nepritel(0, "", 0, 0, 0, 0, false, true),
-                            0
+                            0,
+                            false
                         )
                     );
                     UlozitHru(hra);

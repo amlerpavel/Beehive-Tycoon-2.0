@@ -144,7 +144,22 @@
     </div>
 </main>
 <nav id="nepratele">
-
+    @if (Model.Ul.Nepritel.Porazen == false)
+    {
+        <div id="nepritel">
+            <p>Nepřítel v úlu!</p>
+            <ul>
+                <li>Jméno nepřítele: @Model.Ul.Nepritel.Jmeno</li>
+                <li>Počet nepřátel: @Model.Ul.Nepritel.Pocet</li>
+            </ul>
+        </div>
+    }
+    else if (Model.Ul.ExistujeMrtvyNepritel == true)
+    {
+        <div id="nepritel">
+            <p>Nepřítel byl poražen.</p>
+        </div>
+    }
     <div id="zdroje">
         <div>Icons made by <a href="https://www.flaticon.com/authors/dinosoftlabs" title="DinosoftLabs">DinosoftLabs</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
         <div><a href="https://wallpapersafari.com/w/rXaV6Y">wallpapersafari.com</a></div>
