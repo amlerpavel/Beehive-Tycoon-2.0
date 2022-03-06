@@ -18,32 +18,36 @@ namespace BeehiveTycoon.Controllers
             if (dataUkolu == null)
                 return Json("Zadejte smysluplné hodnoty");
 
-            if(dataUkolu.Id <= 0 || dataUkolu.Id > 6)
+            Hra hra = NacistHru();
+
+            if (dataUkolu.Id <= 0 || dataUkolu.Id > 6 || dataUkolu.CisloUlu < 0 || dataUkolu.CisloUlu >= hra.Uly.Count)
                 return Json("Něco se pokazilo... :(");
 
             if (dataUkolu.Hodnota <= 0 && (dataUkolu.Id == 1 || dataUkolu.Id == 2 || dataUkolu.Id == 3 || dataUkolu.Id == 4))
                 return Json("Prosím zadejde kladné číslo");
             
-            Hra hra = NacistHru();
-            string blaboly = hra.Ul.PridatUkol(dataUkolu, hra.Datum.CisloMesice);
+            string blaboly = hra.Uly[dataUkolu.CisloUlu].PridatUkol(dataUkolu, hra.Datum.CisloMesice);
 
             if (blaboly != "přisně tajný string")
                 return Json(blaboly);
 
-            Debug.WriteLine(JsonSerializer.Serialize(hra.Ul.SeznamUkolu));
+            Debug.WriteLine(JsonSerializer.Serialize(hra.Uly[dataUkolu.CisloUlu].SeznamUkolu));
             UlozitHru(hra);
             
-            return Json(hra.Ul.SeznamUkolu);
+            return Json(hra.Uly[dataUkolu.CisloUlu].SeznamUkolu);
         }
 
         [HttpPost]
-        public IActionResult Zrusit([FromBody] int idUkolu)
+        public IActionResult Zrusit([FromBody] DataUkolu dataUkolu)
         {
+            if (dataUkolu == null)
+                return Json("Něco se pokazilo... :(");
+
             Hra hra = NacistHru();
-            hra.Ul.SmazatUkol(idUkolu);
+            hra.Uly[dataUkolu.CisloUlu].SmazatUkol(dataUkolu.Id);
             UlozitHru(hra);
 
-            return Json(hra.Ul.SeznamUkolu);
+            return Json(hra.Uly[dataUkolu.CisloUlu].SeznamUkolu);
         }
     }
 }

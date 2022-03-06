@@ -1,17 +1,25 @@
 ﻿let hra;
+let cisloUlu = 0;
 
 $(document).ready(function () {
     fetch('/Hra/JSON')
     .then(odpoved => odpoved.json())
-    .then(data => { hra = data; });
+    .then(data => {
+        hra = data;
+        NacistHerniPlochu();
+    });
+
+    $(document).on("click", ".ul", function () {
+        cisloUlu = this.value;
+        ZobrazitDataUlu();
+    });
 
     $(document).on("click", "#dalsiKolo", function () {
         fetch('/Hra/DalsiKolo')
         .then(odpoved => odpoved.json())
         .then(data => {
             hra = data;
-            PrepsatZakladniInformace();
-            PrepsatSeznamUkolu();
+            ZobrazitDataUlu();
         });
     });
 
@@ -22,13 +30,6 @@ $(document).ready(function () {
         UkazVyberUkolu();
     });
     $(document).on("click", "#pridat", function () {
-
-        /*
-        fetch('/Ukoly/Seznam')
-            .then(odpoved => odpoved.json())
-            .then(data => console.log(data));
-        */
-
         fetch('/Ukoly/Pridat', {
             method: 'POST',
             body: JSON.stringify(ZiskatDataUkolu()),
@@ -41,7 +42,7 @@ $(document).ready(function () {
             if (typeof (data) == "string")
                 console.log(data);
             else {
-                hra.ul.seznamUkolu = data;
+                hra.uly[cisloUlu].seznamUkolu = data;
                 PrepsatSeznamUkolu();
                 UkazVyberUkolu();
             }
@@ -49,19 +50,24 @@ $(document).ready(function () {
     });
     $(document).on("click", "#zrusit", function () {
         let dataUkolu = ZiskatDataUkolu();
-        if (hra.ul.seznamUkolu.includes(NajitUkol(dataUkolu.Id))) {
+        dataUkolu.Hodnota = 0;
+        if (hra.uly[cisloUlu].seznamUkolu.includes(NajitUkol(dataUkolu.Id))) {
             fetch('/Ukoly/Zrusit', {
                 method: 'POST',
-                body: JSON.stringify(dataUkolu.Id),
+                body: JSON.stringify(dataUkolu),
                 headers: {
                     "Content-Type": "application/json"
                 }
             })
             .then(odpoved => odpoved.json())
             .then(data => {
-                hra.ul.seznamUkolu = data;
-                PrepsatSeznamUkolu();
-                UkazVyberUkolu();
+                if (typeof (data) == "string")
+                    console.log(data);
+                else {
+                    hra.uly[cisloUlu].seznamUkolu = data;
+                    PrepsatSeznamUkolu();
+                    UkazVyberUkolu();
+                }
             });
         }
     });
@@ -71,24 +77,25 @@ function PrepsatZakladniInformace() {
     let soucetVek = 0;
     let vypisGeneraci = "";
 
-    for(let generaceVcel of hra.ul.generaceVcelstva)
+    for (let generaceVcel of hra.uly[cisloUlu].generaceVcelstva)
     {
         soucetVek += generaceVcel.vek;
 
         vypisGeneraci += `
             <tr>
-                <td>`+ generaceVcel.pocet +`</td>
-                <td>`+ generaceVcel.vek +`</td>
-            </tr>`
+                <td>${generaceVcel.pocet}</td>
+                <td>${generaceVcel.vek }</td>
+            </tr>
+        `;
     }
 
-    let prumerVek = Math.round(soucetVek / hra.ul.generaceVcelstva.length * 100) / 100;
+    let prumerVek = Math.round(soucetVek / hra.uly[cisloUlu].generaceVcelstva.length * 100) / 100;
     //(soucetVek / hra.ul.generaceVcelstva.length).toFixed(2);
 
     $("#radek").html(`
-        <div>Včelstvo: `+ hra.ul.vcelstvo +`</div>
+        <div>Včelstvo: ${hra.uly[cisloUlu].vcelstvo}</div>
         <div id="Prumer">
-            Průměrný věk včelstva: `+ prumerVek +`
+            Průměrný věk včelstva: ${prumerVek}
             <div class="submenuG">
                 Generace včel:
                 <table id="generace">
@@ -97,15 +104,15 @@ function PrepsatZakladniInformace() {
                             <th>Počet včel</th>
                             <th>Věk</th>
                         </tr>
-                        `+ vypisGeneraci +`
+                        ${vypisGeneraci}
                     </tbody>
                 </table>
             </div>
         </div>
-        <div>Med: `+ hra.ul.med +`</div>
-        <div>Plástve: `+ hra.ul.plastve.length +`</div>
-        <div>Měsíc: `+ hra.datum.mesic +`</div>
-        <div>Lokace: `+ hra.ul.lokace +`</div>
+        <div>Med: ${hra.uly[cisloUlu].med}</div>
+        <div>Plástve: ${hra.uly[cisloUlu].plastve.length}</div>
+        <div>Měsíc: ${hra.datum.mesic}</div>
+        <div>Lokace: ${hra.uly[cisloUlu].lokace}</div>
     `);
 }
 function PrepsatSeznamUkolu() {
@@ -113,16 +120,19 @@ function PrepsatSeznamUkolu() {
     let pocetVcel = 0;
     let pocetMedu = 0;
 
-    if (hra.ul.seznamUkolu.length == 0) {
-        tabulka = "<ul><li>Nejsou zadané žádné úkoly.</li></ul>";
-
+    if (hra.uly[cisloUlu].seznamUkolu.length == 0) {
+        tabulka = `
+            <ul>
+                <li>Nejsou zadané žádné úkoly.</li>
+            </ul>
+        `;
     } else {
         let radky = "";
         let sloupecKusy = [];
         let sloupecVcely = [];
         let sloupecMed = [];
 
-        for (let ukol of hra.ul.seznamUkolu) {
+        for (let ukol of hra.uly[cisloUlu].seznamUkolu) {
             let kusy = ukol.podrobnosti.find(u => u.jmeno == "kusy");
             let vcely = ukol.podrobnosti.find(u => u.jmeno == "vcely");
             let med = ukol.podrobnosti.find(u => u.jmeno == "med");
@@ -140,8 +150,16 @@ function PrepsatSeznamUkolu() {
             else
                 sloupecMed.push(med.hodnota);
 
-            let i = hra.ul.seznamUkolu.indexOf(ukol);
-            radky += "<tr><th><a>" + ukol.nazev + "</a></th><td>" + sloupecKusy[i] + "</td><td>" + sloupecVcely[i] + "</td><td>" + sloupecMed[i] + "</td></tr>";
+            let i = hra.uly[cisloUlu].seznamUkolu.indexOf(ukol);
+
+            radky += `
+                <tr>
+                    <th><a>${ukol.nazev}</a></th>
+                    <td>${sloupecKusy[i]}</td>
+                    <td>${sloupecVcely[i]}</td>
+                    <td>${sloupecMed[i]}</td>
+                </tr>
+            `;
             
             for (let podrobnost of ukol.podrobnosti) {
                 if (podrobnost.jmeno == "vcely") {
@@ -153,10 +171,64 @@ function PrepsatSeznamUkolu() {
             }
         }
         
-        tabulka = "<table><tbody><tr><th>Název úkolu</th><td>Kusy</td><td>Včely</td><td>Med</td></tr>" + radky + "<tr><th>Celkem</th><td></td><td>" + pocetVcel + "</td><td>" + pocetMedu + "</td></tr></tbody></table>";
+        tabulka = `
+            <table>
+                <tbody>
+                    <tr>
+                        <th>Název úkolu</th>
+                        <td>Kusy</td>
+                        <td>Včely</td>
+                        <td>Med</td>
+                    </tr>
+                    ${radky}
+                    <tr>
+                        <th>Celkem</th>
+                        <td></td>
+                        <td>${pocetVcel}</td>
+                        <td>${pocetMedu}</td>
+                    </tr>
+                </tbody>
+            </table>
+        `;
     }
+    
+    $("#seznamUkolu").remove();
+    $(`
+        <div id="seznamUkolu">
+            <p>Úkoly:</p>
+            ${tabulka}
+        </div>
+    `).insertBefore("#dalsiKolo");
+}
+function ZobrazitUly() {
+    let tlacitka = "";
 
-    $("#seznamUkolu").html("<p>Úkoly:</p>" + tabulka);
+    for (ul of hra.uly) {
+        tlacitka += `<li><button class="ul" value="${hra.uly.indexOf(ul)}">Úl - ${ul.lokace}</button></li>`;
+    }
+    
+    $("#uly").remove();
+    $("#ukoly").prepend(`
+        <div id="uly">
+            <p>Včelí úly:</p>
+            <ul>${tlacitka}</ul>
+        </div>
+    `);
+}
+
+function ZobrazitDataUlu() {
+    PrepsatZakladniInformace();
+    ZobrazitUly();
+    PrepsatSeznamUkolu();
+}
+function NacistHerniPlochu() {
+    $("#ukoly").prepend(`
+        <div id="dalsiKolo" class="tlacitko0">
+            <a>Další kolo</a>
+        </div>
+    `);
+    ZobrazitDataUlu();
+    UkazVyberUkolu();
 }
 
 function UkazVyberUkolu() {
@@ -214,11 +286,11 @@ function UkazFormular(element) {
     }
 
     $("#container2").html(`
-        <h1>` + element.innerText + `</h1>
+        <h1>${element.innerText}</h1>
         <button id="zpet">&#10006;</button>
         <div id="formular">
-            <input type="hidden" name="Id" value="` + element.value + `">
-            `+ telo + `
+            <input type="hidden" name="Id" value="${element.value}">
+            ${telo}
         </div>
         <div id="tlacitka">
             <button id="zrusit"">Smazat úkol</button>
@@ -229,7 +301,7 @@ function UkazFormular(element) {
 
 function ZiskatDataUkolu() {
     let formular = $("#formular").find("input");
-    let ukol = { Id: 0, Hodnota: 0 };
+    let ukol = { Id: 0, Hodnota: 0, CisloUlu: cisloUlu };
 
     for (let input of formular) {
         let jmeno = input.name;
@@ -246,7 +318,7 @@ function ZiskatDataUkolu() {
     return ukol;
 }
 function NajitUkol(id) {
-    for (let ukol of hra.ul.seznamUkolu) {
+    for (let ukol of hra.uly[cisloUlu].seznamUkolu) {
         if (ukol.id == id)
             return ukol;
     }

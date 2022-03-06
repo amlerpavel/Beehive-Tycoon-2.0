@@ -10,17 +10,18 @@ namespace BeehiveTycoon.Models
     public class Hra
     {
         public Datum Datum { get; private set; }
-        public Ul Ul { get; private set; }
-        
-        public Hra(Datum datum, Ul ul)
+        public List<Ul> Uly { get; private set; }
+
+        public Hra(Datum datum, List<Ul> uly)
         {
             Datum = datum;
-            Ul = ul;
+            Uly = uly;
         }
 
         public void Dalsikolo()
         {
-            Ul.DalsiKolo(Datum.CisloMesice);
+            foreach(Ul ul in Uly)
+                ul.DalsiKolo(Datum.CisloMesice);
             Datum.ZmenaData();
         }
     }
