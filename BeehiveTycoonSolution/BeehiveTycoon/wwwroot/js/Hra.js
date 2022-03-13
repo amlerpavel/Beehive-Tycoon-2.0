@@ -215,11 +215,36 @@ function ZobrazitUly() {
         </div>
     `);
 }
+function ZobrazitNepritele() {
+    if (hra.uly[cisloUlu].nepritel.porazen == false || hra.uly[cisloUlu].existujeMrtvyNepritel == true) {
+        let telo = "";
+
+        if (hra.uly[cisloUlu].nepritel.porazen == false) {
+            telo = `
+                <p>Nepřítel v úlu!</p>
+                <ul>
+                    <li>Jméno nepřítele: ${hra.uly[cisloUlu].nepritel.jmeno}</li>
+                    <li>Počet nepřátel: ${hra.uly[cisloUlu].nepritel.pocet}</li>
+                </ul>
+            `;
+        }
+        else if (hra.uly[cisloUlu].existujeMrtvyNepritel == true) {
+            telo = `<p>Nepřítel byl poražen.</p>`;
+        }
+        console.log(hra.uly[cisloUlu].existujeMrtvyNepritel);
+        $("#nepritel").remove();
+        $("#nepratele").prepend(`<div id="nepritel">${telo}</div>`);
+    }
+    else {
+        $("#nepritel").remove();
+    }
+}
 
 function ZobrazitDataUlu() {
     PrepsatZakladniInformace();
     ZobrazitUly();
     PrepsatSeznamUkolu();
+    ZobrazitNepritele();
 }
 function NacistHerniPlochu() {
     $("#ukoly").prepend(`

@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -65,7 +65,8 @@ namespace BeehiveTycoon.Controllers
                                 },
                                 new List<Ukol>(),
                                 new Nepritel(0, "", 0, 0, 0, 0, false, true),
-                                0
+                                0,
+                                false
                             ),
                             new Ul(
                                 "moje",
@@ -79,7 +80,8 @@ namespace BeehiveTycoon.Controllers
                                 },
                                 new List<Ukol>(),
                                 new Nepritel(0, "", 0, 0, 0, 0, false, true),
-                                0
+                                0,
+                                false
                             )
                         }
                     );
