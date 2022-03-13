@@ -207,9 +207,10 @@ namespace BeehiveTycoon.Models.Game
             else if (dataUkolu.Id == 6) // Vyrojení včelstva
             {
                 nazev = "Vyrojení včelstva";
+
                 podrobnosti = new Podrobnost[]
                 {
-                    new Podrobnost("netusim", 0)
+                    new Podrobnost("Lokace", dataUkolu.Hodnota)
                 };
             }
 
