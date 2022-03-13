@@ -25,8 +25,13 @@ namespace BeehiveTycoon.Models.Game
             }
             else
             {
-                Med = med;
-                med = 0;
+                if (med < 0)
+                    Med = 0;
+                else
+                {
+                    Med = med;
+                    med = 0;
+                }
             }
 
             return med;

@@ -112,7 +112,7 @@ function PrepsatZakladniInformace() {
         <div>Med: ${hra.uly[cisloUlu].med}</div>
         <div>Plástve: ${hra.uly[cisloUlu].plastve.length}</div>
         <div>Měsíc: ${hra.datum.mesic}</div>
-        <div>Lokace: ${hra.uly[cisloUlu].lokace}</div>
+        <div>Lokace: ${hra.uly[cisloUlu].lokace.nazev}</div>
     `);
 }
 function PrepsatSeznamUkolu() {
@@ -204,7 +204,7 @@ function ZobrazitUly() {
     let tlacitka = "";
 
     for (ul of hra.uly) {
-        tlacitka += `<li><button class="ul" value="${hra.uly.indexOf(ul)}">Úl - ${ul.lokace}</button></li>`;
+        tlacitka += `<li><button class="ul" value="${hra.uly.indexOf(ul)}">Úl - ${ul.lokace.nazev}</button></li>`;
     }
     
     $("#uly").remove();

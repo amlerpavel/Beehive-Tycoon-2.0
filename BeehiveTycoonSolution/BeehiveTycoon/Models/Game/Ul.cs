@@ -10,13 +10,15 @@ namespace BeehiveTycoon.Models.Game
     {
         public int Vcelstvo { get; private set; }
         public int Med { get; private set; }
-        public string Lokace { get; private set; }
+        public Lokace Lokace { get; private set; }
         public List<GeneraceVcel> GeneraceVcelstva { get; private set; }
         public List<Plastev> Plastve { get; private set; }
         public List<Ukol> SeznamUkolu { get; private set; }
         public Nepritel Nepritel { get; private set; }
         public int KlidPoBitve { get; private set; }
         public bool ExistujeMrtvyNepritel { get; private set; }
+        public bool VyrojitUl { get; private set; }
+        public bool BylVyrojenUl { get; private set; }
 
         private struct DostupnyPocet
         {
@@ -27,6 +29,7 @@ namespace BeehiveTycoon.Models.Game
         private readonly Random _nahodneCislo = new();
         private readonly int _zivotStrazce = 100;
         private int _strazci;
+        private Lokace _lokace;
 
         // cisla mesicu, ve kterych je ...
         private readonly int[] _zima = { 1, 12 };
@@ -44,11 +47,7 @@ namespace BeehiveTycoon.Models.Game
         private readonly int[] _mravenci = { 4, 5, 6, 7, 8, 9 };
         private readonly int[] _zavijec = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
 
-        /*
-        public Nepritel Nepritel { get; set; }
-        public List<Ukol> SeznamUkolu { get; set; }
-        */
-        public Ul(string lokace, List<GeneraceVcel> generaceVcelstva, List<Plastev> plastve, List<Ukol> seznamUkolu, Nepritel nepritel, int klidPoBitve, bool existujeMrtvyNepritel)
+        public Ul(Lokace lokace, List<GeneraceVcel> generaceVcelstva, List<Plastev> plastve, List<Ukol> seznamUkolu, Nepritel nepritel, int klidPoBitve, bool existujeMrtvyNepritel, bool vyrojitUl, bool bylVyrojenUl)
         {
             Lokace = lokace;
             GeneraceVcelstva = generaceVcelstva;
@@ -57,6 +56,8 @@ namespace BeehiveTycoon.Models.Game
             Nepritel = nepritel;
             KlidPoBitve = klidPoBitve;
             ExistujeMrtvyNepritel = existujeMrtvyNepritel;
+            VyrojitUl = vyrojitUl;
+            BylVyrojenUl = bylVyrojenUl;
 
             SecistMed();
             SecistVcely();
@@ -140,8 +141,15 @@ namespace BeehiveTycoon.Models.Game
                 return "Úkol nelze přidat, protože nejsou kvetoucí rostliny";
             if (dataUkolu.Id == 5 && !_zazimovaniUlu.Contains(cisloMesice))
                 return "Úl lze zazimovat pouze v listopadu.";
-            if (dataUkolu.Id == 6 && !_rojVcelstva.Contains(cisloMesice))
-                return "Úl lze vyrojit pouze v dubnu, květnu a červnu";
+            if (dataUkolu.Id == 6)
+            {
+                if(!_rojVcelstva.Contains(cisloMesice))
+                    return "Úl lze vyrojit pouze v dubnu, květnu a červnu";
+                else if(Nepritel.Porazen == false)
+                    return "Úkol nelze přidat, protože je v úlu nepřítel";
+                else if(BylVyrojenUl == true)
+                    return "Úkol nelze přidat, protože z toho úlu jste se již vyrojili.";
+            }
 
             Ukol ukol = VytvoritUkol(dataUkolu);
             DostupnyPocet dostupnyPocet = ZjistiDostupnyPocet(dataUkolu.Id);
@@ -306,8 +314,24 @@ namespace BeehiveTycoon.Models.Game
                 }
                 else if (ukol.Id == 6)
                 {
-                    // zatim v budoucnu
-                    // neco se zapise
+                    VyrojitUl = true;
+
+                    string nazev = "";
+                    int id = ukol.Podrobnosti[0].Hodnota;
+
+                    if (id == 1)
+                        nazev = "tady";
+                    else if (id == 2)
+                        nazev = "zde";
+                    else if (id == 3)
+                        nazev = "vedle";
+                    else if (id == 4)
+                        nazev = "támhle";
+                    else if (id == 5)
+                        nazev = "vedle";
+
+                    _lokace = new(nazev, id);
+
                     splneneUkoly.Add(ukol);
                 }
             }
@@ -442,15 +466,11 @@ namespace BeehiveTycoon.Models.Game
                     SecistVcely();
 
                     Med -= Nepritel.Pocet / 2;
-                    if (Med < 0)
-                        Med = 0;
                     UlozitMedNaPlastve();
                 }
                 else if (Nepritel.Id == 4)
                 {
                     Med -= Nepritel.Pocet * 2;
-                    if (Med < 0)
-                        Med = 0;
                     UlozitMedNaPlastve();
                 }
                 else if (Nepritel.Id == 5)
@@ -485,6 +505,76 @@ namespace BeehiveTycoon.Models.Game
                 Med -= Plastve[cisloPlastve].Med;
                 Plastve.RemoveAt(cisloPlastve);
             }
+        }
+
+        public Ul Vyrojit()
+        {
+            BylVyrojenUl = true;
+            VyrojitUl = false;
+
+            List<GeneraceVcel> generaceVcelstvaRoj = VyrojitGeneraceVcelstva();
+            int pocetVcel = 0;
+
+            foreach (GeneraceVcel generaceVcel in generaceVcelstvaRoj)
+                pocetVcel += generaceVcel.Pocet;
+
+            int med = Convert.ToInt32(pocetVcel * 1.5);
+
+            Med -= med;
+            UlozitMedNaPlastve();
+
+            List<Plastev> plastve = VytvoritPlastve(med);
+
+            Ul ul = new(
+                _lokace,
+                generaceVcelstvaRoj,
+                plastve,
+                new List<Ukol>(),
+                new Nepritel(0, "", 0, 0, 0, 0, false, true),
+                0,
+                false,
+                false,
+                false
+            );
+
+            return ul;
+        }
+        private List<GeneraceVcel> VyrojitGeneraceVcelstva()
+        {
+            List<GeneraceVcel> GeneraceVcelstvaRoj = new();
+
+            foreach (GeneraceVcel generaceVcel in GeneraceVcelstva)
+            {
+                int pulkaVcel = generaceVcel.Pocet / 2;
+                generaceVcel.OdstranitVcely(pulkaVcel);
+                GeneraceVcel generaceVcelRoj = new(pulkaVcel, generaceVcel.Vek);
+                GeneraceVcelstvaRoj.Add(generaceVcelRoj);
+            }
+
+            SecistVcely();
+
+            return GeneraceVcelstvaRoj;
+        }
+        private static List<Plastev> VytvoritPlastve(int med)
+        {
+            List<Plastev> plastve = new();
+
+            while (med > 0)
+            {
+                med -= 200;
+                if(med >= 1000)
+                {
+                    plastve.Add(new Plastev(1000));
+                    med -= 1000;
+                }
+                else
+                {
+                    plastve.Add(new Plastev(med));
+                    med = 0;
+                }
+            }
+
+            return plastve;
         }
     }
 }

@@ -22,6 +22,15 @@ namespace BeehiveTycoon.Models
         {
             foreach(Ul ul in Uly)
                 ul.DalsiKolo(Datum.CisloMesice);
+
+            int posleniUl = Uly.Count - 1;
+
+            if (Uly[posleniUl].VyrojitUl == true)
+            {
+                Ul ul = Uly[posleniUl].Vyrojit();
+                Uly.Add(ul);
+            }
+
             Datum.ZmenaData();
         }
     }
