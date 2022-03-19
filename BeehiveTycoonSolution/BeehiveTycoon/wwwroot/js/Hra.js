@@ -308,6 +308,25 @@ function UkazFormular(element) {
         <div class="radek" id="posledni">
             <input type="submit" value="Zobrazit požadavky" name="tlacitko">
         </div>`;
+    } else if (element.value == 6) {
+        telo = `
+        <div class="radek">
+            <div class="sloupec1">
+                <label>Vyberte lokaci: </label>
+            </div>
+            <div class="sloupec2">
+                <input type="radio" name="Hodnota" id="tady" value="1">
+                <label for="tady">tady</label><br>
+                <input type="radio" name="Hodnota" id="zde" value="2">
+                <label for="zde">zde</label><br>
+                <input type="radio" name="Hodnota" id="vedle" value="3">
+                <label for="vedle">vedle</label><br>
+                <input type="radio" name="Hodnota" id="tamhle" value="4">
+                <label for="tamhle">támhle</label><br>
+                <input type="radio" name="Hodnota" id="tam" value="5">
+                <label for="tam">tam</label><br>
+            </div>
+        </div>`;
     }
 
     $("#container2").html(`
@@ -325,19 +344,14 @@ function UkazFormular(element) {
 }
 
 function ZiskatDataUkolu() {
-    let formular = $("#formular").find("input");
     let ukol = { Id: 0, Hodnota: 0, CisloUlu: cisloUlu };
 
-    for (let input of formular) {
-        let jmeno = input.name;
-        let hodnota = input.value;
+    ukol.Id = $('input[name ="Id"]').val();
 
-        if (jmeno == "Id") {
-            ukol.Id = hodnota;
-        }
-        else if (jmeno == "Hodnota") {
-            ukol.Hodnota = hodnota;
-        }
+    if (ukol.Id == 6) {
+        ukol.Hodnota = $('input[name="Hodnota"]:checked').val();
+    } else {
+        ukol.Hodnota = $('input[name="Hodnota"]').val();
     }
     
     return ukol;
