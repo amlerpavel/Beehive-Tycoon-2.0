@@ -23,8 +23,15 @@ namespace BeehiveTycoon.Controllers
             if (dataUkolu.Id <= 0 || dataUkolu.Id > 6 || dataUkolu.CisloUlu < 0 || dataUkolu.CisloUlu >= hra.Uly.Count)
                 return Json("Něco se pokazilo... :(");
 
-            if (dataUkolu.Id == 6 && (dataUkolu.Hodnota <= 0 || dataUkolu.Hodnota > 5))
-                return Json("Rozbili jste to.");
+            if (dataUkolu.Id == 6)
+            {
+                if (dataUkolu.Hodnota <= 0 || dataUkolu.Hodnota > 5)
+                    return Json("Rozbili jste to.");
+
+                foreach(Ul ul in hra.Uly)
+                    if(ul.Lokace.Id == dataUkolu.Hodnota)
+                        return Json("Do této lokace se znovu vyrojit nemůžete");
+            }
 
             if (dataUkolu.Hodnota <= 0 && (dataUkolu.Id == 1 || dataUkolu.Id == 2 || dataUkolu.Id == 3 || dataUkolu.Id == 4))
                 return Json("Prosím zadejde kladné číslo");
