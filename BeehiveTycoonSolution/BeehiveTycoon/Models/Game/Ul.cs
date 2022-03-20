@@ -120,7 +120,7 @@ namespace BeehiveTycoon.Models.Game
         }
         private void SmazatGeneraci(GeneraceVcel[] generaceVcelstva)
         {
-            foreach (GeneraceVcel generaceVcel in generaceVcelstva.ToList())
+            foreach (GeneraceVcel generaceVcel in generaceVcelstva)
                 GeneraceVcelstva.Remove(generaceVcel);
         }
         private void UlozitMedNaPlastve()

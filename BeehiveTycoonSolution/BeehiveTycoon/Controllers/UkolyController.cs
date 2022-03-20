@@ -19,8 +19,9 @@ namespace BeehiveTycoon.Controllers
                 return Json("Zadejte smysluplné hodnoty");
 
             Hra hra = NacistHru();
+            Ul vybranyUl = hra.Uly.Where(u => u.Lokace.Id == dataUkolu.IdLokaceUlu).FirstOrDefault();
 
-            if (dataUkolu.Id <= 0 || dataUkolu.Id > 6 || dataUkolu.CisloUlu < 0 || dataUkolu.CisloUlu >= hra.Uly.Count)
+            if (dataUkolu.Id <= 0 || dataUkolu.Id > 6 || !hra.Uly.Contains(vybranyUl))
                 return Json("Něco se pokazilo... :(");
 
             if (dataUkolu.Id == 6)
@@ -35,29 +36,34 @@ namespace BeehiveTycoon.Controllers
 
             if (dataUkolu.Hodnota <= 0 && (dataUkolu.Id == 1 || dataUkolu.Id == 2 || dataUkolu.Id == 3 || dataUkolu.Id == 4))
                 return Json("Prosím zadejde kladné číslo");
-            
-            string blaboly = hra.Uly[dataUkolu.CisloUlu].PridatUkol(dataUkolu, hra.Datum.CisloMesice);
+
+            int i = hra.Uly.IndexOf(vybranyUl);
+
+            string blaboly = hra.Uly[i].PridatUkol(dataUkolu, hra.Datum.CisloMesice);
 
             if (blaboly != "přisně tajný string")
                 return Json(blaboly);
 
-            Debug.WriteLine(JsonSerializer.Serialize(hra.Uly[dataUkolu.CisloUlu].SeznamUkolu));
+            Debug.WriteLine(JsonSerializer.Serialize(hra.Uly[i].SeznamUkolu));
             UlozitHru(hra);
             
-            return Json(hra.Uly[dataUkolu.CisloUlu].SeznamUkolu);
+            return Json(hra.Uly[i].SeznamUkolu);
         }
 
         [HttpPost]
         public IActionResult Zrusit([FromBody] DataUkolu dataUkolu)
         {
-            if (dataUkolu == null)
+            Hra hra = NacistHru();
+            Ul vybranyUl = hra.Uly.Where(u => u.Lokace.Id == dataUkolu.IdLokaceUlu).FirstOrDefault();
+
+            if (dataUkolu == null || vybranyUl == null)
                 return Json("Něco se pokazilo... :(");
 
-            Hra hra = NacistHru();
-            hra.Uly[dataUkolu.CisloUlu].SmazatUkol(dataUkolu.Id);
+            int i = hra.Uly.IndexOf(vybranyUl);
+            hra.Uly[i].SmazatUkol(dataUkolu.Id);
             UlozitHru(hra);
 
-            return Json(hra.Uly[dataUkolu.CisloUlu].SeznamUkolu);
+            return Json(hra.Uly[i].SeznamUkolu);
         }
     }
 }

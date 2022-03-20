@@ -1,16 +1,21 @@
 ﻿let hra;
-let cisloUlu = 0;
+let idLokaceUlu;
+let vybranyUl;
 
 $(document).ready(function () {
     fetch('/Hra/JSON')
     .then(odpoved => odpoved.json())
     .then(data => {
         hra = data;
+        vybranyUl = hra.uly[0];
+        idLokaceUlu = hra.uly[0].lokace.id;
         NacistHerniPlochu();
     });
 
     $(document).on("click", ".ul", function () {
-        cisloUlu = this.value;
+        idLokaceUlu = this.value;
+        vybranyUl = NajitUlPodleLokace(idLokaceUlu);
+        
         ZobrazitDataUlu();
     });
 
@@ -19,6 +24,13 @@ $(document).ready(function () {
         .then(odpoved => odpoved.json())
         .then(data => {
             hra = data;
+            vybranyUl = NajitUlPodleLokace(idLokaceUlu);
+
+            if (vybranyUl == undefined) {
+                vybranyUl = hra.uly[0];
+                idLokaceUlu = hra.uly[0].lokace.id;
+            }
+
             ZobrazitDataUlu();
         });
     });
@@ -42,16 +54,15 @@ $(document).ready(function () {
             if (typeof (data) == "string")
                 console.log(data);
             else {
-                hra.uly[cisloUlu].seznamUkolu = data;
-                PrepsatSeznamUkolu();
-                UkazVyberUkolu();
+                vybranyUl.seznamUkolu = data;
+                AktualizovatUkoly();
             }
         });
     });
     $(document).on("click", "#zrusit", function () {
         let dataUkolu = ZiskatDataUkolu();
         dataUkolu.Hodnota = 0;
-        if (hra.uly[cisloUlu].seznamUkolu.includes(NajitUkol(dataUkolu.Id))) {
+        if (vybranyUl.seznamUkolu.includes(NajitUkol(dataUkolu.Id))) {
             fetch('/Ukoly/Zrusit', {
                 method: 'POST',
                 body: JSON.stringify(dataUkolu),
@@ -64,9 +75,8 @@ $(document).ready(function () {
                 if (typeof (data) == "string")
                     console.log(data);
                 else {
-                    hra.uly[cisloUlu].seznamUkolu = data;
-                    PrepsatSeznamUkolu();
-                    UkazVyberUkolu();
+                    vybranyUl.seznamUkolu = data;
+                    AktualizovatUkoly();
                 }
             });
         }
@@ -77,7 +87,7 @@ function PrepsatZakladniInformace() {
     let soucetVek = 0;
     let vypisGeneraci = "";
 
-    for (let generaceVcel of hra.uly[cisloUlu].generaceVcelstva)
+    for (let generaceVcel of vybranyUl.generaceVcelstva)
     {
         soucetVek += generaceVcel.vek;
 
@@ -89,11 +99,11 @@ function PrepsatZakladniInformace() {
         `;
     }
 
-    let prumerVek = Math.round(soucetVek / hra.uly[cisloUlu].generaceVcelstva.length * 100) / 100;
+    let prumerVek = Math.round(soucetVek / vybranyUl.generaceVcelstva.length * 100) / 100;
     //(soucetVek / hra.ul.generaceVcelstva.length).toFixed(2);
 
     $("#radek").html(`
-        <div>Včelstvo: ${hra.uly[cisloUlu].vcelstvo}</div>
+        <div>Včelstvo: ${vybranyUl.vcelstvo}</div>
         <div id="Prumer">
             Průměrný věk včelstva: ${prumerVek}
             <div class="submenuG">
@@ -109,10 +119,10 @@ function PrepsatZakladniInformace() {
                 </table>
             </div>
         </div>
-        <div>Med: ${hra.uly[cisloUlu].med}</div>
-        <div>Plástve: ${hra.uly[cisloUlu].plastve.length}</div>
+        <div>Med: ${vybranyUl.med}</div>
+        <div>Plástve: ${vybranyUl.plastve.length}</div>
         <div>Měsíc: ${hra.datum.mesic}</div>
-        <div>Lokace: ${hra.uly[cisloUlu].lokace.nazev}</div>
+        <div>Lokace: ${vybranyUl.lokace.nazev}</div>
     `);
 }
 function PrepsatSeznamUkolu() {
@@ -120,7 +130,7 @@ function PrepsatSeznamUkolu() {
     let pocetVcel = 0;
     let pocetMedu = 0;
 
-    if (hra.uly[cisloUlu].seznamUkolu.length == 0) {
+    if (vybranyUl.seznamUkolu.length == 0) {
         tabulka = `
             <ul>
                 <li>Nejsou zadané žádné úkoly.</li>
@@ -132,7 +142,7 @@ function PrepsatSeznamUkolu() {
         let sloupecVcely = [];
         let sloupecMed = [];
 
-        for (let ukol of hra.uly[cisloUlu].seznamUkolu) {
+        for (let ukol of vybranyUl.seznamUkolu) {
             let kusy = ukol.podrobnosti.find(u => u.jmeno == "kusy");
             let vcely = ukol.podrobnosti.find(u => u.jmeno == "vcely");
             let med = ukol.podrobnosti.find(u => u.jmeno == "med");
@@ -150,7 +160,7 @@ function PrepsatSeznamUkolu() {
             else
                 sloupecMed.push(med.hodnota);
 
-            let i = hra.uly[cisloUlu].seznamUkolu.indexOf(ukol);
+            let i = vybranyUl.seznamUkolu.indexOf(ukol);
 
             radky += `
                 <tr>
@@ -204,7 +214,7 @@ function ZobrazitUly() {
     let tlacitka = "";
 
     for (ul of hra.uly) {
-        tlacitka += `<li><button class="ul" value="${hra.uly.indexOf(ul)}">Úl - ${ul.lokace.nazev}</button></li>`;
+        tlacitka += `<li><button class="ul" value="${ul.lokace.id}">Úl - ${ul.lokace.nazev}</button></li>`;
     }
     
     $("#uly").remove();
@@ -216,22 +226,22 @@ function ZobrazitUly() {
     `);
 }
 function ZobrazitNepritele() {
-    if (hra.uly[cisloUlu].nepritel.porazen == false || hra.uly[cisloUlu].existujeMrtvyNepritel == true) {
+    if (vybranyUl.nepritel.porazen == false || vybranyUl.existujeMrtvyNepritel == true) {
         let telo = "";
 
-        if (hra.uly[cisloUlu].nepritel.porazen == false) {
+        if (vybranyUl.nepritel.porazen == false) {
             telo = `
                 <p>Nepřítel v úlu!</p>
                 <ul>
-                    <li>Jméno nepřítele: ${hra.uly[cisloUlu].nepritel.jmeno}</li>
-                    <li>Počet nepřátel: ${hra.uly[cisloUlu].nepritel.pocet}</li>
+                    <li>Jméno nepřítele: ${vybranyUl.nepritel.jmeno}</li>
+                    <li>Počet nepřátel: ${vybranyUl.nepritel.pocet}</li>
                 </ul>
             `;
         }
-        else if (hra.uly[cisloUlu].existujeMrtvyNepritel == true) {
+        else if (vybranyUl.existujeMrtvyNepritel == true) {
             telo = `<p>Nepřítel byl poražen.</p>`;
         }
-        console.log(hra.uly[cisloUlu].existujeMrtvyNepritel);
+        console.log(vybranyUl.existujeMrtvyNepritel);
         $("#nepritel").remove();
         $("#nepratele").prepend(`<div id="nepritel">${telo}</div>`);
     }
@@ -253,6 +263,11 @@ function NacistHerniPlochu() {
         </div>
     `);
     ZobrazitDataUlu();
+    UkazVyberUkolu();
+}
+function AktualizovatUkoly() {
+    hra.uly[hra.uly.indexOf(vybranyUl)].seznamUkolu = vybranyUl.seznamUkolu;
+    PrepsatSeznamUkolu();
     UkazVyberUkolu();
 }
 
@@ -344,7 +359,7 @@ function UkazFormular(element) {
 }
 
 function ZiskatDataUkolu() {
-    let ukol = { Id: 0, Hodnota: 0, CisloUlu: cisloUlu };
+    let ukol = { Id: 0, Hodnota: 0, IdLokaceUlu: idLokaceUlu };
 
     ukol.Id = $('input[name ="Id"]').val();
 
@@ -357,8 +372,14 @@ function ZiskatDataUkolu() {
     return ukol;
 }
 function NajitUkol(id) {
-    for (let ukol of hra.uly[cisloUlu].seznamUkolu) {
+    for (let ukol of vybranyUl.seznamUkolu) {
         if (ukol.id == id)
             return ukol;
+    }
+}
+function NajitUlPodleLokace(lokaceId) {
+    for (let ul of hra.uly) {
+        if (ul.lokace.id == lokaceId)
+            return ul;
     }
 }
