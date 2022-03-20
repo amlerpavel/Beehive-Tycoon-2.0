@@ -35,13 +35,13 @@ namespace BeehiveTycoon.Models.Game
     {
         public int Id { get; private set; }
         public int Hodnota { get; private set; }
-        public int CisloUlu { get; private set; }
+        public int IdLokaceUlu { get; private set; }
 
-        public DataUkolu(int id, int hodnota, int cisloUlu)
+        public DataUkolu(int id, int hodnota, int idLokaceUlu)
         {
             Id = id;
             Hodnota = hodnota;
-            CisloUlu = cisloUlu;
+            IdLokaceUlu = idLokaceUlu;
         }
     }
 }

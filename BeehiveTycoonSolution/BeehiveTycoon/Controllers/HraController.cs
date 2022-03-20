@@ -55,7 +55,7 @@ namespace BeehiveTycoon.Controllers
                         new Datum(5, 0),
                         new List<Ul> {
                             new Ul(
-                                new Lokace("netusim",0),
+                                new Lokace("tady",1),
                                 new List<GeneraceVcel> {
                                     new GeneraceVcel(300, 3),
                                     new GeneraceVcel(400, 0)
@@ -71,7 +71,7 @@ namespace BeehiveTycoon.Controllers
                                 true
                             ),
                             new Ul(
-                                new Lokace("moje",0),
+                                new Lokace("zde",2),
                                 new List<GeneraceVcel> {
                                     new GeneraceVcel(700, 3),
                                     new GeneraceVcel(300, 0)

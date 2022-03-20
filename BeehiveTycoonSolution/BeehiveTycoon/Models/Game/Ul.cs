@@ -120,7 +120,7 @@ namespace BeehiveTycoon.Models.Game
         }
         private void SmazatGeneraci(GeneraceVcel[] generaceVcelstva)
         {
-            foreach (GeneraceVcel generaceVcel in generaceVcelstva.ToList())
+            foreach (GeneraceVcel generaceVcel in generaceVcelstva)
                 GeneraceVcelstva.Remove(generaceVcel);
         }
         private void UlozitMedNaPlastve()
@@ -167,7 +167,7 @@ namespace BeehiveTycoon.Models.Game
 
             return "přisně tajný string";
         }
-        private static Ukol VytvoritUkol(DataUkolu dataUkolu)
+        private Ukol VytvoritUkol(DataUkolu dataUkolu)
         {
             Podrobnost[] podrobnosti = Array.Empty<Podrobnost>();
             string nazev = "";
@@ -218,7 +218,8 @@ namespace BeehiveTycoon.Models.Game
 
                 podrobnosti = new Podrobnost[]
                 {
-                    new Podrobnost("Lokace", dataUkolu.Hodnota)
+                    new Podrobnost("lokace", dataUkolu.Hodnota),
+                    new Podrobnost("vcely", Vcelstvo)
                 };
             }
 
@@ -316,6 +317,7 @@ namespace BeehiveTycoon.Models.Game
                 else if (ukol.Id == 6)
                 {
                     VyrojitUl = true;
+                    KlidPoBitve = 1;
 
                     string nazev = "";
                     int id = ukol.Podrobnosti[0].Hodnota;
