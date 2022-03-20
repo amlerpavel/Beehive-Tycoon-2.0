@@ -19,6 +19,10 @@ namespace BeehiveTycoon.Controllers
                 return Json("Zadejte smysluplné hodnoty");
 
             Hra hra = NacistHru();
+
+            if (hra.Vyhra == true || hra.Prohra == true)
+                return Json("Blahopřejeme");
+
             Ul vybranyUl = hra.Uly.Where(u => u.Lokace.Id == dataUkolu.IdLokaceUlu).FirstOrDefault();
 
             if (dataUkolu.Id <= 0 || dataUkolu.Id > 6 || !hra.Uly.Contains(vybranyUl))
@@ -54,6 +58,10 @@ namespace BeehiveTycoon.Controllers
         public IActionResult Zrusit([FromBody] DataUkolu dataUkolu)
         {
             Hra hra = NacistHru();
+
+            if (hra.Vyhra == true || hra.Prohra == true)
+                return Json("Blahopřejeme");
+
             Ul vybranyUl = hra.Uly.Where(u => u.Lokace.Id == dataUkolu.IdLokaceUlu).FirstOrDefault();
 
             if (dataUkolu == null || vybranyUl == null)
