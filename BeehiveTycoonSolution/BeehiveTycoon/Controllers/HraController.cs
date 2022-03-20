@@ -52,10 +52,10 @@ namespace BeehiveTycoon.Controllers
                 if (HttpContext.Request.Cookies["Hra"] == null)
                 {
                     hra = new Hra(
-                        new Datum(3, 0),
+                        new Datum(5, 0),
                         new List<Ul> {
                             new Ul(
-                                "netusim",
+                                new Lokace("tady",1),
                                 new List<GeneraceVcel> {
                                     new GeneraceVcel(300, 3),
                                     new GeneraceVcel(400, 0)
@@ -66,10 +66,12 @@ namespace BeehiveTycoon.Controllers
                                 new List<Ukol>(),
                                 new Nepritel(0, "", 0, 0, 0, 0, false, true),
                                 0,
-                                false
+                                false,
+                                false,
+                                true
                             ),
                             new Ul(
-                                "moje",
+                                new Lokace("zde",2),
                                 new List<GeneraceVcel> {
                                     new GeneraceVcel(700, 3),
                                     new GeneraceVcel(300, 0)
@@ -81,6 +83,8 @@ namespace BeehiveTycoon.Controllers
                                 new List<Ukol>(),
                                 new Nepritel(0, "", 0, 0, 0, 0, false, true),
                                 0,
+                                false,
+                                false,
                                 false
                             )
                         }

@@ -20,8 +20,20 @@ namespace BeehiveTycoon.Models
 
         public void Dalsikolo()
         {
-            foreach(Ul ul in Uly)
+            foreach (Ul ul in Uly.Where(u => u.Vcelstvo <= 0).ToArray())
+                Uly.Remove(ul);
+            
+            foreach (Ul ul in Uly)
                 ul.DalsiKolo(Datum.CisloMesice);
+
+            Ul posleniUl = Uly.Last();
+
+            if (posleniUl.VyrojitUl == true)
+            {
+                Ul ul = posleniUl.Vyrojit();
+                Uly.Add(ul);
+            }
+
             Datum.ZmenaData();
         }
     }
