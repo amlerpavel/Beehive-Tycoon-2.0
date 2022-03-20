@@ -20,6 +20,14 @@ namespace BeehiveTycoon.Controllers
         }
 
         [HttpGet]
+        public IActionResult Nova()
+        {
+            Hra hra = VytvoritHru();
+
+            return Json(hra);
+        }
+
+        [HttpGet]
         public IActionResult JSON()
         {
             Hra hra = NacistHru();
@@ -36,7 +44,55 @@ namespace BeehiveTycoon.Controllers
 
             return Json(hra);
         }
-        
+
+        public Hra VytvoritHru()
+        {
+            Hra hra = new(
+                new Datum(5, 0),
+                new List<Ul> {
+                    new Ul(
+                        new Lokace("tady",1),
+                        new List<GeneraceVcel> {
+                            new GeneraceVcel(300, 3),
+                            new GeneraceVcel(400, 0)
+                        },
+                        new List<Plastev> {
+                            new Plastev(1000)
+                        },
+                        new List<Ukol>(),
+                        new Nepritel(0, "", 0, 0, 0, 0, false, true),
+                        0,
+                        false,
+                        false,
+                        true
+                    ),
+                    new Ul(
+                        new Lokace("zde",2),
+                        new List<GeneraceVcel> {
+                            new GeneraceVcel(700, 3),
+                            new GeneraceVcel(300, 0)
+                        },
+                        new List<Plastev> {
+                            new Plastev(1000),
+                            new Plastev(1000)
+                        },
+                        new List<Ukol>(),
+                        new Nepritel(0, "", 0, 0, 0, 0, false, true),
+                        0,
+                        false,
+                        false,
+                        false
+                    )
+                },
+                false,
+                false
+            );
+
+            UlozitHru(hra);
+
+            return hra;
+        }
+
         public void UlozitHru(Hra hra)
         {
             HttpContext.Session.SetString("Hra", JsonSerializer.Serialize(hra));
@@ -50,47 +106,7 @@ namespace BeehiveTycoon.Controllers
             if (HttpContext.Session.GetString("Hra") == null)
             {
                 if (HttpContext.Request.Cookies["Hra"] == null)
-                {
-                    hra = new Hra(
-                        new Datum(5, 0),
-                        new List<Ul> {
-                            new Ul(
-                                new Lokace("tady",1),
-                                new List<GeneraceVcel> {
-                                    new GeneraceVcel(300, 3),
-                                    new GeneraceVcel(400, 0)
-                                },
-                                new List<Plastev> {
-                                    new Plastev(1000)
-                                },
-                                new List<Ukol>(),
-                                new Nepritel(0, "", 0, 0, 0, 0, false, true),
-                                0,
-                                false,
-                                false,
-                                true
-                            ),
-                            new Ul(
-                                new Lokace("zde",2),
-                                new List<GeneraceVcel> {
-                                    new GeneraceVcel(700, 3),
-                                    new GeneraceVcel(300, 0)
-                                },
-                                new List<Plastev> {
-                                    new Plastev(1000),
-                                    new Plastev(1000)
-                                },
-                                new List<Ukol>(),
-                                new Nepritel(0, "", 0, 0, 0, 0, false, true),
-                                0,
-                                false,
-                                false,
-                                false
-                            )
-                        }
-                    );
-                    UlozitHru(hra);
-                }
+                    hra = VytvoritHru();
                 else
                     hra = JsonSerializer.Deserialize<Hra>(HttpContext.Request.Cookies["Hra"]);
             }
