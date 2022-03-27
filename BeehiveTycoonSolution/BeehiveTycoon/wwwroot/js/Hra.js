@@ -11,6 +11,16 @@ $(document).ready(function () {
         idLokaceUlu = hra.uly[0].lokace.id;
         NacistHerniPlochu();
     });
+    $(document).on("click", "#znovu", function () {
+        fetch('/Hra/Nova')
+        .then(odpoved => odpoved.json())
+        .then(data => {
+            hra = data;
+            vybranyUl = hra.uly[0];
+            idLokaceUlu = hra.uly[0].lokace.id;
+            NacistHerniPlochu();
+        });
+    });
 
     $(document).on("click", ".ul", function () {
         idLokaceUlu = this.value;
@@ -255,15 +265,15 @@ function ZobrazitDataUlu() {
     ZobrazitUly();
     PrepsatSeznamUkolu();
     ZobrazitNepritele();
+    PrepsatContainer2();
 }
 function NacistHerniPlochu() {
-    $("#ukoly").prepend(`
+    $("#ukoly").html(`
         <div id="dalsiKolo" class="tlacitko0">
             <a>Další kolo</a>
         </div>
     `);
     ZobrazitDataUlu();
-    UkazVyberUkolu();
 }
 function AktualizovatUkoly() {
     hra.uly[hra.uly.indexOf(vybranyUl)].seznamUkolu = vybranyUl.seznamUkolu;
@@ -356,6 +366,27 @@ function UkazFormular(element) {
             <button id="pridat">Přidat úkol</button>
         </div>
     `);
+}
+function PrepsatContainer2(){
+    if(hra.vyhra == false && hra.prohra == false){
+        if(vybranyUl.vcelstvo <= 0){
+            $("#container2").html(`
+                <h1>V tomto úlu vám zemřelo včelstvo.</h1>
+            `);
+        } else {
+            UkazVyberUkolu();
+        }
+    } else if (hra.vyhra == true){
+        $("#container2").html(`
+            <h1>Vyhrál jsi.</h1>
+            <button id="znovu">Hrát znovu</button>
+        `);
+    } else if (hra.prohra == true){
+        $("#container2").html(`
+            <h1>Prohrál jsi.</h1>
+            <button id="znovu">Hrát znovu</button>
+        `);
+    }
 }
 
 function ZiskatDataUkolu() {
