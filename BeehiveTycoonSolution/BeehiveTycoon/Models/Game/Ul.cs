@@ -572,12 +572,18 @@ namespace BeehiveTycoon.Models.Game
                 }
                 else
                 {
+                    if (med <= 0)
+                        med = 0;
                     plastve.Add(new Plastev(med));
                     med = 0;
                 }
             }
 
             return plastve;
+        }
+        public void PovolitZnovuRoj()
+        {
+            BylVyrojenUl = false;
         }
     }
 }
