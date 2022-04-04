@@ -37,11 +37,6 @@ namespace BeehiveTycoon.Models.Game
         private readonly int[] _rojVcelstva = { 4, 5, 6 };
         private readonly int[] _zazimovaniUlu = { 11 };
 
-        private readonly int[] _nejvicePylu = { 5 };
-        private readonly int[] _sezonaPylu = { 4, 6, 7, 8 };
-        private readonly int[] _menePylu = { 3, 9 };
-        private readonly int[] _maloPylu = { 2, 10 };
-
         private readonly int[] _hlodavci = { 1, 11, 12 };
         private readonly int[] _vosy = { 6, 7, 8 };
         private readonly int[] _mravenci = { 4, 5, 6, 7, 8, 9 };
@@ -271,14 +266,7 @@ namespace BeehiveTycoon.Models.Game
                 {
                     int vcely = ukol.Podrobnosti[0].Hodnota;
 
-                    if (_nejvicePylu.Contains(cisloMesice))
-                        Med += vcely * 8;
-                    else if (_sezonaPylu.Contains(cisloMesice))
-                        Med += vcely * 6;
-                    else if (_menePylu.Contains(cisloMesice))
-                        Med += vcely * 3;
-                    else if (_maloPylu.Contains(cisloMesice))
-                        Med += Convert.ToInt32(vcely * 0.5);
+                    Med += Lokace.Pyl.ZiskatMed(vcely, cisloMesice);
 
                     splneneUkoly.Add(ukol);
                 }
@@ -319,21 +307,43 @@ namespace BeehiveTycoon.Models.Game
                     VyrojitUl = true;
                     KlidPoBitve = 1;
 
-                    string nazev = "";
+                    string nazev;
                     int id = ukol.Podrobnosti[0].Hodnota;
+                    Vystkyt vystkyt;
+                    MnostviNaVcelu mnostviNaVcelu;
 
                     if (id == 1)
+                    {
                         nazev = "Zahrada";
+                        vystkyt = new(new int[] { 5 }, new int[] { 4, 6, 7, 8 }, new int[] { 3, 9 }, new int[] { 2, 10 });
+                        mnostviNaVcelu = new(8, 6, 3, 0.5);
+                    }
                     else if (id == 2)
+                    {
                         nazev = "Les";
+                        vystkyt = new(new int[] { 4, 5 }, new int[] { 3, 6 }, new int[] { 7, 8, 9 }, new int[] { 2, 10 });
+                        mnostviNaVcelu = new(10, 8, 1.5, 0.25);
+                    }
                     else if (id == 3)
+                    {
                         nazev = "Louka";
+                        vystkyt = new(new int[] { 6, 7, 8 }, new int[] { 5, 9 }, new int[] { 4, 10 }, new int[] { 2, 3 });
+                        mnostviNaVcelu = new(9, 6, 2, 0.3);
+                    }
                     else if (id == 4)
+                    {
                         nazev = "Pole";
-                    else if (id == 5)
+                        vystkyt = new(new int[] { 4,5 }, new int[] { 6, 7, 8 }, new int[] { 3, 9 }, new int[] { 2, 10 });
+                        mnostviNaVcelu = new(15, 2, 1.5, 0.25);
+                    }
+                    else //if (id == 5)
+                    {
                         nazev = "Město";
+                        vystkyt = new(new int[] { 5 }, new int[] { 4, 6, 7, 8 }, new int[] { 3, 9 }, new int[] { 2, 10 });
+                        mnostviNaVcelu = new(4, 3, 1.5, 0.25);
+                    }
 
-                    _lokace = new(nazev, id);
+                    _lokace = new(nazev, id, new Pyl(vystkyt, mnostviNaVcelu));
 
                     splneneUkoly.Add(ukol);
                 }
