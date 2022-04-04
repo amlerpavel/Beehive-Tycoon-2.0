@@ -323,15 +323,15 @@ namespace BeehiveTycoon.Models.Game
                     int id = ukol.Podrobnosti[0].Hodnota;
 
                     if (id == 1)
-                        nazev = "tady";
+                        nazev = "Zahrada";
                     else if (id == 2)
-                        nazev = "zde";
+                        nazev = "Les";
                     else if (id == 3)
-                        nazev = "vedle";
+                        nazev = "Louka";
                     else if (id == 4)
-                        nazev = "támhle";
+                        nazev = "Pole";
                     else if (id == 5)
-                        nazev = "vedle";
+                        nazev = "Město";
 
                     _lokace = new(nazev, id);
 
