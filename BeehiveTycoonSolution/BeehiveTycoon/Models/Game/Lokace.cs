@@ -10,12 +10,18 @@ namespace BeehiveTycoon.Models.Game
         public string Nazev { get; private set; }
         public int Id { get; private set; }
         public Pyl Pyl { get; private set; }
+        public int ViceNepratel { get; private set; } // v procentech, upravuje pocet utocicich nepratel na ul
+        public int MaximalniOchrana { get; private set; } // upravuje max sanci na vytvoreni nepritele, kterou muzou vcely ziskat
+        public int ZtraceneVcely { get; private set; } // procento, kolik vcel se ztrati za jedno kolo
 
-        public Lokace(string nazev, int id, Pyl pyl)
+        public Lokace(string nazev, int id, Pyl pyl, int viceNepratel, int maximalniOchrana, int ztraceneVcely)
         {
             Nazev = nazev;
             Id = id;
             Pyl = pyl;
+            ViceNepratel = viceNepratel;
+            MaximalniOchrana = maximalniOchrana;
+            ZtraceneVcely = ztraceneVcely;
         }
 
         /*

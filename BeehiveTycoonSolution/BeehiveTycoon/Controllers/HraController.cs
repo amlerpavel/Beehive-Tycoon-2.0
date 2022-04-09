@@ -57,7 +57,10 @@ namespace BeehiveTycoon.Controllers
                             new Pyl(
                                 new Vystkyt(new int[] { 5 }, new int[] { 4, 6, 7, 8 }, new int[] { 3, 9 }, new int[] { 2, 10 }),
                                 new MnostviNaVcelu(8, 6, 3, 0.5)
-                            )
+                            ),
+                            0,
+                            90,
+                            0
                         ),
                         new List<GeneraceVcel> {
                             new GeneraceVcel(300, 3),
