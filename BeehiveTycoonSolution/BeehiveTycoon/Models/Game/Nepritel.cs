@@ -35,26 +35,46 @@ namespace BeehiveTycoon.Models.Game
             Porazen = porazen;
         }
 
-        public void Invaze(int vcelstvo)
+        public void Invaze(int vcelstvo, int viceNepratel)
         {
+            double min = 0;
+            double max = 1;
+
             if (VrazednyUder == true)
             {
                 if (Id == 3)
-                    Pocet = _nahodneCislo.Next(vcelstvo / 8, vcelstvo / 4);
+                {
+                    min = vcelstvo / 8;
+                    max = vcelstvo / 4;
+                }
                 else if (Id == 4)
-                    Pocet = _nahodneCislo.Next(vcelstvo / 2, (vcelstvo / 100) * 20 + vcelstvo);
+                {
+                    min = vcelstvo / 2;
+                    max = (vcelstvo / 100) * 20 + vcelstvo;
+                }
 
                 VrazednyUder = false;
             }
             else
             {
                 if (Id == 5)
-                    Pocet += _nahodneCislo.Next(2, 7);
+                {
+                    min = 2;
+                    max = 7;
+                }
                 else if (Id == 3 || Id == 4)
-                    Pocet += _nahodneCislo.Next(4, 28);
+                {
+                    min = 4;
+                    max = 28;
+                }
             }
 
-            if(Id != 0)
+            min += min / 100 * viceNepratel;
+            max += max / 100 * viceNepratel;
+
+            Pocet += _nahodneCislo.Next(Convert.ToInt32(min), Convert.ToInt32(max));
+
+            if (Id != 0)
                 Zivoty = Pocet * ZivotJedince;
 
             Vek += 1;

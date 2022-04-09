@@ -340,16 +340,16 @@ function UkazFormular(element) {
                 <label>Vyberte lokaci: </label>
             </div>
             <div class="sloupec2">
-                <input type="radio" name="Hodnota" id="tady" value="1">
-                <label for="tady">tady</label><br>
-                <input type="radio" name="Hodnota" id="zde" value="2">
-                <label for="zde">zde</label><br>
-                <input type="radio" name="Hodnota" id="vedle" value="3">
-                <label for="vedle">vedle</label><br>
-                <input type="radio" name="Hodnota" id="tamhle" value="4">
-                <label for="tamhle">támhle</label><br>
-                <input type="radio" name="Hodnota" id="tam" value="5">
-                <label for="tam">tam</label><br>
+                <input type="radio" name="Hodnota" id="zahrada" value="1">
+                <label for="zahrada">Zahrada</label><br>
+                <input type="radio" name="Hodnota" id="les" value="2">
+                <label for="les">Les</label><br>
+                <input type="radio" name="Hodnota" id="louka" value="3">
+                <label for="louka">Louka</label><br>
+                <input type="radio" name="Hodnota" id="pole" value="4">
+                <label for="pole">Pole</label><br>
+                <input type="radio" name="Hodnota" id="mesto" value="5">
+                <label for="mesto">Město</label><br>
             </div>
         </div>`;
     }
