@@ -37,11 +37,6 @@ namespace BeehiveTycoon.Models.Game
         private readonly int[] _rojVcelstva = { 4, 5, 6 };
         private readonly int[] _zazimovaniUlu = { 11 };
 
-        private readonly int[] _nejvicePylu = { 5 };
-        private readonly int[] _sezonaPylu = { 4, 6, 7, 8 };
-        private readonly int[] _menePylu = { 3, 9 };
-        private readonly int[] _maloPylu = { 2, 10 };
-
         private readonly int[] _hlodavci = { 1, 11, 12 };
         private readonly int[] _vosy = { 6, 7, 8 };
         private readonly int[] _mravenci = { 4, 5, 6, 7, 8, 9 };
@@ -68,7 +63,7 @@ namespace BeehiveTycoon.Models.Game
             SplnitUkoly(cisloMesice);
             ZestarnutiVcelstva();
             UlozitMedNaPlastve();
-            SecistVcely();
+            ZtraceneVcely();
             Debug.WriteLine("Před vytvořenim: " + Nepritel.Jmeno + " " + Nepritel.Pocet + " porazen: " + Nepritel.Porazen);
             VytvoritNepritele(VylosovatNepritele(cisloMesice));
             Debug.WriteLine("Vytvořen: " + Nepritel.Jmeno + " " + Nepritel.Pocet + " porazen: " + Nepritel.Porazen);
@@ -115,6 +110,7 @@ namespace BeehiveTycoon.Models.Game
             }
 
             SmazatGeneraci(GeneraceVcelstva.Where(u => u.Vek >= 7).ToArray());
+            SecistVcely();
 
             GeneraceVcelstva.Sort((x, y) => y.Vek.CompareTo(x.Vek));
         }
@@ -271,14 +267,7 @@ namespace BeehiveTycoon.Models.Game
                 {
                     int vcely = ukol.Podrobnosti[0].Hodnota;
 
-                    if (_nejvicePylu.Contains(cisloMesice))
-                        Med += vcely * 8;
-                    else if (_sezonaPylu.Contains(cisloMesice))
-                        Med += vcely * 6;
-                    else if (_menePylu.Contains(cisloMesice))
-                        Med += vcely * 3;
-                    else if (_maloPylu.Contains(cisloMesice))
-                        Med += Convert.ToInt32(vcely * 0.5);
+                    Med += Lokace.Pyl.ZiskatMed(vcely, cisloMesice);
 
                     splneneUkoly.Add(ukol);
                 }
@@ -319,21 +308,61 @@ namespace BeehiveTycoon.Models.Game
                     VyrojitUl = true;
                     KlidPoBitve = 1;
 
-                    string nazev = "";
+                    string nazev;
                     int id = ukol.Podrobnosti[0].Hodnota;
+                    Vystkyt vystkytPylu;
+                    MnostviNaVcelu mnostviNaVcelu;
+                    int viceNepratel;
+                    int maximalniOchrana;
+                    int ztraceneVcely;
 
                     if (id == 1)
-                        nazev = "tady";
+                    {
+                        nazev = "Zahrada";
+                        vystkytPylu = new(new int[] { 5 }, new int[] { 4, 6, 7, 8 }, new int[] { 3, 9 }, new int[] { 2, 10 });
+                        mnostviNaVcelu = new(8, 6, 3, 0.5);
+                        viceNepratel = 0;
+                        maximalniOchrana = 90;
+                        ztraceneVcely = 0;
+                    }
                     else if (id == 2)
-                        nazev = "zde";
+                    {
+                        nazev = "Les";
+                        vystkytPylu = new(new int[] { 4, 5 }, new int[] { 3, 6 }, new int[] { 7, 8, 9 }, new int[] { 2, 10 });
+                        mnostviNaVcelu = new(10, 8, 1.5, 0.25);
+                        viceNepratel = 40;
+                        maximalniOchrana = 60;
+                        ztraceneVcely = 0;
+                    }
                     else if (id == 3)
-                        nazev = "vedle";
+                    {
+                        nazev = "Louka";
+                        vystkytPylu = new(new int[] { 6, 7, 8 }, new int[] { 5, 9 }, new int[] { 4, 10 }, new int[] { 2, 3 });
+                        mnostviNaVcelu = new(9, 6, 2, 0.3);
+                        viceNepratel = 20;
+                        maximalniOchrana = 80;
+                        ztraceneVcely = 0;
+                    }
                     else if (id == 4)
-                        nazev = "támhle";
-                    else if (id == 5)
-                        nazev = "vedle";
+                    {
+                        nazev = "Pole";
+                        vystkytPylu = new(new int[] { 4,5 }, new int[] { 6, 7, 8 }, new int[] { 3, 9 }, new int[] { 2, 10 });
+                        mnostviNaVcelu = new(15, 2, 1.5, 0.25);
+                        viceNepratel = 0;
+                        maximalniOchrana = 90;
+                        ztraceneVcely = 5;
+                    }
+                    else //if (id == 5)
+                    {
+                        nazev = "Město";
+                        vystkytPylu = new(new int[] { 5 }, new int[] { 4, 6, 7, 8 }, new int[] { 3, 9 }, new int[] { 2, 10 });
+                        mnostviNaVcelu = new(4, 3, 1.5, 0.25);
+                        viceNepratel = -20;
+                        maximalniOchrana = 90;
+                        ztraceneVcely = 10;
+                    }
 
-                    _lokace = new(nazev, id);
+                    _lokace = new(nazev, id, new Pyl(vystkytPylu, mnostviNaVcelu), viceNepratel, maximalniOchrana, ztraceneVcely);
 
                     splneneUkoly.Add(ukol);
                 }
@@ -352,11 +381,18 @@ namespace BeehiveTycoon.Models.Game
                 int sance;
 
                 if (_strazci == 0)
-                    sance = 100;
+                {
+                    sance = 100 - Lokace.MaximalniOchrana / 3;
+                }
                 else
-                    sance = 101 - (_strazci / Plastve.Count) / 20 * 100;
+                {
+                    double ochranaPlastvi = _strazci / Plastve.Count / 20;
+                    if (ochranaPlastvi > 1)
+                        ochranaPlastvi = 1;
+                    sance = 100 - Convert.ToInt32(ochranaPlastvi) * Lokace.MaximalniOchrana;
+                }
 
-                if (_nahodneCislo.Next(0, 101) <= sance)
+                if (_nahodneCislo.Next(1, 101) <= sance)
                 {
                     List<int> IdNepratel = new();
 
@@ -386,9 +422,10 @@ namespace BeehiveTycoon.Models.Game
                 if (id != 0 && Nepritel.Porazen == true)
                 {
                     string jmeno = "";
-                    int pocet = 0;
                     int zivotJedince = 0;
                     bool vrazednyUder = false;
+                    double min = 0;
+                    double max = 0;
 
                     if (id == 1 || id == 2)
                     {
@@ -397,40 +434,49 @@ namespace BeehiveTycoon.Models.Game
                         else
                             jmeno = "Myš";
 
-                        pocet = 1;
+                        min = 1;
+                        max = 2;
                         zivotJedince = 1000;
                     }
                     else if (id == 3)
                     {
                         jmeno = "Vosy";
-                        pocet = _nahodneCislo.Next(6, (_strazci / 100) * 5 + _strazci + 8);
+                        min = 6 + (_strazci / 10);
+                        max = 8 + (_strazci / 10) * 5;
                         zivotJedince = 200;
                         vrazednyUder = true;
                     }
                     else if (id == 4)
                     {
                         jmeno = "Mravenci";
-                        pocet = _nahodneCislo.Next(10, (_strazci / 100) * 20 + _strazci + 20);
+                        min = 10 + (_strazci / 10);
+                        max = 20 + (_strazci / 10) * 20;
                         zivotJedince = 60;
                         vrazednyUder = true;
                     }
                     else if (id == 5)
                     {
                         jmeno = "Zavíječ";
-                        pocet = _nahodneCislo.Next(2, Plastve.Count / 3 + 3);
+                        min = 3 + Plastve.Count / 6;
+                        max = 5 + Plastve.Count / 3;
                         zivotJedince = 1;
                     }
+
+                    min += min / 100 * Lokace.ViceNepratel;
+                    max += max / 100 * Lokace.ViceNepratel;
+
+                    int pocet = _nahodneCislo.Next(Convert.ToInt32(min), Convert.ToInt32(max));
 
                     Nepritel = new Nepritel(id, jmeno, pocet, pocet * zivotJedince, zivotJedince, 0, vrazednyUder, false);
                 }
                 else if (Nepritel.Porazen == false)
-                    Nepritel.Invaze(Vcelstvo);
+                    Nepritel.Invaze(Vcelstvo, Lokace.ViceNepratel);
             }
             else
             {
                 KlidPoBitve -= 1;
                 if (Nepritel.Porazen == false)
-                    Nepritel.Invaze(Vcelstvo);
+                    Nepritel.Invaze(Vcelstvo, Lokace.ViceNepratel);
                 ExistujeMrtvyNepritel = false;
             }
         }
@@ -478,7 +524,7 @@ namespace BeehiveTycoon.Models.Game
                 }
                 else if (Nepritel.Id == 5)
                 {
-                    ZnicitPlastve(Nepritel.Pocet / 2, false);
+                    ZnicitPlastve(Nepritel.Pocet / 3, false);
                 }
             }
         }
@@ -572,12 +618,32 @@ namespace BeehiveTycoon.Models.Game
                 }
                 else
                 {
+                    if (med <= 0)
+                        med = 0;
                     plastve.Add(new Plastev(med));
                     med = 0;
                 }
             }
 
             return plastve;
+        }
+        public void PovolitZnovuRoj()
+        {
+            BylVyrojenUl = false;
+        }
+
+        private void ZtraceneVcely()
+        {
+            if (Lokace.ZtraceneVcely != 0)
+            {
+                double ztraceneVcely = Vcelstvo / 100 * Lokace.ZtraceneVcely;
+
+                double min = ztraceneVcely - ztraceneVcely / 100 * 5;
+                double max = ztraceneVcely + ztraceneVcely / 100 * 10;
+
+                OdecistVcely(_nahodneCislo.Next(Convert.ToInt32(min), Convert.ToInt32(max)), false);
+                SecistVcely();
+            }
         }
     }
 }

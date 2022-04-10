@@ -37,12 +37,18 @@ namespace BeehiveTycoon.Models
                 else if (Uly.Count == 5)
                     Vyhra = true;
 
-                Ul posleniUl = Uly.Last();
-                
-                if (posleniUl.VyrojitUl == true)
+                if (Vyhra == false && Prohra == false)
                 {
-                    Ul ul = posleniUl.Vyrojit();
-                    Uly.Add(ul);
+                    Ul nejmladsiZivyUl = Uly.Where(u => u.Vcelstvo > 0).ToArray().Last();
+
+                    if (nejmladsiZivyUl.VyrojitUl == true)
+                    {
+                        Ul ul = nejmladsiZivyUl.Vyrojit();
+                        Uly.Add(ul);
+                    }
+                    Debug.WriteLine(nejmladsiZivyUl.Lokace.Nazev);
+                    if (nejmladsiZivyUl.BylVyrojenUl == true)
+                        Uly.Where(u => u.Vcelstvo > 0).Last().PovolitZnovuRoj();
                 }
 
                 Datum.ZmenaData();

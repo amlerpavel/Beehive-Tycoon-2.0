@@ -51,29 +51,22 @@ namespace BeehiveTycoon.Controllers
                 new Datum(5, 0),
                 new List<Ul> {
                     new Ul(
-                        new Lokace("tady",1),
+                        new Lokace(
+                            "Zahrada",
+                            1,
+                            new Pyl(
+                                new Vystkyt(new int[] { 5 }, new int[] { 4, 6, 7, 8 }, new int[] { 3, 9 }, new int[] { 2, 10 }),
+                                new MnostviNaVcelu(8, 6, 3, 0.5)
+                            ),
+                            0,
+                            90,
+                            0
+                        ),
                         new List<GeneraceVcel> {
                             new GeneraceVcel(300, 3),
                             new GeneraceVcel(400, 0)
                         },
                         new List<Plastev> {
-                            new Plastev(1000)
-                        },
-                        new List<Ukol>(),
-                        new Nepritel(0, "", 0, 0, 0, 0, false, true),
-                        0,
-                        false,
-                        false,
-                        true
-                    ),
-                    new Ul(
-                        new Lokace("zde",2),
-                        new List<GeneraceVcel> {
-                            new GeneraceVcel(700, 3),
-                            new GeneraceVcel(300, 0)
-                        },
-                        new List<Plastev> {
-                            new Plastev(1000),
                             new Plastev(1000)
                         },
                         new List<Ukol>(),
