@@ -130,7 +130,7 @@ function PrepsatZakladniInformace() {
             </div>
         </div>
         <div>Med: ${vybranyUl.med}</div>
-        <div>Plástve: ${vybranyUl.plastve.length}</div>
+        <div>Plástve: ${vybranyUl.plastve.length} / ${vybranyUl.maxPlastvi}</div>
         <div>Měsíc: ${hra.datum.mesic}</div>
         <div>Lokace: ${vybranyUl.lokace.nazev}</div>
     `);
