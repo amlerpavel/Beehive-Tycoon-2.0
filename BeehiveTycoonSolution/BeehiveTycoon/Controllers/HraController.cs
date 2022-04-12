@@ -28,7 +28,7 @@ namespace BeehiveTycoon.Controllers
         }
 
         [HttpGet]
-        public IActionResult JSON()
+        public IActionResult Nacist()
         {
             Hra hra = NacistHru();
 

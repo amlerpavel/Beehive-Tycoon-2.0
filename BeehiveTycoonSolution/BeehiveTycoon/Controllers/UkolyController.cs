@@ -30,6 +30,8 @@ namespace BeehiveTycoon.Controllers
 
             if (dataUkolu.Id == 6)
             {
+                if (dataUkolu.Hodnota == 0)
+                    return Json("Vyberte si laskavě lokaci.");
                 if (dataUkolu.Hodnota <= 0 || dataUkolu.Hodnota > 5)
                     return Json("Rozbili jste to.");
 
