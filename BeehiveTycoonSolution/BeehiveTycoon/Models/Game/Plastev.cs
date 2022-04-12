@@ -9,7 +9,7 @@ namespace BeehiveTycoon.Models.Game
     {
         public int Med { get; private set; }
 
-        private readonly int _maxMedu = 1000;
+        public readonly int MaxMedu = 1000;
 
         public Plastev(int med)
         {
@@ -18,10 +18,10 @@ namespace BeehiveTycoon.Models.Game
 
         public int PridatMed(int med)
         {
-            if (med >= _maxMedu)
+            if (med >= MaxMedu)
             {
-                Med = _maxMedu;
-                med -= _maxMedu;
+                Med = MaxMedu;
+                med -= MaxMedu;
             }
             else
             {

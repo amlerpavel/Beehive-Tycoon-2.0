@@ -19,6 +19,7 @@ namespace BeehiveTycoon.Models.Game
         public bool ExistujeMrtvyNepritel { get; private set; }
         public bool VyrojitUl { get; private set; }
         public bool BylVyrojenUl { get; private set; }
+        public int MaxPlastvi { get; private set; }
 
         private struct DostupnyPocet
         {
@@ -30,6 +31,7 @@ namespace BeehiveTycoon.Models.Game
         private readonly int _zivotStrazce = 100;
         private int _strazci;
         private Lokace _lokace;
+        private int _maxPlastvi;
 
         // cisla mesicu, ve kterych je ...
         private readonly int[] _zima = { 1, 12 };
@@ -42,7 +44,7 @@ namespace BeehiveTycoon.Models.Game
         private readonly int[] _mravenci = { 4, 5, 6, 7, 8, 9 };
         private readonly int[] _zavijec = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
 
-        public Ul(Lokace lokace, List<GeneraceVcel> generaceVcelstva, List<Plastev> plastve, List<Ukol> seznamUkolu, Nepritel nepritel, int klidPoBitve, bool existujeMrtvyNepritel, bool vyrojitUl, bool bylVyrojenUl)
+        public Ul(Lokace lokace, List<GeneraceVcel> generaceVcelstva, List<Plastev> plastve, List<Ukol> seznamUkolu, Nepritel nepritel, int klidPoBitve, bool existujeMrtvyNepritel, bool vyrojitUl, bool bylVyrojenUl, int maxPlastvi)
         {
             Lokace = lokace;
             GeneraceVcelstva = generaceVcelstva;
@@ -53,6 +55,7 @@ namespace BeehiveTycoon.Models.Game
             ExistujeMrtvyNepritel = existujeMrtvyNepritel;
             VyrojitUl = vyrojitUl;
             BylVyrojenUl = bylVyrojenUl;
+            MaxPlastvi = maxPlastvi;
 
             SecistMed();
             SecistVcely();
@@ -145,6 +148,15 @@ namespace BeehiveTycoon.Models.Game
                     return "Úkol nelze přidat, protože je v úlu nepřítel";
                 else if(BylVyrojenUl == true)
                     return "Úkol nelze přidat, protože z toho úlu jste se již vyrojili.";
+                else if (MaxPlastvi > Plastve.Count)
+                    return "Úkol nelze přidat, protože v tomto úlu je ještě místo pro další plástve.";
+            }
+            if (dataUkolu.Id == 3)
+            {
+                if(MaxPlastvi <= Plastve.Count)
+                    return "V tomto úlu již není místo pro další plástve.";
+                else if (MaxPlastvi - Plastve.Count < dataUkolu.Hodnota)
+                    return "Úkol nelze přidat, protože není místo pro tyto nové plástve.";
             }
 
             Ukol ukol = VytvoritUkol(dataUkolu);
@@ -215,7 +227,8 @@ namespace BeehiveTycoon.Models.Game
                 podrobnosti = new Podrobnost[]
                 {
                     new Podrobnost("lokace", dataUkolu.Hodnota),
-                    new Podrobnost("vcely", Vcelstvo)
+                    new Podrobnost("vcely", Vcelstvo),
+                    new Podrobnost("med", MaxPlastvi * Plastve[0].MaxMedu)
                 };
             }
 
@@ -324,6 +337,7 @@ namespace BeehiveTycoon.Models.Game
                         viceNepratel = 0;
                         maximalniOchrana = 90;
                         ztraceneVcely = 0;
+                        _maxPlastvi = 25;
                     }
                     else if (id == 2)
                     {
@@ -333,6 +347,7 @@ namespace BeehiveTycoon.Models.Game
                         viceNepratel = 40;
                         maximalniOchrana = 60;
                         ztraceneVcely = 0;
+                        _maxPlastvi = 40;
                     }
                     else if (id == 3)
                     {
@@ -342,6 +357,7 @@ namespace BeehiveTycoon.Models.Game
                         viceNepratel = 20;
                         maximalniOchrana = 80;
                         ztraceneVcely = 0;
+                        _maxPlastvi = 30;
                     }
                     else if (id == 4)
                     {
@@ -351,6 +367,7 @@ namespace BeehiveTycoon.Models.Game
                         viceNepratel = 0;
                         maximalniOchrana = 90;
                         ztraceneVcely = 5;
+                        _maxPlastvi = 20;
                     }
                     else //if (id == 5)
                     {
@@ -360,6 +377,7 @@ namespace BeehiveTycoon.Models.Game
                         viceNepratel = -20;
                         maximalniOchrana = 90;
                         ztraceneVcely = 10;
+                        _maxPlastvi = 10;
                     }
 
                     _lokace = new(nazev, id, new Pyl(vystkytPylu, mnostviNaVcelu), viceNepratel, maximalniOchrana, ztraceneVcely);
@@ -583,7 +601,8 @@ namespace BeehiveTycoon.Models.Game
                 0,
                 false,
                 false,
-                false
+                false,
+                _maxPlastvi
             );
 
             return ul;
