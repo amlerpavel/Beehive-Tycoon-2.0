@@ -74,7 +74,8 @@ namespace BeehiveTycoon.Controllers
                         0,
                         false,
                         false,
-                        false
+                        false,
+                        25
                     )
                 },
                 false,
