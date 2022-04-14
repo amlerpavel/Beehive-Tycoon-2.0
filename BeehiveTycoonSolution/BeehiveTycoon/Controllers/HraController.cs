@@ -19,9 +19,14 @@ namespace BeehiveTycoon.Controllers
             return View();
         }
 
-        [HttpGet]
-        public IActionResult Nova()
+        [HttpPost]
+        public IActionResult Nova([FromBody] int idObtiznosti)
         {
+            if (idObtiznosti <= 0 || idObtiznosti > 3)
+                return Json("Nìco  se pokazilo. :(");
+
+            Debug.WriteLine(idObtiznosti);
+
             Hra hra = VytvoritHru();
 
             return Json(hra);
@@ -39,6 +44,10 @@ namespace BeehiveTycoon.Controllers
         public IActionResult DalsiKolo()
         {
             Hra hra = NacistHru();
+
+            if (hra == null)
+                return Json(null);
+
             hra.Dalsikolo();
             UlozitHru(hra);
 
@@ -100,7 +109,7 @@ namespace BeehiveTycoon.Controllers
             if (HttpContext.Session.GetString("Hra") == null)
             {
                 if (HttpContext.Request.Cookies["Hra"] == null)
-                    hra = VytvoritHru();
+                    hra = null;
                 else
                     hra = JsonSerializer.Deserialize<Hra>(HttpContext.Request.Cookies["Hra"]);
             }

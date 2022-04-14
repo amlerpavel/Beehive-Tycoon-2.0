@@ -18,11 +18,23 @@ function VytvoritHerniPlochu() {
     `);
     ZobrazitDataUlu();
 }
-function VytvoritHru(data) {
-    hra = data;
-    if (hra == null) {
+function ZobrazitVyberObtiznosti() {
+    $("#container2").html(`
+        <h1>Nová hra</h1>
+        <h2>Zvolte si obtížnost: </h2>
+        <div id="obtiznosti">
+            <button class="obtiznost" value="1">Lehká</button>
+            <button class="obtiznost" value="2">Normální</button>
+            <button class="obtiznost" value="3">Těžká</button>
+        </div>
+    `);
+}
 
+function KontrolaUlu(data) {
+    if (data == null) {
+        ZobrazitVyberObtiznosti();
     } else {
+        hra = data;
         vybranyUl = hra.uly[0];
         idLokaceUlu = hra.uly[0].lokace.id;
         VytvoritHerniPlochu();
@@ -31,16 +43,31 @@ function VytvoritHru(data) {
 
 function Start() {
     fetch('/Hra/Nacist')
+    .then(odpoved => odpoved.json())
+    .then(data => {
+        KontrolaUlu(data);
+    });
+
+    $(document).on("click", "#znovu", function () {
+        ZobrazitVyberObtiznosti();
+    });
+
+    $(document).on("click", ".obtiznost", function () {
+        fetch('/Hra/Nova', {
+            method: 'POST',
+            body: JSON.stringify(this.value),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
         .then(odpoved => odpoved.json())
         .then(data => {
-            VytvoritHru(data);
+            if (typeof (data) == "string")
+                console.log(data);
+            else {
+                KontrolaUlu(data);
+            }
         });
-    $(document).on("click", "#znovu", function () {
-        fetch('/Hra/Nova')
-            .then(odpoved => odpoved.json())
-            .then(data => {
-                VytvoritHru(data);
-            });
     });
 }
 
@@ -338,22 +365,25 @@ function UkazUkol(element) {
             ${telo}
         </div>
         <div id="tlacitka">
-            <button id="zrusit"">Smazat úkol</button>
+            <button id="zrusit">Smazat úkol</button>
             <button id="pridat">Přidat úkol</button>
         </div>
     `);
 }
 
 function AktualizovatUkoly(data) {
-    if (typeof (data) == "string")
-        console.log(data);
-    else {
-        vybranyUl.seznamUkolu = data;
-        hra.uly[hra.uly.indexOf(vybranyUl)].seznamUkolu = vybranyUl.seznamUkolu;
+    if (data != null) {
+        if (typeof (data) == "string")
+            console.log(data);
+        else {
+            vybranyUl.seznamUkolu = data;
+            hra.uly[hra.uly.indexOf(vybranyUl)].seznamUkolu = vybranyUl.seznamUkolu;
 
-        PrepsatSeznamUkolu();
-        UkazVyberUkolu();
-    }
+            PrepsatSeznamUkolu();
+            UkazVyberUkolu();
+        }
+    } else
+        location.href = "/";
 }
 
 function ZiskatDataUkolu() {
@@ -380,9 +410,11 @@ function OvladaniUkolu() {
     $(document).on("click", ".ukol", function () {
         UkazUkol(this);
     });
+
     $(document).on("click", "#zpet", function () {
         UkazVyberUkolu();
     });
+
     $(document).on("click", "#pridat", function () {
         fetch('/Ukoly/Pridat', {
             method: 'POST',
@@ -391,14 +423,16 @@ function OvladaniUkolu() {
                 "Content-Type": "application/json"
             }
         })
-            .then(odpoved => odpoved.json())
-            .then(data => {
-                AktualizovatUkoly(data);
-            });
+        .then(odpoved => odpoved.json())
+        .then(data => {
+            AktualizovatUkoly(data);
+        });
     });
+
     $(document).on("click", "#zrusit", function () {
         let dataUkolu = ZiskatDataUkolu();
         dataUkolu.Hodnota = 0;
+
         if (vybranyUl.seznamUkolu.includes(NajitUkol(dataUkolu.Id))) {
             fetch('/Ukoly/Zrusit', {
                 method: 'POST',
@@ -407,10 +441,10 @@ function OvladaniUkolu() {
                     "Content-Type": "application/json"
                 }
             })
-                .then(odpoved => odpoved.json())
-                .then(data => {
-                    AktualizovatUkoly(data);
-                });
+            .then(odpoved => odpoved.json())
+            .then(data => {
+                AktualizovatUkoly(data);
+            });
         }
     });
 }
@@ -419,8 +453,9 @@ function OvladaniUkolu() {
 function DalsiKolo() {
     $(document).on("click", "#dalsiKolo", function () {
         fetch('/Hra/DalsiKolo')
-            .then(odpoved => odpoved.json())
-            .then(data => {
+        .then(odpoved => odpoved.json())
+        .then(data => {
+            if (data != null) {
                 hra = data;
                 vybranyUl = NajitUlPodleLokace(idLokaceUlu);
 
@@ -430,6 +465,8 @@ function DalsiKolo() {
                 }
 
                 ZobrazitDataUlu();
-            });
+            } else
+                location.href = "/";
+        });
     });
 }

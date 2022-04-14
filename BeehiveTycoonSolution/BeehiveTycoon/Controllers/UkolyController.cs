@@ -20,6 +20,9 @@ namespace BeehiveTycoon.Controllers
 
             Hra hra = NacistHru();
 
+            if (hra == null)
+                return Json(null);
+
             if (hra.Vyhra == true || hra.Prohra == true)
                 return Json("Blahopřejeme");
 
@@ -60,6 +63,9 @@ namespace BeehiveTycoon.Controllers
         public IActionResult Zrusit([FromBody] DataUkolu dataUkolu)
         {
             Hra hra = NacistHru();
+
+            if (hra == null)
+                return Json(null);
 
             if (hra.Vyhra == true || hra.Prohra == true)
                 return Json("Blahopřejeme");
