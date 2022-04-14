@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +23,7 @@ namespace BeehiveTycoon.Controllers
         public IActionResult Nova([FromBody] int idObtiznosti)
         {
             if (idObtiznosti <= 0 || idObtiznosti > 3)
-                return Json("N�co  se pokazilo. :(");
+                return Json("Něco  se pokazilo. :(");
 
             Debug.WriteLine(idObtiznosti);
 
