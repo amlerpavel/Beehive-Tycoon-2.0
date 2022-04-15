@@ -27,7 +27,8 @@ namespace BeehiveTycoon.Controllers
 
             Debug.WriteLine(idObtiznosti);
 
-            Hra hra = VytvoritHru();
+            Hra hra = VytvoritHru(VytvoritObtiznost(idObtiznosti));
+            UlozitHru(hra);
 
             return Json(hra);
         }
@@ -54,7 +55,7 @@ namespace BeehiveTycoon.Controllers
             return Json(hra);
         }
 
-        public Hra VytvoritHru()
+        private static Hra VytvoritHru(Obtiznost obtiznost)
         {
             Hra hra = new(
                 new Datum(5, 0),
@@ -88,12 +89,46 @@ namespace BeehiveTycoon.Controllers
                     )
                 },
                 false,
-                false
+                false,
+                obtiznost
             );
 
-            UlozitHru(hra);
-
             return hra;
+        }
+        private static Obtiznost VytvoritObtiznost(int idObtiznosti)
+        {
+            string nazev;
+            int pMedu;
+            int pNepratel;
+            int pMaxOchrana;
+            int pZtraceneVcely;
+
+            if (idObtiznosti == 1)
+            {
+                nazev = "Lehká";
+                pMedu = 20;
+                pNepratel = -20;
+                pMaxOchrana = 15;
+                pZtraceneVcely = -30;
+            }
+            else if (idObtiznosti == 2)
+            {
+                nazev = "Normální";
+                pMedu = 0;
+                pNepratel = 0;
+                pMaxOchrana = 0;
+                pZtraceneVcely = 0;
+            }
+            else
+            {
+                nazev = "Těžká";
+                pMedu = -20;
+                pNepratel = 20;
+                pMaxOchrana = -15;
+                pZtraceneVcely = 30;
+            }
+
+            return new Obtiznost(idObtiznosti, nazev, pMedu, pNepratel, pMaxOchrana, pZtraceneVcely);
         }
 
         public void UlozitHru(Hra hra)
