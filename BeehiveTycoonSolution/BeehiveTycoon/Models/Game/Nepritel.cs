@@ -35,7 +35,7 @@ namespace BeehiveTycoon.Models.Game
             Porazen = porazen;
         }
 
-        public void Invaze(int vcelstvo, int viceNepratel)
+        public void Invaze(int vcelstvo, int lPNepratel, int oPNepratel)
         {
             double min = 0;
             double max = 1;
@@ -69,8 +69,11 @@ namespace BeehiveTycoon.Models.Game
                 }
             }
 
-            min += min / 100 * viceNepratel;
-            max += max / 100 * viceNepratel;
+            min += min / 100 * lPNepratel;
+            max += max / 100 * lPNepratel;
+
+            min += min / 100 * oPNepratel;
+            max += max / 100 * oPNepratel;
 
             Pocet += _nahodneCislo.Next(Convert.ToInt32(min), Convert.ToInt32(max));
 

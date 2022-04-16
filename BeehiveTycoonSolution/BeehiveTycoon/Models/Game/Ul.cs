@@ -61,14 +61,14 @@ namespace BeehiveTycoon.Models.Game
             SecistVcely();
         }
 
-        public void DalsiKolo(int cisloMesice)
+        public void DalsiKolo(int cisloMesice, Obtiznost obtiznost)
         {
-            SplnitUkoly(cisloMesice);
+            SplnitUkoly(cisloMesice, obtiznost.PMedu);
             ZestarnutiVcelstva();
             UlozitMedNaPlastve();
-            ZtraceneVcely();
+            ZtraceneVcely(obtiznost.PZtraceneVcely);
             Debug.WriteLine("Před vytvořenim: " + Nepritel.Jmeno + " " + Nepritel.Pocet + " porazen: " + Nepritel.Porazen);
-            VytvoritNepritele(VylosovatNepritele(cisloMesice));
+            VytvoritNepritele(VylosovatNepritele(cisloMesice, obtiznost.PMaxOchrana), obtiznost.PNepratel);
             Debug.WriteLine("Vytvořen: " + Nepritel.Jmeno + " " + Nepritel.Pocet + " porazen: " + Nepritel.Porazen);
             BojSNepritelem();
             Debug.WriteLine("Po boji: " + Nepritel.Jmeno + " " + Nepritel.Pocet + " porazen: " + Nepritel.Porazen);
@@ -269,7 +269,7 @@ namespace BeehiveTycoon.Models.Game
                 SeznamUkolu.Remove(nactenyUkol);
             }
         }
-        private void SplnitUkoly(int cisloMesice)
+        private void SplnitUkoly(int cisloMesice, int pMedu)
         {
             List<Ukol> splneneUkoly = new();
             _strazci = 0;
@@ -280,7 +280,7 @@ namespace BeehiveTycoon.Models.Game
                 {
                     int vcely = ukol.Podrobnosti[0].Hodnota;
 
-                    Med += Lokace.Pyl.ZiskatMed(vcely, cisloMesice);
+                    Med += Lokace.Pyl.ZiskatMed(vcely, cisloMesice, pMedu);
 
                     splneneUkoly.Add(ukol);
                 }
@@ -325,18 +325,18 @@ namespace BeehiveTycoon.Models.Game
                     int id = ukol.Podrobnosti[0].Hodnota;
                     Vystkyt vystkytPylu;
                     MnostviNaVcelu mnostviNaVcelu;
-                    int viceNepratel;
+                    int pNepratel;
                     int maximalniOchrana;
-                    int ztraceneVcely;
+                    int pZtraceneVcely;
 
                     if (id == 1)
                     {
                         nazev = "Zahrada";
                         vystkytPylu = new(new int[] { 5 }, new int[] { 4, 6, 7, 8 }, new int[] { 3, 9 }, new int[] { 2, 10 });
                         mnostviNaVcelu = new(8, 6, 3, 0.5);
-                        viceNepratel = 0;
+                        pNepratel = 0;
                         maximalniOchrana = 90;
-                        ztraceneVcely = 0;
+                        pZtraceneVcely = 0;
                         _maxPlastvi = 25;
                     }
                     else if (id == 2)
@@ -344,9 +344,9 @@ namespace BeehiveTycoon.Models.Game
                         nazev = "Les";
                         vystkytPylu = new(new int[] { 4, 5 }, new int[] { 3, 6 }, new int[] { 7, 8, 9 }, new int[] { 2, 10 });
                         mnostviNaVcelu = new(10, 8, 1.5, 0.25);
-                        viceNepratel = 40;
+                        pNepratel = 40;
                         maximalniOchrana = 60;
-                        ztraceneVcely = 0;
+                        pZtraceneVcely = 0;
                         _maxPlastvi = 40;
                     }
                     else if (id == 3)
@@ -354,9 +354,9 @@ namespace BeehiveTycoon.Models.Game
                         nazev = "Louka";
                         vystkytPylu = new(new int[] { 6, 7, 8 }, new int[] { 5, 9 }, new int[] { 4, 10 }, new int[] { 2, 3 });
                         mnostviNaVcelu = new(9, 6, 2, 0.3);
-                        viceNepratel = 20;
+                        pNepratel = 20;
                         maximalniOchrana = 80;
-                        ztraceneVcely = 0;
+                        pZtraceneVcely = 0;
                         _maxPlastvi = 30;
                     }
                     else if (id == 4)
@@ -364,9 +364,9 @@ namespace BeehiveTycoon.Models.Game
                         nazev = "Pole";
                         vystkytPylu = new(new int[] { 4,5 }, new int[] { 6, 7, 8 }, new int[] { 3, 9 }, new int[] { 2, 10 });
                         mnostviNaVcelu = new(15, 2, 1.5, 0.25);
-                        viceNepratel = 0;
+                        pNepratel = 0;
                         maximalniOchrana = 90;
-                        ztraceneVcely = 5;
+                        pZtraceneVcely = 5;
                         _maxPlastvi = 20;
                     }
                     else //if (id == 5)
@@ -374,13 +374,13 @@ namespace BeehiveTycoon.Models.Game
                         nazev = "Město";
                         vystkytPylu = new(new int[] { 5 }, new int[] { 4, 6, 7, 8 }, new int[] { 3, 9 }, new int[] { 2, 10 });
                         mnostviNaVcelu = new(4, 3, 1.5, 0.25);
-                        viceNepratel = -20;
+                        pNepratel = -20;
                         maximalniOchrana = 90;
-                        ztraceneVcely = 10;
+                        pZtraceneVcely = 10;
                         _maxPlastvi = 10;
                     }
 
-                    _lokace = new(nazev, id, new Pyl(vystkytPylu, mnostviNaVcelu), viceNepratel, maximalniOchrana, ztraceneVcely);
+                    _lokace = new(nazev, id, new Pyl(vystkytPylu, mnostviNaVcelu), pNepratel, maximalniOchrana, pZtraceneVcely);
 
                     splneneUkoly.Add(ukol);
                 }
@@ -390,25 +390,28 @@ namespace BeehiveTycoon.Models.Game
                 SeznamUkolu.Remove(ukol);
         }
 
-        private int VylosovatNepritele(int cisloMesice)
+        private int VylosovatNepritele(int cisloMesice, int pMaxOchrana)
         {
             int vyherce = 0;
 
             if (Nepritel.Porazen == true)
             {
                 int sance;
+                double ochrana;
 
                 if (_strazci == 0)
-                {
-                    sance = 100 - Lokace.MaximalniOchrana / 3;
-                }
+                    ochrana = (Lokace.MaximalniOchrana + Lokace.MaximalniOchrana / 100.0 * pMaxOchrana) / 3.0;
                 else
                 {
                     double ochranaPlastvi = _strazci / Plastve.Count / 20;
+
                     if (ochranaPlastvi > 1)
                         ochranaPlastvi = 1;
-                    sance = 100 - Convert.ToInt32(ochranaPlastvi) * Lokace.MaximalniOchrana;
+
+                    ochrana = ochranaPlastvi * (Lokace.MaximalniOchrana + Lokace.MaximalniOchrana / 100.0 * pMaxOchrana);
                 }
+
+                sance = 100 - Convert.ToInt32(ochrana);
 
                 if (_nahodneCislo.Next(1, 101) <= sance)
                 {
@@ -433,7 +436,7 @@ namespace BeehiveTycoon.Models.Game
 
             return vyherce;
         }
-        private void VytvoritNepritele(int id)
+        private void VytvoritNepritele(int id, int oPNepratel)
         {
             if (KlidPoBitve == 0)
             {
@@ -480,21 +483,24 @@ namespace BeehiveTycoon.Models.Game
                         zivotJedince = 1;
                     }
 
-                    min += min / 100 * Lokace.ViceNepratel;
-                    max += max / 100 * Lokace.ViceNepratel;
+                    min += min / 100 * Lokace.PNepratel;
+                    max += max / 100 * Lokace.PNepratel;
+
+                    min += min / 100 * oPNepratel;
+                    max += max / 100 * oPNepratel;
 
                     int pocet = _nahodneCislo.Next(Convert.ToInt32(min), Convert.ToInt32(max));
 
                     Nepritel = new Nepritel(id, jmeno, pocet, pocet * zivotJedince, zivotJedince, 0, vrazednyUder, false);
                 }
                 else if (Nepritel.Porazen == false)
-                    Nepritel.Invaze(Vcelstvo, Lokace.ViceNepratel);
+                    Nepritel.Invaze(Vcelstvo, Lokace.PNepratel, oPNepratel);
             }
             else
             {
                 KlidPoBitve -= 1;
                 if (Nepritel.Porazen == false)
-                    Nepritel.Invaze(Vcelstvo, Lokace.ViceNepratel);
+                    Nepritel.Invaze(Vcelstvo, Lokace.PNepratel, oPNepratel);
                 ExistujeMrtvyNepritel = false;
             }
         }
@@ -651,11 +657,13 @@ namespace BeehiveTycoon.Models.Game
             BylVyrojenUl = false;
         }
 
-        private void ZtraceneVcely()
+        private void ZtraceneVcely(int pZtraceneVcely)
         {
-            if (Lokace.ZtraceneVcely != 0)
+            if (Lokace.PZtraceneVcely != 0)
             {
-                double ztraceneVcely = Vcelstvo / 100 * Lokace.ZtraceneVcely;
+                double ztraceneVcely = Vcelstvo / 100 * Lokace.PZtraceneVcely;
+
+                ztraceneVcely += ztraceneVcely / 100 * pZtraceneVcely;
 
                 double min = ztraceneVcely - ztraceneVcely / 100 * 5;
                 double max = ztraceneVcely + ztraceneVcely / 100 * 10;

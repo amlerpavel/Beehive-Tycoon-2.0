@@ -1,38 +1,48 @@
-.tlacitko {
-    margin: auto;
-    margin-top: 6em;
+:root {
+    --barvaTlacitka: yellowgreen;
+    --barvaTlacitka2: lawngreen;
 }
 
-#container {
-    position: relative;
+button {
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 16pt;
+    border: none;
+    padding: 0.5em;
+    font-family: inherit;
+    border-radius: 10px;
+    background-color: var(--barvaTlacitka);
+    margin: .5em;
+}
+
+
+button:hover {
+    background-color: var(--barvaTlacitka2);
 }
 
 #tlacitka {
-    display: flex;
+    display: grid;
+    width: min-content;
     position: absolute;
+    bottom: 10%;
     left: 50%;
-    bottom: 50%;
     transform: translate(-50%);
 }
 
-#tlacitka .tlacitko {
-    margin: auto;
+#prihlasit {
+    margin-right: 20px;
 }
 
-#tlacitka .tlacitko a, #tlacitka .tlacitko {
-    width: 180px;
+#hraci {
+    display: flex;
 }
 
-#tlacitka .tlacitko a {
-    padding: 0.5em;
-    font-size: 14pt;
+#hraci button {
+    width: 170px;
 }
 
-#tlacitka #tlacitkoHrat {
-    margin-right: 10px;
-}
-
-p{
+p {
     width: 90%;
     margin: auto;
+    text-align: center;
 }
