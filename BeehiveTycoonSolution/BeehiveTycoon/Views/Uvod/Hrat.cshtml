@@ -1,9 +1,14 @@
 ﻿@{
-    ViewData["css"] = "uvod.css";
+    ViewData["stranka"] = "hrat";
 }
 
 <h1>Obrana včelího úlu</h1>
 <p>Cílem hry je vyrojit včelstvo. Lze uskutečnit pouze v&nbsp;dubnu, květnu a červnu. Pro vyrojení je potřeba minimálně 25 000 včel a 50 000 medu.</p>
-<div id="tlacitkoHrat" class="tlacitko">
-    <a href="/Hra/Ul">Hrát</a>
+<div id="tlacitka">
+    <button onclick="location.href='/Hra/Ul'">Hrát</button>
+    <div id="hraci">
+        <button id="prihlasit">Přihlásit se</button>
+        <button>Zaregistrovat se</button>
+    </div>
+    <button>Žebříček včelařů</button>
 </div>
