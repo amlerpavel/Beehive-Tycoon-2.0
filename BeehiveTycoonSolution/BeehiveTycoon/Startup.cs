@@ -8,6 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BeehiveTycoon.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace BeehiveTycoon
 {
@@ -24,6 +26,7 @@ namespace BeehiveTycoon
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddDbContext<BeehiveTycoonContex>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddSession(options => { 
                 options.Cookie.Name = ".BeehiveTycoon";
                 options.Cookie.IsEssential = true;

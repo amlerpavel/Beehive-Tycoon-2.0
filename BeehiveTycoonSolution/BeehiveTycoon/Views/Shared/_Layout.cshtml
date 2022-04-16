@@ -21,6 +21,18 @@
     {
         <link rel="stylesheet" href="/css/containerUprostred.css">
     }
+    else if ((string)ViewData["stranka"] == "registrace")
+    {
+        <link rel="stylesheet" href="/css/containerUprostred.css">
+        <script src="/lib/jquery-3.6.0.min.js"></script>
+        <script src="/js/Registrace.js"></script>
+    }
+    else if ((string)ViewData["stranka"] == "prihlaseni")
+    {
+        <link rel="stylesheet" href="/css/containerUprostred.css">
+        <script src="/lib/jquery-3.6.0.min.js"></script>
+        <script src="/js/Prihlaseni.js"></script>
+    }
     <title>BeehiveTycoon</title>
 </head>
 <body>
