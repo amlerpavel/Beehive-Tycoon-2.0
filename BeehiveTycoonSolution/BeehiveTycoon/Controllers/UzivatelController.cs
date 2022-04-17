@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using BeehiveTycoon.Models;
 using System.Diagnostics;
 using BeehiveTycoon.Db;
+using Microsoft.AspNetCore.Http;
 
 namespace BeehiveTycoon.Controllers
 {
@@ -31,44 +32,48 @@ namespace BeehiveTycoon.Controllers
         }
 
         [HttpPost]
-        public IActionResult Zaregistrovat([FromBody] DataRegistrace registrace)
+        public IActionResult Zaregistrovat([FromBody] DataRegistrace dataRegistrace)
         {
-            if (registrace == null)
+            if (dataRegistrace == null)
                 return Json("Něco se pokazilo.");
 
-            registrace.Jmeno = registrace.Jmeno.Trim();
-            registrace.Heslo = registrace.Heslo.Trim();
-            registrace.HesloZnovu = registrace.HesloZnovu.Trim();
+            dataRegistrace.Jmeno = dataRegistrace.Jmeno.Trim();
+            dataRegistrace.Heslo = dataRegistrace.Heslo.Trim();
+            dataRegistrace.HesloZnovu = dataRegistrace.HesloZnovu.Trim();
 
-            if (registrace.Jmeno.Length == 0)
+            if (dataRegistrace.Jmeno.Length == 0)
                 return Json("Nevyplněné jméno.");
-            if (registrace.Heslo.Length == 0 || registrace.HesloZnovu.Length == 0)
+            if (dataRegistrace.Heslo.Length == 0 || dataRegistrace.HesloZnovu.Length == 0)
                 return Json("Nevyplněné heslo.");
-
-            if (registrace.Heslo != registrace.HesloZnovu)
+            if (dataRegistrace.Heslo != dataRegistrace.HesloZnovu)
                 return Json("Hesla se neshodují.");
 
-            string status = _dbUzivatele.PridatNovehoUzivatele(registrace.Jmeno, registrace.Heslo);
+            string status = _dbUzivatele.PridatNovehoUzivatele(dataRegistrace.Jmeno, dataRegistrace.Heslo);
 
             if (status != "pridan")
                 return Json(status);
 
-            return Json("aaa");
+            return Json("zaregistrovan");
         }
 
         [HttpPost]
-        public IActionResult Prihlasit([FromBody] DataPrihlaseni prihlaseni)
+        public IActionResult Prihlasit([FromBody] DataPrihlaseni dataPrihlaseni)
         {
-            if (prihlaseni == null)
+            if (dataPrihlaseni == null)
                 return Json("Něco se pokazilo.");
 
-            prihlaseni.Jmeno = prihlaseni.Jmeno.Trim();
-            prihlaseni.Heslo = prihlaseni.Heslo.Trim();
+            dataPrihlaseni.Jmeno = dataPrihlaseni.Jmeno.Trim();
+            dataPrihlaseni.Heslo = dataPrihlaseni.Heslo.Trim();
 
-            if (prihlaseni.Jmeno.Length == 0 || prihlaseni.Heslo.Length == 0)
+            if (dataPrihlaseni.Jmeno.Length == 0 || dataPrihlaseni.Heslo.Length == 0)
                 return Json("Nevyplněné údaje.");
 
-            return Json("aaa");
+            if (_dbUzivatele.OveritUzivatele(dataPrihlaseni.Jmeno, dataPrihlaseni.Heslo) == false)
+                return Json("Heslo není správné.");
+
+            HttpContext.Session.SetString("Uzivatel", dataPrihlaseni.Jmeno);
+
+            return Json("prihlasen");
         }
     }
 }
