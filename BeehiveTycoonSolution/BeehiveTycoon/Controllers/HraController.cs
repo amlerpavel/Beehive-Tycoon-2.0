@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,16 +19,22 @@ namespace BeehiveTycoon.Controllers
             return View();
         }
 
-        [HttpGet]
-        public IActionResult Nova()
+        [HttpPost]
+        public IActionResult Nova([FromBody] int idObtiznosti)
         {
-            Hra hra = VytvoritHru();
+            if (idObtiznosti <= 0 || idObtiznosti > 3)
+                return Json("Něco  se pokazilo. :(");
+
+            Debug.WriteLine(idObtiznosti);
+
+            Hra hra = VytvoritHru(VytvoritObtiznost(idObtiznosti));
+            UlozitHru(hra);
 
             return Json(hra);
         }
 
         [HttpGet]
-        public IActionResult JSON()
+        public IActionResult Nacist()
         {
             Hra hra = NacistHru();
 
@@ -39,13 +45,17 @@ namespace BeehiveTycoon.Controllers
         public IActionResult DalsiKolo()
         {
             Hra hra = NacistHru();
+
+            if (hra == null)
+                return Json(null);
+
             hra.Dalsikolo();
             UlozitHru(hra);
 
             return Json(hra);
         }
 
-        public Hra VytvoritHru()
+        private static Hra VytvoritHru(Obtiznost obtiznost)
         {
             Hra hra = new(
                 new Datum(5, 0),
@@ -79,12 +89,46 @@ namespace BeehiveTycoon.Controllers
                     )
                 },
                 false,
-                false
+                false,
+                obtiznost
             );
 
-            UlozitHru(hra);
-
             return hra;
+        }
+        private static Obtiznost VytvoritObtiznost(int idObtiznosti)
+        {
+            string nazev;
+            int pMedu;
+            int pNepratel;
+            int pMaxOchrana;
+            int pZtraceneVcely;
+
+            if (idObtiznosti == 1)
+            {
+                nazev = "Lehká";
+                pMedu = 20;
+                pNepratel = -20;
+                pMaxOchrana = 15;
+                pZtraceneVcely = -30;
+            }
+            else if (idObtiznosti == 2)
+            {
+                nazev = "Normální";
+                pMedu = 0;
+                pNepratel = 0;
+                pMaxOchrana = 0;
+                pZtraceneVcely = 0;
+            }
+            else
+            {
+                nazev = "Těžká";
+                pMedu = -20;
+                pNepratel = 20;
+                pMaxOchrana = -15;
+                pZtraceneVcely = 30;
+            }
+
+            return new Obtiznost(idObtiznosti, nazev, pMedu, pNepratel, pMaxOchrana, pZtraceneVcely);
         }
 
         public void UlozitHru(Hra hra)
@@ -100,7 +144,7 @@ namespace BeehiveTycoon.Controllers
             if (HttpContext.Session.GetString("Hra") == null)
             {
                 if (HttpContext.Request.Cookies["Hra"] == null)
-                    hra = VytvoritHru();
+                    hra = null;
                 else
                     hra = JsonSerializer.Deserialize<Hra>(HttpContext.Request.Cookies["Hra"]);
             }

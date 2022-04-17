@@ -5,16 +5,33 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="/img/honey.png" type="image/png">
-    @if ((string)ViewData["css"] != "hra.css")
+    @if ((string)ViewData["stranka"] == "ul")
     {
-        <link rel="stylesheet" href="/css/style.css">
-    }
-    <link rel="stylesheet" href="/css/@ViewData["css"]">
-    @if ((string)ViewData["css2"] != null)
-    {
-        <link rel="stylesheet" href="/css/@ViewData["css2"]">
+        <link rel="stylesheet" href="/css/hra.css">
+        <link rel="stylesheet" href="/css/upresneniUkolu.css">
         <script src="/lib/jquery-3.6.0.min.js"></script>
         <script src="/js/Hra.js"></script>
+    }
+    else if ((string)ViewData["stranka"] == "hrat")
+    {
+        <link rel="stylesheet" href="/css/uvod.css">
+        <link rel="stylesheet" href="/css/containerUprostred.css">
+    }
+    else if ((string)ViewData["stranka"] == "chyba")
+    {
+        <link rel="stylesheet" href="/css/containerUprostred.css">
+    }
+    else if ((string)ViewData["stranka"] == "registrace")
+    {
+        <link rel="stylesheet" href="/css/containerUprostred.css">
+        <script src="/lib/jquery-3.6.0.min.js"></script>
+        <script src="/js/Registrace.js"></script>
+    }
+    else if ((string)ViewData["stranka"] == "prihlaseni")
+    {
+        <link rel="stylesheet" href="/css/containerUprostred.css">
+        <script src="/lib/jquery-3.6.0.min.js"></script>
+        <script src="/js/Prihlaseni.js"></script>
     }
     <title>BeehiveTycoon</title>
 </head>

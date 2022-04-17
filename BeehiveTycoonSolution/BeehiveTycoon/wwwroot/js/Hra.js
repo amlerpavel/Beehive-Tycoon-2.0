@@ -3,58 +3,59 @@ let idLokaceUlu;
 let vybranyUl;
 
 $(document).ready(function () {
-    fetch('/Hra/JSON')
-    .then(odpoved => odpoved.json())
-    .then(data => {
+    Start();
+    ZobrazitUl();
+    OvladaniUkolu();
+    DalsiKolo();
+});
+
+// Inicializace hry
+function VytvoritHerniPlochu() {
+    $("#ukoly").html(`
+        <div id="dalsiKolo" class="tlacitko0">
+            <a>Další kolo</a>
+        </div>
+    `);
+    ZobrazitDataUlu();
+}
+function ZobrazitVyberObtiznosti() {
+    $("#container2").html(`
+        <h1>Nová hra</h1>
+        <h2>Zvolte si obtížnost: </h2>
+        <div id="obtiznosti">
+            <button class="obtiznost" value="1">Lehká</button>
+            <button class="obtiznost" value="2">Normální</button>
+            <button class="obtiznost" value="3">Těžká</button>
+        </div>
+    `);
+}
+
+function KontrolaUlu(data) {
+    if (data == null) {
+        ZobrazitVyberObtiznosti();
+    } else {
         hra = data;
         vybranyUl = hra.uly[0];
         idLokaceUlu = hra.uly[0].lokace.id;
-        NacistHerniPlochu();
+        VytvoritHerniPlochu();
+    }
+}
+
+function Start() {
+    fetch('/Hra/Nacist')
+    .then(odpoved => odpoved.json())
+    .then(data => {
+        KontrolaUlu(data);
     });
+
     $(document).on("click", "#znovu", function () {
-        fetch('/Hra/Nova')
-        .then(odpoved => odpoved.json())
-        .then(data => {
-            hra = data;
-            vybranyUl = hra.uly[0];
-            idLokaceUlu = hra.uly[0].lokace.id;
-            NacistHerniPlochu();
-        });
+        ZobrazitVyberObtiznosti();
     });
 
-    $(document).on("click", ".ul", function () {
-        idLokaceUlu = this.value;
-        vybranyUl = NajitUlPodleLokace(idLokaceUlu);
-        
-        ZobrazitDataUlu();
-    });
-
-    $(document).on("click", "#dalsiKolo", function () {
-        fetch('/Hra/DalsiKolo')
-        .then(odpoved => odpoved.json())
-        .then(data => {
-            hra = data;
-            vybranyUl = NajitUlPodleLokace(idLokaceUlu);
-
-            if (vybranyUl == undefined) {
-                vybranyUl = hra.uly[0];
-                idLokaceUlu = hra.uly[0].lokace.id;
-            }
-
-            ZobrazitDataUlu();
-        });
-    });
-
-    $(document).on("click", ".ukol", function () {
-        UkazFormular(this);
-    });
-    $(document).on("click", "#zpet", function () {
-        UkazVyberUkolu();
-    });
-    $(document).on("click", "#pridat", function () {
-        fetch('/Ukoly/Pridat', {
+    $(document).on("click", ".obtiznost", function () {
+        fetch('/Hra/Nova', {
             method: 'POST',
-            body: JSON.stringify(ZiskatDataUkolu()),
+            body: JSON.stringify(this.value),
             headers: {
                 "Content-Type": "application/json"
             }
@@ -64,35 +65,13 @@ $(document).ready(function () {
             if (typeof (data) == "string")
                 console.log(data);
             else {
-                vybranyUl.seznamUkolu = data;
-                AktualizovatUkoly();
+                KontrolaUlu(data);
             }
         });
     });
-    $(document).on("click", "#zrusit", function () {
-        let dataUkolu = ZiskatDataUkolu();
-        dataUkolu.Hodnota = 0;
-        if (vybranyUl.seznamUkolu.includes(NajitUkol(dataUkolu.Id))) {
-            fetch('/Ukoly/Zrusit', {
-                method: 'POST',
-                body: JSON.stringify(dataUkolu),
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            })
-            .then(odpoved => odpoved.json())
-            .then(data => {
-                if (typeof (data) == "string")
-                    console.log(data);
-                else {
-                    vybranyUl.seznamUkolu = data;
-                    AktualizovatUkoly();
-                }
-            });
-        }
-    });
-});
+}
 
+// Zobrazeni ulu
 function PrepsatZakladniInformace() {
     let soucetVek = 0;
     let vypisGeneraci = "";
@@ -180,7 +159,7 @@ function PrepsatSeznamUkolu() {
                     <td>${sloupecMed[i]}</td>
                 </tr>
             `;
-            
+
             for (let podrobnost of ukol.podrobnosti) {
                 if (podrobnost.jmeno == "vcely") {
                     pocetVcel += podrobnost.hodnota;
@@ -190,7 +169,7 @@ function PrepsatSeznamUkolu() {
                 }
             }
         }
-        
+
         tabulka = `
             <table>
                 <tbody>
@@ -211,7 +190,7 @@ function PrepsatSeznamUkolu() {
             </table>
         `;
     }
-    
+
     $("#seznamUkolu").remove();
     $(`
         <div id="seznamUkolu">
@@ -220,7 +199,7 @@ function PrepsatSeznamUkolu() {
         </div>
     `).insertBefore("#dalsiKolo");
 }
-function ZobrazitUly() {
+function PrepsatUly() {
     let tlacitka = "";
 
     for (ul of hra.uly) {
@@ -235,7 +214,7 @@ function ZobrazitUly() {
         </div>
     `);
 }
-function ZobrazitNepritele() {
+function PrepsatNepritele() {
     if (vybranyUl.nepritel.porazen == false || vybranyUl.existujeMrtvyNepritel == true) {
         let telo = "";
 
@@ -259,28 +238,52 @@ function ZobrazitNepritele() {
         $("#nepritel").remove();
     }
 }
+function UkazVyhruProhruUmrti() {
+    if (hra.vyhra == false && hra.prohra == false) {
+        if (vybranyUl.vcelstvo <= 0) {
+            $("#container2").html(`
+                <h1>V tomto úlu vám zemřelo včelstvo.</h1>
+            `);
+        } else {
+            UkazVyberUkolu();
+        }
+    } else if (hra.vyhra == true) {
+        $("#container2").html(`
+            <h1>Vyhrál jsi.</h1>
+            <button id="znovu">Hrát znovu</button>
+        `);
+    } else if (hra.prohra == true) {
+        $("#container2").html(`
+            <h1>Prohrál jsi.</h1>
+            <button id="znovu">Hrát znovu</button>
+        `);
+    }
+}
 
 function ZobrazitDataUlu() {
     PrepsatZakladniInformace();
-    ZobrazitUly();
+    PrepsatUly();
     PrepsatSeznamUkolu();
-    ZobrazitNepritele();
-    PrepsatContainer2();
+    PrepsatNepritele();
+    UkazVyhruProhruUmrti();
 }
-function NacistHerniPlochu() {
-    $("#ukoly").html(`
-        <div id="dalsiKolo" class="tlacitko0">
-            <a>Další kolo</a>
-        </div>
-    `);
-    ZobrazitDataUlu();
-}
-function AktualizovatUkoly() {
-    hra.uly[hra.uly.indexOf(vybranyUl)].seznamUkolu = vybranyUl.seznamUkolu;
-    PrepsatSeznamUkolu();
-    UkazVyberUkolu();
+function NajitUlPodleLokace(lokaceId) {
+    for (let ul of hra.uly) {
+        if (ul.lokace.id == lokaceId)
+            return ul;
+    }
 }
 
+function ZobrazitUl() {
+    $(document).on("click", ".ul", function () {
+        idLokaceUlu = this.value;
+        vybranyUl = NajitUlPodleLokace(idLokaceUlu);
+
+        ZobrazitDataUlu();
+    });
+}
+
+// Ukoly
 function UkazVyberUkolu() {
     $("#container2").html(`
         <h1>Přidat úkol</h1>
@@ -294,7 +297,7 @@ function UkazVyberUkolu() {
         </div>
     `);
 }
-function UkazFormular(element) {
+function UkazUkol(element) {
     let telo = "";
 
     if (element.value == 1 || element.value == 4) {
@@ -362,31 +365,25 @@ function UkazFormular(element) {
             ${telo}
         </div>
         <div id="tlacitka">
-            <button id="zrusit"">Smazat úkol</button>
+            <button id="zrusit">Smazat úkol</button>
             <button id="pridat">Přidat úkol</button>
         </div>
     `);
 }
-function PrepsatContainer2(){
-    if(hra.vyhra == false && hra.prohra == false){
-        if(vybranyUl.vcelstvo <= 0){
-            $("#container2").html(`
-                <h1>V tomto úlu vám zemřelo včelstvo.</h1>
-            `);
-        } else {
+
+function AktualizovatUkoly(data) {
+    if (data != null) {
+        if (typeof (data) == "string")
+            console.log(data);
+        else {
+            vybranyUl.seznamUkolu = data;
+            hra.uly[hra.uly.indexOf(vybranyUl)].seznamUkolu = vybranyUl.seznamUkolu;
+
+            PrepsatSeznamUkolu();
             UkazVyberUkolu();
         }
-    } else if (hra.vyhra == true){
-        $("#container2").html(`
-            <h1>Vyhrál jsi.</h1>
-            <button id="znovu">Hrát znovu</button>
-        `);
-    } else if (hra.prohra == true){
-        $("#container2").html(`
-            <h1>Prohrál jsi.</h1>
-            <button id="znovu">Hrát znovu</button>
-        `);
-    }
+    } else
+        location.href = "/";
 }
 
 function ZiskatDataUkolu() {
@@ -408,9 +405,68 @@ function NajitUkol(id) {
             return ukol;
     }
 }
-function NajitUlPodleLokace(lokaceId) {
-    for (let ul of hra.uly) {
-        if (ul.lokace.id == lokaceId)
-            return ul;
-    }
+
+function OvladaniUkolu() {
+    $(document).on("click", ".ukol", function () {
+        UkazUkol(this);
+    });
+
+    $(document).on("click", "#zpet", function () {
+        UkazVyberUkolu();
+    });
+
+    $(document).on("click", "#pridat", function () {
+        fetch('/Ukoly/Pridat', {
+            method: 'POST',
+            body: JSON.stringify(ZiskatDataUkolu()),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        .then(odpoved => odpoved.json())
+        .then(data => {
+            AktualizovatUkoly(data);
+        });
+    });
+
+    $(document).on("click", "#zrusit", function () {
+        let dataUkolu = ZiskatDataUkolu();
+        dataUkolu.Hodnota = 0;
+
+        if (vybranyUl.seznamUkolu.includes(NajitUkol(dataUkolu.Id))) {
+            fetch('/Ukoly/Zrusit', {
+                method: 'POST',
+                body: JSON.stringify(dataUkolu),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
+            .then(odpoved => odpoved.json())
+            .then(data => {
+                AktualizovatUkoly(data);
+            });
+        }
+    });
+}
+
+// Dalsi kolo
+function DalsiKolo() {
+    $(document).on("click", "#dalsiKolo", function () {
+        fetch('/Hra/DalsiKolo')
+        .then(odpoved => odpoved.json())
+        .then(data => {
+            if (data != null) {
+                hra = data;
+                vybranyUl = NajitUlPodleLokace(idLokaceUlu);
+
+                if (vybranyUl == undefined) {
+                    vybranyUl = hra.uly[0];
+                    idLokaceUlu = hra.uly[0].lokace.id;
+                }
+
+                ZobrazitDataUlu();
+            } else
+                location.href = "/";
+        });
+    });
 }

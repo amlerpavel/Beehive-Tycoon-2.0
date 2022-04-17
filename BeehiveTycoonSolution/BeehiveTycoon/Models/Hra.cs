@@ -13,13 +13,15 @@ namespace BeehiveTycoon.Models
         public List<Ul> Uly { get; private set; }
         public bool Vyhra { get; private set; }
         public bool Prohra { get; private set; }
+        public Obtiznost Obtiznost { get; private set; }
 
-        public Hra(Datum datum, List<Ul> uly, bool vyhra, bool prohra)
+        public Hra(Datum datum, List<Ul> uly, bool vyhra, bool prohra, Obtiznost obtiznost)
         {
             Datum = datum;
             Uly = uly;
             Vyhra = vyhra;
             Prohra = prohra;
+            Obtiznost = obtiznost;
         }
 
         public void Dalsikolo()
@@ -30,7 +32,7 @@ namespace BeehiveTycoon.Models
                     Uly.Remove(ul);
 
                 foreach (Ul ul in Uly)
-                    ul.DalsiKolo(Datum.CisloMesice);
+                    ul.DalsiKolo(Datum.CisloMesice, Obtiznost);
 
                 if (Uly.Count == Uly.Where(u => u.Vcelstvo <= 0).ToArray().Length)
                     Prohra = true;
