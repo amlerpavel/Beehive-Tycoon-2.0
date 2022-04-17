@@ -31,5 +31,15 @@ namespace BeehiveTycoon.Db
 
             return "pridan";
         }
+
+        public bool OveritUzivatele(string jmeno, string heslo)
+        {
+            Uzivatel uzivatel = _databaze.NajitUzivatele(jmeno);
+
+            if (uzivatel == null)
+                return false;
+
+            return BCrypt.Net.BCrypt.Verify(heslo, uzivatel.Heslo);
+        }
     }
 }
