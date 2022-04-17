@@ -28,6 +28,22 @@ namespace BeehiveTycoon.Controllers
         [HttpGet]
         public IActionResult Prihlaseni()
         {
+            if (HttpContext.Session.GetString("Uzivatel") != null)
+                return Redirect("Profil");
+
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult Profil()
+        {
+            string jmenoUzivatele = HttpContext.Session.GetString("Uzivatel");
+
+            if (jmenoUzivatele == null)
+                return Redirect("Prihlaseni");
+
+            ViewData["uzivatel"] = jmenoUzivatele;
+
             return View();
         }
 
@@ -74,6 +90,14 @@ namespace BeehiveTycoon.Controllers
             HttpContext.Session.SetString("Uzivatel", dataPrihlaseni.Jmeno);
 
             return Json("prihlasen");
+        }
+
+        [HttpGet]
+        public IActionResult Odhlasit()
+        {
+            HttpContext.Session.Clear();
+
+            return Redirect("/");
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿$(document).ready(function () {
-    Prihlasit();
+    Odhlasit();
 });
 
 function ZiskatData() {
@@ -11,7 +11,7 @@ function ZiskatData() {
     return dataPrihlaseni;
 }
 
-function Prihlasit() {
+function Odhlasit() {
     $(document).on("click", "#prihlasit", function () {
         fetch('/Uzivatel/Prihlasit', {
             method: 'POST',
@@ -22,7 +22,11 @@ function Prihlasit() {
         })
         .then(odpoved => odpoved.json())
         .then(data => {
-            console.log(data);
+            $("#hlaska").remove();
+            $(`<p>${data}</p>`).insertAfter("#formular");
+
+            if (data == "prihlasen")
+                location.href = "Profil";
         });
     });
 }
