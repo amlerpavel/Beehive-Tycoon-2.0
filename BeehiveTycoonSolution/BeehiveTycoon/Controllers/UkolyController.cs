@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BeehiveTycoon.Models;
-using BeehiveTycoon.Models.Game;
+using BeehiveTycoon.Game;
 using System.Diagnostics;
 using System.Text.Json;
 
@@ -12,6 +12,8 @@ namespace BeehiveTycoon.Controllers
 {
     public class UkolyController : HraController
     {
+        public UkolyController(Data.BeehiveTycoonContex contex) : base(contex) { }
+
         [HttpPost]
         public IActionResult Pridat([FromBody] DataUkolu dataUkolu)
         {

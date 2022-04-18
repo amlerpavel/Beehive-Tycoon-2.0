@@ -1,18 +1,28 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using BeehiveTycoon.Models;
-using BeehiveTycoon.Models.Game;
+using BeehiveTycoon.Game;
 using Microsoft.AspNetCore.Http;
 using System.Text.Json;
+using BeehiveTycoon.Db;
 
 namespace BeehiveTycoon.Controllers
 {
     public class HraController : Controller
     {
+        private readonly DbUzivatele _dbUzivatele;
+        private readonly Data.BeehiveTycoonContex _db;
+
+        public HraController(Data.BeehiveTycoonContex contex)
+        {
+            _dbUzivatele = new(contex);
+            _db = contex;
+        }
+
         [HttpGet]
         public IActionResult Ul()
         {

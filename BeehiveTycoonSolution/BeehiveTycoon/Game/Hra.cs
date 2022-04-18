@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BeehiveTycoon.Models.Game;
 using System.Diagnostics;
 
-namespace BeehiveTycoon.Models
+namespace BeehiveTycoon.Game
 {
     public class Hra
     {
