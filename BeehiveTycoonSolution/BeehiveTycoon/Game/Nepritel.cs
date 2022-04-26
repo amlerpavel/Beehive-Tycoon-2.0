@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Diagnostics;
 
-namespace BeehiveTycoon.Models.Game
+namespace BeehiveTycoon.Game
 {
     public class Nepritel
     {

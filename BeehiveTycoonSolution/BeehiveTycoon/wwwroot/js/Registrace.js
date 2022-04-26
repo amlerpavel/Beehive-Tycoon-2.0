@@ -23,7 +23,11 @@ function Registrovat() {
         })
         .then(odpoved => odpoved.json())
         .then(data => {
-            console.log(data);
+            $("#hlaska").remove();
+            $(`<p id="hlaska">${data}</p>`).insertAfter("#formular");
+
+            if (data == "zaregistrovan")
+                location.href = "Prihlaseni";
         });
     });
 }

@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Diagnostics;
-using BeehiveTycoon.Models;
-using BeehiveTycoon.Models.Game;
+using BeehiveTycoon.Game;
+using BeehiveTycoon.Db;
 using Microsoft.AspNetCore.Http;
 using System.Text.Json;
 
@@ -13,10 +13,35 @@ namespace BeehiveTycoon.Controllers
 {
     public class HraController : Controller
     {
+        private readonly DbUzivatele _dbUzivatele;
+        private readonly DbUlozeneHry _dbUlozeneHry;
+
+        public HraController(Data.BeehiveTycoonContex contex)
+        {
+            _dbUzivatele = new(contex);
+            _dbUlozeneHry = new(contex);
+        }
+
         [HttpGet]
         public IActionResult Ul()
         {
+            if (JmenoUzivatele() != null && Pozice() == 0)
+                return Redirect("/Uzivatel/Profil");
+
             return View();
+        }
+
+        [HttpPost]
+        public IActionResult Pozice([FromBody] int pozice)
+        {
+            if (pozice <= 0 || pozice > 3)
+                return Json("Něco  se pokazilo. :(");
+            if (JmenoUzivatele() == null)
+                return Redirect("Prihlaseni");
+
+            HttpContext.Session.SetString("Pozice", Convert.ToString(pozice));
+
+            return Redirect("Ul");
         }
 
         [HttpPost]
@@ -25,12 +50,35 @@ namespace BeehiveTycoon.Controllers
             if (idObtiznosti <= 0 || idObtiznosti > 3)
                 return Json("Něco  se pokazilo. :(");
 
-            Debug.WriteLine(idObtiznosti);
+            string prihlasenyUzivatel = JmenoUzivatele();
+            int pozice = Pozice();
+
+            if (prihlasenyUzivatel != null && pozice == 0)
+                return Json("neni vybrana pozice");
 
             Hra hra = VytvoritHru(VytvoritObtiznost(idObtiznosti));
-            UlozitHru(hra);
+            string postup = JsonSerializer.Serialize(hra);
+
+            if (prihlasenyUzivatel != null)
+                _dbUlozeneHry.PridatHru(postup, pozice, prihlasenyUzivatel);
+            else
+                HttpContext.Response.Cookies.Append("Hra", postup, new CookieOptions() { SameSite = SameSiteMode.Lax, HttpOnly = true });
 
             return Json(hra);
+        }
+
+        [HttpPost]
+        public IActionResult Smazat([FromBody] int pozice)
+        {
+            if (pozice <= 0 || pozice > 3)
+                return Json("Něco  se pokazilo. :(");
+            if (JmenoUzivatele() == null)
+                return Redirect("Prihlaseni");
+
+            _dbUlozeneHry.SmazatHru(pozice, JmenoUzivatele());
+            HttpContext.Session.SetString("Pozice", "0");
+
+            return Json("OK");
         }
 
         [HttpGet]
@@ -53,6 +101,18 @@ namespace BeehiveTycoon.Controllers
             UlozitHru(hra);
 
             return Json(hra);
+        }
+
+        [HttpGet]
+        public IActionResult Rozehrane()
+        {
+            List<MUlozenaHra> rozehraneHry = new();
+            string jmenouzivatele = JmenoUzivatele();
+
+            if (jmenouzivatele != null)
+                rozehraneHry = _dbUzivatele.ZiskatUzivatele(jmenouzivatele).UlozeneHry;
+
+            return Json(rozehraneHry);
         }
 
         private static Hra VytvoritHru(Obtiznost obtiznost)
@@ -133,25 +193,48 @@ namespace BeehiveTycoon.Controllers
 
         public void UlozitHru(Hra hra)
         {
-            HttpContext.Session.SetString("Hra", JsonSerializer.Serialize(hra));
+            string postup = JsonSerializer.Serialize(hra);
+            string jmenoUzivatele = JmenoUzivatele();
 
-            //HttpContext.Response.Cookies.Append("Hra", JsonSerializer.Serialize(hra), new CookieOptions() { SameSite = SameSiteMode.Lax, HttpOnly = true });
+            if (jmenoUzivatele != null)
+                _dbUlozeneHry.AktualizovatHru(postup, Pozice(), jmenoUzivatele);
+            else
+                HttpContext.Response.Cookies.Append("Hra", postup, new CookieOptions() { SameSite = SameSiteMode.Lax, HttpOnly = true });
         }
         public Hra NacistHru()
         {
-            Hra hra;
-            
-            if (HttpContext.Session.GetString("Hra") == null)
+            string postup;
+            string jmenoUzivatele = JmenoUzivatele();
+
+            if (jmenoUzivatele == null)
             {
-                if (HttpContext.Request.Cookies["Hra"] == null)
-                    hra = null;
+                string hraCookie = HttpContext.Request.Cookies["Hra"];
+
+                if (hraCookie == null)
+                    postup = null;
                 else
-                    hra = JsonSerializer.Deserialize<Hra>(HttpContext.Request.Cookies["Hra"]);
+                    postup = hraCookie;
             }
             else
-                hra = JsonSerializer.Deserialize<Hra>(HttpContext.Session.GetString("Hra"));
+                postup = _dbUlozeneHry.ZiskatPostup(Pozice(), jmenoUzivatele);
+
+            Hra hra;
+
+            if (postup != null)
+                hra = JsonSerializer.Deserialize<Hra>(postup);
+            else
+                hra = null;
 
             return hra;
+        }
+
+        private string JmenoUzivatele()
+        {
+            return HttpContext.Session.GetString("JmenoUzivatele");
+        }
+        private int Pozice()
+        {
+            return Convert.ToInt32(HttpContext.Session.GetString("Pozice"));
         }
     }
 }

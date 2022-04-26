@@ -11,11 +11,12 @@ namespace BeehiveTycoon.Db
     {
         public void PridatUzivatele(string jmeno, string heslo);
         public Uzivatel NajitUzivatele(string jmeno);
+        public MUzivatel NajitMUzivatele(string jmeno);
     }
 
     public class DbUzivatele
     {
-        private IDbUzivatele _databaze;
+        private readonly IDbUzivatele _databaze;
 
         public DbUzivatele(IDbUzivatele databaze)
         {
@@ -40,6 +41,13 @@ namespace BeehiveTycoon.Db
                 return false;
 
             return BCrypt.Net.BCrypt.Verify(heslo, uzivatel.Heslo);
+        }
+
+        public MUzivatel ZiskatUzivatele(string jmeno)
+        {
+            MUzivatel uzivatel = _databaze.NajitMUzivatele(jmeno);
+
+            return uzivatel;
         }
     }
 }
