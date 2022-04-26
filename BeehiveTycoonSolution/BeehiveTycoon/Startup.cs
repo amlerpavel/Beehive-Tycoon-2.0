@@ -26,7 +26,7 @@ namespace BeehiveTycoon
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.AddDbContext<BeehiveTycoonContex>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<BeehiveTycoonContex>(options => options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddSession(options => { 
                 options.Cookie.Name = ".BeehiveTycoon";
                 options.Cookie.IsEssential = true;

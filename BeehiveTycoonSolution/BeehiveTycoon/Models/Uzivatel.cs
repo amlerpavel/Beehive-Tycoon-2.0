@@ -9,41 +9,12 @@ namespace BeehiveTycoon.Models
     public class Uzivatel
     {
         [Key]
-        public int Id { get; private set; }
+        public int Id { get; set; }
         [Required]
-        public string Jmeno { get; private set; }
+        public string Jmeno { get; set; }
         [Required]
-        public string Heslo { get; private set; }
-
-        public Uzivatel(string jmeno, string heslo)
-        {
-            Jmeno = jmeno;
-            Heslo = heslo;
-        }
-    }
-
-    public class DataRegistrace
-    {
-        public string Jmeno { get; set; }
         public string Heslo { get; set; }
-        public string HesloZnovu { get; set; }
-
-        public DataRegistrace(string jmeno, string heslo)
-        {
-            Jmeno = jmeno;
-            Heslo = heslo;
-        }
-    }
-
-    public class DataPrihlaseni
-    {
-        public string Jmeno { get; set; }
-        public string Heslo { get; set; }
-
-        public DataPrihlaseni(string jmeno, string heslo)
-        {
-            Jmeno = jmeno;
-            Heslo = heslo;
-        }
+        [Required]
+        public virtual List<UlozenaHra> UlozeneHry { get; set; }
     }
 }

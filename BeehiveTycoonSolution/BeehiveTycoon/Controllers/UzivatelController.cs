@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BeehiveTycoon.Models;
 using System.Diagnostics;
 using BeehiveTycoon.Db;
 using Microsoft.AspNetCore.Http;
@@ -28,7 +27,7 @@ namespace BeehiveTycoon.Controllers
         [HttpGet]
         public IActionResult Prihlaseni()
         {
-            if (HttpContext.Session.GetString("Uzivatel") != null)
+            if (HttpContext.Session.GetString("JmenoUzivatele") != null)
                 return Redirect("Profil");
 
             return View();
@@ -37,7 +36,7 @@ namespace BeehiveTycoon.Controllers
         [HttpGet]
         public IActionResult Profil()
         {
-            string jmenoUzivatele = HttpContext.Session.GetString("Uzivatel");
+            string jmenoUzivatele = HttpContext.Session.GetString("JmenoUzivatele");
 
             if (jmenoUzivatele == null)
                 return Redirect("Prihlaseni");
@@ -87,7 +86,7 @@ namespace BeehiveTycoon.Controllers
             if (_dbUzivatele.OveritUzivatele(dataPrihlaseni.Jmeno, dataPrihlaseni.Heslo) == false)
                 return Json("Heslo není správné.");
 
-            HttpContext.Session.SetString("Uzivatel", dataPrihlaseni.Jmeno);
+            HttpContext.Session.SetString("JmenoUzivatele", dataPrihlaseni.Jmeno);
 
             return Json("prihlasen");
         }
@@ -99,5 +98,18 @@ namespace BeehiveTycoon.Controllers
 
             return Redirect("/");
         }
+    }
+
+    public class DataRegistrace
+    {
+        public string Jmeno { get; set; }
+        public string Heslo { get; set; }
+        public string HesloZnovu { get; set; }
+    }
+
+    public class DataPrihlaseni
+    {
+        public string Jmeno { get; set; }
+        public string Heslo { get; set; }
     }
 }
