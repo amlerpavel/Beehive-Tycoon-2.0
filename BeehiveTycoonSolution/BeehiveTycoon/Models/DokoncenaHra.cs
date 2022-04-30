@@ -6,17 +6,19 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BeehiveTycoon.Models
 {
-    public class Uzivatel
+    public class DokoncenaHra
     {
         [Key]
         public int Id { get; set; }
         [Required]
-        public string Jmeno { get; set; }
+        public int ObtiznostId { get; set; }
         [Required]
-        public string Heslo { get; set; }
+        public int Rok { get; set; }
         [Required]
-        public virtual List<UlozenaHra> UlozeneHry { get; set; }
+        public int Mesic { get; set; }
         [Required]
-        public virtual List<DokoncenaHra> DokonceneHry { get; set; }
+        public DateTime Datum { get; set; }
+        [Required]
+        public virtual Uzivatel Uzivatel { get; set; }
     }
 }
