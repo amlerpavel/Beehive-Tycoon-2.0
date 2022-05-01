@@ -135,17 +135,17 @@ namespace BeehiveTycoon.Game
         public string PridatUkol(DataUkolu dataUkolu, int cisloMesice)
         {
             if (_zima.Contains(cisloMesice))
-                return "Úkol nelze přidat, protože je zimní období";
+                return "Úkol nelze přidat, protože je zimní období.";
             if (dataUkolu.Id == 1 && _neniPyl.Contains(cisloMesice))
-                return "Úkol nelze přidat, protože nejsou kvetoucí rostliny";
+                return "Úkol nelze přidat, protože nejsou kvetoucí rostliny.";
             if (dataUkolu.Id == 5 && !_zazimovaniUlu.Contains(cisloMesice))
                 return "Úl lze zazimovat pouze v listopadu.";
             if (dataUkolu.Id == 6)
             {
                 if(!_rojVcelstva.Contains(cisloMesice))
-                    return "Úl lze vyrojit pouze v dubnu, květnu a červnu";
+                    return "Úl lze vyrojit pouze v dubnu, květnu a červnu.";
                 else if(Nepritel.Porazen == false)
-                    return "Úkol nelze přidat, protože je v úlu nepřítel";
+                    return "Úkol nelze přidat, protože je v úlu nepřítel.";
                 else if(BylVyrojenUl == true)
                     return "Úkol nelze přidat, protože z toho úlu jste se již vyrojili.";
                 else if (MaxPlastvi > Plastve.Count)
@@ -165,9 +165,9 @@ namespace BeehiveTycoon.Game
             foreach (Podrobnost podrobnost in ukol.Podrobnosti)
             {
                 if (podrobnost.Jmeno == "vcely" && podrobnost.Hodnota > dostupnyPocet.vcel)
-                    return "Úkol nelze přidat, protože máte nedostatek včel." + dostupnyPocet.vcel;
+                    return "Úkol nelze přidat, protože máte nedostatek včel. K dispozici: " + dostupnyPocet.vcel;
                 else if (podrobnost.Jmeno == "med" && podrobnost.Hodnota > dostupnyPocet.medu)
-                    return "Úkol nelze přidat, protože máte nedostatek medu.";
+                    return "Úkol nelze přidat, protože máte nedostatek medu. K dispozici: " + dostupnyPocet.medu;
             }
 
             SmazatUkol(dataUkolu.Id);

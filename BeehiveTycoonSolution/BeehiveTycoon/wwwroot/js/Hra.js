@@ -116,7 +116,6 @@ function PrepsatZakladniInformace() {
         <div>Obtížnost: ${hra.obtiznost.nazev}</div>
         <button id="konec" onclick="location.href='/'">&#10006;</button>
     `);
-    console.log(hra);
 }
 function PrepsatSeznamUkolu() {
     let tabulka;
@@ -234,7 +233,7 @@ function PrepsatNepritele() {
         else if (vybranyUl.existujeMrtvyNepritel == true) {
             telo = `<p>Nepřítel byl poražen.</p>`;
         }
-        console.log(vybranyUl.existujeMrtvyNepritel);
+
         $("#nepritel").remove();
         $("#nepratele").prepend(`<div id="nepritel">${telo}</div>`);
     }
@@ -324,9 +323,6 @@ function UkazUkol(element) {
             <div class="sloupec2">
                 <input type="number" name="Hodnota" value="@ViewBag.Ukol.PocetVajicek" max="" min="1">
             </div>
-        </div>
-        <div class="radek" id="posledni">
-            <input type="submit" value="Zobrazit požadavky" name="tlacitko">
         </div>`;
     } else if (element.value == 3) {
         telo = `
@@ -337,9 +333,6 @@ function UkazUkol(element) {
             <div class="sloupec2">
                 <input type="number" name="Hodnota" value="@ViewBag.Ukol.PocetPlastvi" max="" min="1">
             </div>
-        </div>
-        <div class="radek" id="posledni">
-            <input type="submit" value="Zobrazit požadavky" name="tlacitko">
         </div>`;
     } else if (element.value == 6) {
         telo = `
@@ -397,9 +390,10 @@ function ZobrazitPopisky() {
 
 function AktualizovatUkoly(data) {
     if (data != null) {
-        if (typeof (data) == "string")
-            console.log(data);
-        else {
+        if (typeof (data) == "string") {
+            $("#hlaska").remove();
+            $(`<div id="hlaska"><p>${data}</p></div>`).insertBefore("#tlacitka");
+        }else {
             vybranyUl.seznamUkolu = data;
             hra.uly[hra.uly.indexOf(vybranyUl)].seznamUkolu = vybranyUl.seznamUkolu;
 

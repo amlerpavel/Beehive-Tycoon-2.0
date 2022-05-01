@@ -260,6 +260,15 @@ tr:last-child {
     min-width: 1200px;
 }
 
+#hlaska p{
+    width: 80%;
+    margin:auto;
+}
+
+#hlaska {
+    margin-top:2em;
+}
+
 #popisek {
     position: fixed;
     background-color: white;
