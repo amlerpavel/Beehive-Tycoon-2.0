@@ -26,7 +26,7 @@ namespace BeehiveTycoon.Db
         public string PridatNovehoUzivatele(string jmeno, string heslo)
         {
             if (_databaze.NajitUzivatele(jmeno) != null)
-                return "Toto jméno používá jiný uzivatel.";
+                return "Toto jméno používá jiný uživatel.";
 
             _databaze.PridatUzivatele(jmeno, BCrypt.Net.BCrypt.HashPassword(heslo));
 

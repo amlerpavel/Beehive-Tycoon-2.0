@@ -291,11 +291,11 @@ function UkazVyberUkolu() {
     $("#container2").html(`
         <h1>Přidat úkol</h1>
         <div id="seznam">
-            <button class="ukol" value="1" popisek="Jak zístate med? Tím, že včely vyšlete na sbírání pylu.">Sbírání pylu</button>
+            <button class="ukol" value="1" popisek="Jak získat med? Tím, že včely vyšlete na sbírání pylu.">Sbírání pylu</button>
             <button class="ukol" value="2" popisek="Včely nejsou nesmrtelné...">Nakladení vajíček</button>
             <button class="ukol" value="3" popisek="Pro uložení medu potřebujete dostatek pláství.">Vytvoření plástve</button>
             <button class="ukol" value="4" popisek="Nepřítel byl spatřen v blízkosti úlu! Je čas vyslat strážce.">Obrana úlu</button>
-            <button class="ukol" value="5" popisek="V zimě včely hybernují a nemohou se bránit, proto byste měli úl včas zazimovat.">Zazimování úlu</button>
+            <button class="ukol" value="5" popisek="V zimě včely hibernují a nemohou se bránit, proto byste měli úl včas zazimovat.">Zazimování úlu</button>
             <button class="ukol" value="6" popisek="Došlo vám místo v úlu pro další plástve? Neváhejte a založte si další úl.">Vyrojení včelstva</button>
         </div>
     `);

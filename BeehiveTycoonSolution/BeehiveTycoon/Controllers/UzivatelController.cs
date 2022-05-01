@@ -84,7 +84,7 @@ namespace BeehiveTycoon.Controllers
                 return Json("Nevyplněné údaje.");
 
             if (_dbUzivatele.OveritUzivatele(dataPrihlaseni.Jmeno, dataPrihlaseni.Heslo) == false)
-                return Json("Heslo není správné.");
+                return Json("Heslo nebo uživatelské jméno není správné.");
 
             HttpContext.Session.SetString("JmenoUzivatele", dataPrihlaseni.Jmeno);
 
