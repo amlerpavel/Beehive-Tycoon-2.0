@@ -257,7 +257,8 @@ tr:last-child {
 
 #radek {
     position: relative;
-    min-width: 1200px;
+    min-width: 1280px;
+    white-space:nowrap;
 }
 
 #hlaska p{

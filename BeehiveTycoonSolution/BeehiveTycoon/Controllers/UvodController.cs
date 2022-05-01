@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using BeehiveTycoon.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace BeehiveTycoon.Controllers
 {
@@ -14,6 +15,8 @@ namespace BeehiveTycoon.Controllers
         [HttpGet]
         public IActionResult Hrat()
         {
+            ViewData["uzivatel"] = HttpContext.Session.GetString("JmenoUzivatele");
+
             return View();
         }
 

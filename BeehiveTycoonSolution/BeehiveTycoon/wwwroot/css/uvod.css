@@ -22,15 +22,11 @@ button:hover {
 
 #tlacitka {
     display: grid;
-    width: min-content;
+    width: 100%;
     position: absolute;
     bottom: 10%;
     left: 50%;
     transform: translate(-50%);
-}
-
-#prihlasit {
-    margin-right: 20px;
 }
 
 #hraci {
@@ -38,11 +34,20 @@ button:hover {
 }
 
 #hraci button {
-    width: 170px;
+    width: 100%;
 }
 
 p {
     width: 90%;
     margin: auto;
     text-align: center;
+}
+
+#odhlasit {
+    color: white;
+    background-color: hsl(0, 100%, 64%);
+}
+
+#odhlasit:hover {
+    background-color: hsl(0, 100%, 54%);
 }

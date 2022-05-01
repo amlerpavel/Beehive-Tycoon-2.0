@@ -126,7 +126,7 @@ namespace BeehiveTycoon.Controllers
         private static Hra VytvoritHru(Obtiznost obtiznost)
         {
             Hra hra = new(
-                new Datum(5, 0),
+                new Datum(3, 0),
                 new List<Ul> {
                     new Ul(
                         new Lokace(

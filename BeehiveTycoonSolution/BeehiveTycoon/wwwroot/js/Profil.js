@@ -39,7 +39,7 @@ function ZobrazitUlozeneHry(rozehraneHry) {
         <div id="ulozeneHry">
             <table>
                 <thead>
-                    <th>Tvoje uložené pozice:</th>
+                    <th>Vaše uložené pozice:</th>
                 </thead>
                 <tbody>
                     ${telo}
