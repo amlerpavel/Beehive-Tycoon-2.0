@@ -88,7 +88,7 @@ namespace BeehiveTycoon.Data
             return UlozeneHry.FirstOrDefault(u => u.Uzivatel.Jmeno == jmenoUzivatele && u.Pozice == pozice);
         }
 
-        List<MDokoncenaHra> IDbDohraneHry.NajitDohraneHry(string jmenoUzivatele)
+        List<MDokoncenaHra> IDbDohraneHry.NajitDohraneHryU(string jmenoUzivatele)
         {
             List<MDokoncenaHra> mDokonceneHry = PrevodDokoncenaHra(NajitUzivatele(jmenoUzivatele).DokonceneHry);
 
@@ -110,6 +110,13 @@ namespace BeehiveTycoon.Data
         {
             DokonceneHry.Add(new DokoncenaHra() { ObtiznostId = obtiznostId, Rok = rok, Mesic = mesic, Datum = DateTime.Now, Uzivatel = NajitUzivatele(jmenoUzivatele) });
             SaveChanges();
+        }
+
+        List<MDokoncenaHra> IDbDohraneHry.NajitDohraneHryO(int obtiznostId)
+        {
+            List<MDokoncenaHra> mDokonceneHry = PrevodDokoncenaHra(DokonceneHry.Where(d => d.ObtiznostId == obtiznostId).ToList());
+
+            return mDokonceneHry;
         }
 
         private static List<MDokoncenaHra> PrevodDokoncenaHra(List<DokoncenaHra> dokonceneHry)
