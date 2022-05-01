@@ -13,8 +13,8 @@ $(document).ready(function () {
 // Inicializace hry
 function VytvoritHerniPlochu() {
     $("#ukoly").html(`
-        <div id="dalsiKolo" class="tlacitko0">
-            <a>Další kolo</a>
+        <div id="dalsiKolo">
+            <button>Další kolo</button>
         </div>
     `);
     ZobrazitDataUlu();
@@ -111,9 +111,12 @@ function PrepsatZakladniInformace() {
         </div>
         <div>Med: ${vybranyUl.med}</div>
         <div>Plástve: ${vybranyUl.plastve.length} / ${vybranyUl.maxPlastvi}</div>
-        <div>Měsíc: ${hra.datum.mesic}</div>
+        <div>Rok: ${hra.datum.rok} Měsíc: ${hra.datum.mesic}</div>
         <div>Lokace: ${vybranyUl.lokace.nazev}</div>
+        <div>Obtížnost: ${hra.obtiznost.nazev}</div>
+        <button id="konec" onclick="location.href='/'">&#10006;</button>
     `);
+    console.log(hra);
 }
 function PrepsatSeznamUkolu() {
     let tabulka;
@@ -289,12 +292,12 @@ function UkazVyberUkolu() {
     $("#container2").html(`
         <h1>Přidat úkol</h1>
         <div id="seznam">
-            <button class="ukol" value="1" popisek="moje">Sbírání pylu</button>
-            <button class="ukol" value="2">Nakladení vajíček</button>
-            <button class="ukol" value="3">Vytvoření plástve</button>
-            <button class="ukol" value="4">Obrana úlu</button>
-            <button class="ukol" value="5">Zazimování úlu</button>
-            <button class="ukol" value="6">Vyrojení včelstva</button>
+            <button class="ukol" value="1" popisek="Jak zístate med? Tím, že včely vyšlete na sbírání pylu.">Sbírání pylu</button>
+            <button class="ukol" value="2" popisek="Včely nejsou nesmrtelné...">Nakladení vajíček</button>
+            <button class="ukol" value="3" popisek="Pro uložení medu potřebujete dostatek pláství.">Vytvoření plástve</button>
+            <button class="ukol" value="4" popisek="Nepřítel byl spatřen v blízkosti úlu! Je čas vyslat strážce.">Obrana úlu</button>
+            <button class="ukol" value="5" popisek="V zimě včely hybernují a nemohou se bránit, proto byste měli úl včas zazimovat.">Zazimování úlu</button>
+            <button class="ukol" value="6" popisek="Došlo vám místo v úlu pro další plástve? Neváhejte a založte si další úl.">Vyrojení včelstva</button>
         </div>
     `);
     ZobrazitPopisky();
@@ -379,7 +382,7 @@ function ZobrazitPopisky() {
 
         casovac = setTimeout(function () {
             $("#popisek").css({ display: "block" });
-        }, 200);
+        }, 500);
 
         $(this).on("mousemove", function (event) {
             $("#popisek").css({ top: event.pageY + 20, left: event.pageX + 20 });
@@ -473,7 +476,7 @@ function OvladaniUkolu() {
 
 // Dalsi kolo
 function DalsiKolo() {
-    $(document).on("click", "#dalsiKolo", function () {
+    $(document).on("click", "#dalsiKolo button", function () {
         fetch('/Hra/DalsiKolo')
         .then(odpoved => odpoved.json())
         .then(data => {

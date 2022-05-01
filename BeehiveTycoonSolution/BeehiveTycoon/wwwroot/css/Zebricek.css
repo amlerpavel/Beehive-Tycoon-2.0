@@ -1,1 +1,35 @@
-﻿
+﻿#container{
+    width: 500px;
+    height: 550px;
+}
+
+#tlacitka {
+    text-align: center;
+    font-size: 12pt;
+    margin-bottom: 1.5em;
+}
+
+#tabulka {
+    max-height: 350px;
+    width: 470px;
+    overflow-y: auto;
+    overflow-x:visible;
+    margin: auto;
+    border: 1px solid black;
+    white-space: nowrap;
+}
+
+table {
+    width: 100%;
+    margin: auto;
+    border-collapse: collapse;
+}
+
+thead{
+    background-color:yellowgreen;
+}
+
+th, td {
+    padding: 0.5em;
+    border: 1px solid black;
+}
