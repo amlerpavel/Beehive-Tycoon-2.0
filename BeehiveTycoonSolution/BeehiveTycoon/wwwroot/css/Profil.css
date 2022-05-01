@@ -1,0 +1,56 @@
+﻿#container {
+    width: 550px;
+    height: 600px;
+}
+
+table {
+    margin: auto;
+    border-collapse: collapse;
+    white-space: nowrap;
+    font-size: 13pt;
+}
+
+th, td {
+    padding: 0.5em;
+}
+
+tr {
+    border-bottom: 1px solid black;
+}
+
+tr:last-child {
+    border-bottom: none;
+}
+
+#tlacitko{
+    text-align:center;
+    margin-top:8em;
+}
+
+.pozice, .smazat, #odhlasit {
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 12pt;
+    border: none;
+    padding: 0.5em;
+    font-family: inherit;
+    border-radius: 10px;
+    background-color: yellowgreen;
+}
+
+.pozice:hover {
+    background-color: lawngreen;
+}
+
+.smazat, #odhlasit {
+    color:white;
+    background-color: hsl(0, 100%, 64%);
+}
+
+#odhlasit {
+    font-size: 14pt;
+}
+
+.smazat:hover, #odhlasit:hover{
+    background-color: hsl(0, 100%, 54%);
+}

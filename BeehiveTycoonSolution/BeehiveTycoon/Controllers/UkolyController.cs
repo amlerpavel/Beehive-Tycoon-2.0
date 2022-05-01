@@ -17,7 +17,7 @@ namespace BeehiveTycoon.Controllers
         public IActionResult Pridat([FromBody] DataUkolu dataUkolu)
         {
             if (dataUkolu == null)
-                return Json("Zadejte smysluplné hodnoty");
+                return Json("Zadejte smysluplné hodnoty.");
 
             Hra hra = NacistHru();
 
@@ -45,7 +45,7 @@ namespace BeehiveTycoon.Controllers
             }
 
             if (dataUkolu.Hodnota <= 0 && (dataUkolu.Id == 1 || dataUkolu.Id == 2 || dataUkolu.Id == 3 || dataUkolu.Id == 4))
-                return Json("Prosím zadejde kladné číslo");
+                return Json("Prosím zadejde kladné číslo.");
 
             int i = hra.Uly.IndexOf(vybranyUl);
 

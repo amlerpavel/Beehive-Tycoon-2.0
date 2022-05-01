@@ -9,6 +9,7 @@ namespace BeehiveTycoon.Db
     {
         public string Jmeno { get; private set; }
         public virtual List<MUlozenaHra> UlozeneHry { get; private set; }
+        public virtual List<MUlozenaHra> DokonceneHry { get; private set; }
 
         public MUzivatel(string jmeno, List<MUlozenaHra> ulozeneHry)
         {

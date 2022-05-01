@@ -35,7 +35,7 @@ namespace BeehiveTycoon.Game
 
                 if (Uly.Count == Uly.Where(u => u.Vcelstvo <= 0).ToArray().Length)
                     Prohra = true;
-                else if (Uly.Count == 5)
+                else if (Uly.Where(u => u.Med == (u.MaxPlastvi * 1000)).ToArray().Length == 5)
                     Vyhra = true;
 
                 if (Vyhra == false && Prohra == false)

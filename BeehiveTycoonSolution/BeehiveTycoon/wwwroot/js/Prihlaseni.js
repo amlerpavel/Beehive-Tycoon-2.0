@@ -23,7 +23,7 @@ function Odhlasit() {
         .then(odpoved => odpoved.json())
         .then(data => {
             $("#hlaska").remove();
-            $(`<p>${data}</p>`).insertAfter("#formular");
+            $(`<p id="hlaska">${data}</p>`).insertAfter("#formular");
 
             if (data == "prihlasen")
                 location.href = "Profil";

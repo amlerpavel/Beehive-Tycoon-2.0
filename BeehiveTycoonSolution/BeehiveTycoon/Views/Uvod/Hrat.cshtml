@@ -2,13 +2,21 @@
     ViewData["stranka"] = "hrat";
 }
 
-<h1>Obrana včelího úlu</h1>
-<p>Cílem hry je vyrojit včelstvo. Lze uskutečnit pouze v&nbsp;dubnu, květnu a červnu. Pro vyrojení je potřeba minimálně 25 000 včel a 50 000 medu.</p>
+<h1>Beehive Tycoon 2.0</h1>
+<p>Cílem hry je vylepšt 5 úlů na maximum. Na začátku hry máte pouze jeden. Pro získání dalšího úlu se musí vyrojit včelstvo.</p>
 <div id="tlacitka">
     <div id="hraci">
-        <button id="prihlasit" onclick="location.href='/Uzivatel/Prihlaseni'">Přihlásit se</button>
-        <button onclick="location.href='/Uzivatel/Registrace'">Zaregistrovat se</button>
+        @if (@ViewData["uzivatel"] == null)
+        {
+            <button onclick="location.href='/Uzivatel/Prihlaseni'">Přihlásit se</button>
+            <button onclick="location.href='/Uzivatel/Registrace'">Zaregistrovat se</button>
+        }
+        else
+        {
+            <button onclick="location.href='/Uzivatel/Profil'">Zobrazit profil</button>
+            <button id="odhlasit" onclick="location.href='/Uzivatel/Odhlasit'">Odhlásit se</button>
+        }
     </div>
     <button onclick="location.href='/Hra/Ul'">Hrát</button>
-    <button>Žebříček včelařů</button>
+    <button onclick="location.href='/Zebricek/Zobrazit'">Žebříček včelařů</button>
 </div>

@@ -15,11 +15,13 @@ namespace BeehiveTycoon.Controllers
     {
         private readonly DbUzivatele _dbUzivatele;
         private readonly DbUlozeneHry _dbUlozeneHry;
+        private readonly DbDohraneHry _dbDohraneHry;
 
         public HraController(Data.BeehiveTycoonContex contex)
         {
             _dbUzivatele = new(contex);
             _dbUlozeneHry = new(contex);
+            _dbDohraneHry = new(contex);
         }
 
         [HttpGet]
@@ -98,6 +100,12 @@ namespace BeehiveTycoon.Controllers
                 return Json(null);
 
             hra.Dalsikolo();
+
+            string prihlasenyUzivatel = JmenoUzivatele();
+
+            if (hra.Vyhra == true && prihlasenyUzivatel != null)
+                _dbDohraneHry.Aktualizovat(prihlasenyUzivatel, hra.Obtiznost.Id, hra.Datum.Rok, hra.Datum.CisloMesice);
+
             UlozitHru(hra);
 
             return Json(hra);
@@ -118,7 +126,7 @@ namespace BeehiveTycoon.Controllers
         private static Hra VytvoritHru(Obtiznost obtiznost)
         {
             Hra hra = new(
-                new Datum(5, 0),
+                new Datum(3, 0),
                 new List<Ul> {
                     new Ul(
                         new Lokace(

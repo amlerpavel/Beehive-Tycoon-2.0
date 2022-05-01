@@ -21,7 +21,7 @@ function ZobrazitUlozeneHry(rozehraneHry) {
                     <th>Uložená pozice ${i}</th>
                     <td>${day}</td>
                     <td><button class="pozice" value="${i}">Pokračovat ve hře</button></td>
-                    <td><button id="smazat" value="${i}">Smazat hru</button></td>
+                    <td><button class="smazat" value="${i}">Smazat hru</button></td>
                 </tr>
             `;
         }
@@ -38,7 +38,9 @@ function ZobrazitUlozeneHry(rozehraneHry) {
     let tabulka = `
         <div id="ulozeneHry">
             <table>
-                <thead>Tvoje uložené pozice:</thead>
+                <thead>
+                    <th>Vaše uložené pozice:</th>
+                </thead>
                 <tbody>
                     ${telo}
                 </tbody>
@@ -77,7 +79,7 @@ function VybratPozici() {
 }
 
 function Smazat() {
-    $(document).on("click", "#smazat", function () {
+    $(document).on("click", ".smazat", function () {
         fetch('/Hra/Smazat', {
             method: 'POST',
             body: JSON.stringify(this.value),
