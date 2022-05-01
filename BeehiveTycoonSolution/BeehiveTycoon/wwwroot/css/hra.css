@@ -240,6 +240,14 @@ tr:last-child {
     background-color:var(--barvaTlacitka4);
 }
 
+#popisek {
+    position: fixed;
+    background-color: white;
+    border: 1px solid black;
+    padding: 0.5em;
+}
+
+
 /*telefon*/
 @media all and (max-width:640px) {
 }

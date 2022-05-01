@@ -1,6 +1,7 @@
 ﻿let hra;
 let idLokaceUlu;
 let vybranyUl;
+let casovac;
 
 $(document).ready(function () {
     Start();
@@ -288,7 +289,7 @@ function UkazVyberUkolu() {
     $("#container2").html(`
         <h1>Přidat úkol</h1>
         <div id="seznam">
-            <button class="ukol" value="1">Sbírání pylu</button>
+            <button class="ukol" value="1" popisek="moje">Sbírání pylu</button>
             <button class="ukol" value="2">Nakladení vajíček</button>
             <button class="ukol" value="3">Vytvoření plástve</button>
             <button class="ukol" value="4">Obrana úlu</button>
@@ -296,6 +297,7 @@ function UkazVyberUkolu() {
             <button class="ukol" value="6">Vyrojení včelstva</button>
         </div>
     `);
+    ZobrazitPopisky();
 }
 function UkazUkol(element) {
     let telo = "";
@@ -370,6 +372,25 @@ function UkazUkol(element) {
         </div>
     `);
 }
+function ZobrazitPopisky() {
+    $(".ukol").mouseenter(function () {
+        let popisek = $(this).attr("popisek");
+        $("body").append(`<div id="popisek" style="display:none;">${popisek}</div>`);
+
+        casovac = setTimeout(function () {
+            $("#popisek").css({ display: "block" });
+        }, 200);
+
+        $(this).on("mousemove", function (event) {
+            $("#popisek").css({ top: event.pageY + 20, left: event.pageX + 20 });
+        });
+
+        $(this).mouseout(function () {
+            $("#popisek").remove();
+            clearTimeout(casovac);
+        });
+    });
+}
 
 function AktualizovatUkoly(data) {
     if (data != null) {
@@ -408,6 +429,7 @@ function NajitUkol(id) {
 
 function OvladaniUkolu() {
     $(document).on("click", ".ukol", function () {
+        $("#popisek").remove();
         UkazUkol(this);
     });
 
